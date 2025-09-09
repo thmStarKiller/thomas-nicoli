@@ -1,0 +1,80 @@
+{
+  "site": {
+    "title": "Thomas Nicoli — AI Consulting for E-commerce",
+    "description": "AI consulting for commerce that actually ships. SFCC/SFMC · RAG assistants · audits · automation.",
+    "ctaPrimary": "Book intro call",
+    "ctaSecondary": "Ask Thomas"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "chat": "Ask Thomas",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "hero": {
+    "title": "AI consulting for commerce that actually ships.",
+    "subtitle": "SFCC/SFMC · RAG assistants · audits · automation.",
+    "ctaPrimary": "Book intro call",
+    "ctaSecondary": "Ask Thomas"
+  },
+  "home": {
+    "servicesTitle": "Services",
+    "workTitle": "Selected Work",
+    "aboutTitle": "About Thomas",
+    "chatTitle": "Ask Thomas",
+    "contactStrip": "Have a project? Let's talk."
+  },
+  "services": {
+    "title": "Services",
+    "items": [
+      {"title": "AI Strategy & Roadmap", "desc": "Shape pragmatic, outcome-focused initiatives."},
+      {"title": "RAG Assistants & Automation", "desc": "Ship assistants that reduce tickets & toil."},
+      {"title": "SFCC/SFMC Integrations", "desc": "Wire AI into the stack you already use."},
+      {"title": "AI/E-comm Audits", "desc": "Low-effort, high-leverage improvements."},
+      {"title": "Data & Tracking", "desc": "Foundations for attribution and iteration."},
+      {"title": "Enablement", "desc": "Upskill your team to operate AI safely."}
+    ]
+  },
+  "work": {
+    "title": "Selected Work",
+    "tiles": [
+      {"title": "Checkout uplift", "result": "+12% conversion, −28% load"},
+      {"title": "Support RAG", "result": "<10s first-response, CSAT up"},
+      {"title": "SFMC triggers revamp", "result": "Deliverability & opens up"}
+    ]
+  },
+  "about": {
+    "title": "About",
+    "bio": "L’Oréal DEC (Madrid). 10+ yrs digital/e-comm. Strong SFCC/SFMC. RAG, automation, audits. Languages ES/EN/FR. Side-hustle evenings/weekends. Engagements: Kickstart (2 wks), Pilot (4–6 wks). Boundaries: no big-bang rewrites, no 24/7.",
+    "cta": "See services"
+  },
+  "contact": {
+    "title": "Contact",
+    "name": "Name",
+    "email": "Work email",
+    "company": "Company",
+    "website": "Website (optional)",
+    "message": "Message",
+    "consent": "I agree to be contacted and accept the privacy policy.",
+    "submit": "Send",
+    "thanks": "Thanks! I'll reply shortly.",
+    "error": "Something went wrong. Please email me."
+  },
+  "chat": {
+    "title": "Ask Thomas",
+    "placeholder": "Ask about pricing, timelines, SFCC experience, process…",
+    "chips": ["Pricing", "Timeline", "SFCC experience", "Process", "Audit scope", "Next steps"],
+    "disclaimer": "This assistant uses a small knowledge base. If unsure, it will say so and suggest next steps.",
+    "sources": "Sources",
+    "contactCTA": "Want detail? Contact me."
+  },
+  "legal": {
+    "privacy": "Privacy",
+    "terms": "Terms"
+  }
+}
+

@@ -1,0 +1,80 @@
+{
+  "site": {
+    "title": "Thomas Nicoli — Consultoría de IA para e‑commerce",
+    "description": "Consultoría de IA para e‑commerce que entrega de verdad. SFCC/SFMC · asistentes RAG · auditorías · automatización.",
+    "ctaPrimary": "Agenda una llamada",
+    "ctaSecondary": "Pregunta a Thomas"
+  },
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "work": "Trabajo",
+    "about": "Sobre mí",
+    "contact": "Contacto",
+    "chat": "Pregunta a Thomas",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "hero": {
+    "title": "Consultoría de IA para e‑commerce que entrega de verdad.",
+    "subtitle": "SFCC/SFMC · asistentes RAG · auditorías · automatización.",
+    "ctaPrimary": "Agenda una llamada",
+    "ctaSecondary": "Pregunta a Thomas"
+  },
+  "home": {
+    "servicesTitle": "Servicios",
+    "workTitle": "Casos",
+    "aboutTitle": "Sobre Thomas",
+    "chatTitle": "Pregunta a Thomas",
+    "contactStrip": "¿Tienes un proyecto? Hablemos."
+  },
+  "services": {
+    "title": "Servicios",
+    "items": [
+      {"title": "Estrategia y hoja de ruta de IA", "desc": "Iniciativas pragmáticas y enfocadas a resultados."},
+      {"title": "Asistentes RAG y automatización", "desc": "Asistentes que reducen tickets y tareas repetitivas."},
+      {"title": "Integraciones SFCC/SFMC", "desc": "IA en el stack que ya usas."},
+      {"title": "Auditorías de IA/E‑commerce", "desc": "Mejoras de alto impacto y bajo esfuerzo."},
+      {"title": "Datos y tracking", "desc": "Bases para atribución e iteración."},
+      {"title": "Enablement", "desc": "Formación para operar IA con seguridad."}
+    ]
+  },
+  "work": {
+    "title": "Casos",
+    "tiles": [
+      {"title": "Mejora en checkout", "result": "+12% conversión, −28% carga"},
+      {"title": "RAG para soporte", "result": "<10s primera respuesta, +CSAT"},
+      {"title": "Triggers en SFMC", "result": "Mejor entrega y aperturas"}
+    ]
+  },
+  "about": {
+    "title": "Sobre mí",
+    "bio": "L’Oréal DEC (Madrid). 10+ años en digital/e‑commerce. Fuerte en SFCC/SFMC. RAG, automatización, auditorías. Idiomas ES/EN/FR. Side‑hustle tardes/fines de semana. Formatos: Kickstart (2 semanas), Pilot (4–6 semanas). Límites: sin reescrituras grandes, sin 24/7.",
+    "cta": "Ver servicios"
+  },
+  "contact": {
+    "title": "Contacto",
+    "name": "Nombre",
+    "email": "Email de trabajo",
+    "company": "Empresa",
+    "website": "Web (opcional)",
+    "message": "Mensaje",
+    "consent": "Acepto ser contactado y la política de privacidad.",
+    "submit": "Enviar",
+    "thanks": "¡Gracias! Responderé pronto.",
+    "error": "Algo falló. Por favor escríbeme por email."
+  },
+  "chat": {
+    "title": "Pregunta a Thomas",
+    "placeholder": "Pregunta precios, tiempos, experiencia SFCC, proceso…",
+    "chips": ["Precios", "Tiempos", "Experiencia SFCC", "Proceso", "Alcance de auditoría", "Próximos pasos"],
+    "disclaimer": "Este asistente usa una base de conocimiento pequeña. Si no sabe, lo dirá y propondrá próximos pasos.",
+    "sources": "Fuentes",
+    "contactCTA": "¿Quieres detalle? Contáctame."
+  },
+  "legal": {
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  }
+}
+
