@@ -12,9 +12,6 @@ import { ChatMessage } from './types';
 import { NexusAvatar } from './NexusAvatar';
 import { NexusSourceCard } from './NexusSourceCard';
 
-// Import highlight.js theme
-import 'highlight.js/styles/github-dark.css';
-
 // Extended ChatMessage with streaming state for compatibility
 interface ChatMessageWithStreaming extends ChatMessage {
   isStreaming?: boolean;
@@ -90,7 +87,7 @@ export function NexusMessage({
       }}
       className={`flex gap-3 ${isAI ? '' : 'flex-row-reverse'} group rtl:${isAI ? 'flex-row-reverse' : ''} ${
         onClick ? 'cursor-pointer' : ''
-      } ${isSelected ? 'bg-blue-50/50 dark:bg-blue-950/20 rounded-xl p-3 -m-3 border border-blue-200/30 dark:border-blue-800/30' : ''}`}
+      } ${isSelected ? 'bg-message-selection border-message-selection-border rounded-xl p-3 -m-3 border' : ''}`}
       onClick={onClick}
     >
       {/* Avatar */}
@@ -99,7 +96,7 @@ export function NexusMessage({
       {/* User Avatar */}
       {!isAI && (
         <motion.div
-          className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium flex-shrink-0"
+          className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-medium flex-shrink-0"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: index * 0.05 + 0.1 }}
@@ -117,9 +114,9 @@ export function NexusMessage({
         <motion.div
           className={`relative p-4 rounded-2xl ${
             isAI
-              ? 'bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-slate-800 dark:to-slate-700 border border-blue-200/30 dark:border-slate-600 dark:shadow-lg dark:shadow-slate-950/30'
-              : 'bg-card border border-border shadow-sm dark:shadow-md dark:shadow-slate-950/30'
-          } backdrop-blur-sm group-hover:shadow-md dark:group-hover:shadow-lg transition-all duration-200`}
+              ? 'bg-ai-message border-ai-message-border'
+              : 'bg-user-message border-user-message-border'
+          } border shadow-sm dark:shadow-md dark:shadow-slate-950/30 backdrop-blur-sm group-hover:shadow-md dark:group-hover:shadow-lg transition-all duration-200`}
           whileHover={{ 
             scale: 1.01,
             transition: { type: "spring", stiffness: 400, damping: 25 }
@@ -141,7 +138,7 @@ export function NexusMessage({
                     const isInline = !match;
                     return !isInline ? (
                       <div className="relative group/code">
-                        <pre className="bg-slate-900 dark:bg-slate-800 rounded-lg p-4 overflow-x-auto border border-slate-200 dark:border-slate-700">
+                        <pre className="bg-code text-code-foreground rounded-lg p-4 overflow-x-auto border border-border">
                           <code className={`${className} text-sm leading-relaxed`} {...props}>
                             {children}
                           </code>
@@ -153,7 +150,7 @@ export function NexusMessage({
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           }}
-                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-slate-700 hover:bg-slate-600 text-white p-1.5 rounded text-xs"
+                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-accent hover:bg-accent/80 text-accent-foreground p-1.5 rounded text-xs"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -161,7 +158,7 @@ export function NexusMessage({
                         </motion.button>
                       </div>
                     ) : (
-                      <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+                      <code className="bg-code text-code-foreground px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
                         {children}
                       </code>
                     );
@@ -172,7 +169,7 @@ export function NexusMessage({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       {children}
                     </a>
@@ -200,7 +197,7 @@ export function NexusMessage({
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    className="w-1.5 h-1.5 bg-blue-500 rounded-full"
+                    className="w-1.5 h-1.5 bg-primary rounded-full"
                     animate={{ 
                       opacity: [0.4, 1, 0.4],
                       scale: [0.8, 1, 0.8]
@@ -237,7 +234,7 @@ export function NexusMessage({
             >
               {copied ? (
                 <>
-                  <Check className="w-3 h-3 text-green-500" />
+                  <Check className="w-3 h-3 text-primary" />
                   <span>{t('copied')}</span>
                 </>
               ) : (
@@ -252,7 +249,7 @@ export function NexusMessage({
             {canStop && (
               <motion.button
                 onClick={onStop}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 dark:bg-orange-950/30 dark:hover:bg-orange-950/50 rounded-md transition-colors"
+                className="flex items-center gap-1 px-2 py-1 text-xs text-warning-foreground hover:text-warning-foreground/80 bg-warning/10 hover:bg-warning/20 rounded-md transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

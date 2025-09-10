@@ -23,6 +23,20 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 214 100% 35%;
   --radius: 0.5rem;
+
+  /* Custom variables */
+  --ai-message-background: 220 50% 98%;
+  --ai-message-border: 220 50% 92%;
+  --user-message-background: 0 0% 100%;
+  --user-message-border: 214.3 31.8% 91.4%;
+  --code-background: 210 40% 96.1%;
+  --code-foreground: 222.2 84% 4.9%;
+  --message-selection-background: 214 100% 95%;
+  --message-selection-border: 214 100% 85%;
+  --scrollbar-thumb: 214.3 31.8% 91.4%;
+  --disabled-background: 210 40% 96.1%;
+  --disabled-foreground: 215.4 16.3% 46.9%;
+  --warning-foreground: 38 95% 51%;
 }
 
 /* Dark theme */
@@ -46,6 +60,20 @@
   --border: 219 21% 15%;
   --input: 219 21% 15%;
   --ring: 217 91% 60%;
+
+  /* Custom variables */
+  --ai-message-background: 219 21% 12%;
+  --ai-message-border: 219 21% 18%;
+  --user-message-background: 219 21% 8%;
+  --user-message-border: 219 21% 15%;
+  --code-background: 219 21% 15%;
+  --code-foreground: 213 31% 91%;
+  --message-selection-background: 217 91% 12%;
+  --message-selection-border: 217 91% 22%;
+  --scrollbar-thumb: 219 21% 15%;
+  --disabled-background: 219 21% 12%;
+  --disabled-foreground: 215 15% 65%;
+  --warning-foreground: 45 93% 47%;
 }
 
 /* Base styles */

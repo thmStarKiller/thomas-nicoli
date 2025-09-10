@@ -352,7 +352,7 @@ export function NexusChat() {
 
   return (
     <motion.div
-      className="flex flex-col h-[700px] max-w-4xl mx-auto bg-card border border-border rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl dark:shadow-2xl dark:shadow-slate-950/50"
+      className="flex flex-col h-[700px] max-w-4xl mx-auto bg-card border border-border rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl dark:shadow-2xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

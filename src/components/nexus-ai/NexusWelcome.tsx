@@ -56,12 +56,12 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {/* Animated Icon */}
           <motion.div
-            className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 flex items-center justify-center shadow-lg"
+            className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-primary/80 to-primary/60 flex items-center justify-center shadow-lg"
             animate={{
               boxShadow: [
-                "0 0 0 0 rgba(59, 130, 246, 0.4)",
-                "0 0 0 12px rgba(59, 130, 246, 0)",
-                "0 0 0 0 rgba(59, 130, 246, 0)"
+                "0 0 0 0 hsl(var(--primary) / 0.4)",
+                "0 0 0 12px hsl(var(--primary) / 0)",
+                "0 0 0 0 hsl(var(--primary) / 0)"
               ]
             }}
             transition={{
@@ -80,7 +80,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
                 scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
               }}
             >
-              <Sparkles className="w-6 h-6 text-white" />
+              <Sparkles className="w-6 h-6 text-primary-foreground" />
             </motion.div>
           </motion.div>
 
@@ -91,11 +91,11 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-500 dark:from-blue-400 dark:via-purple-400 dark:to-blue-300 bg-clip-text text-transparent relative">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent relative">
               {t('title')}
               {/* Shimmer Effect */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/30 to-transparent -skew-x-12"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent -skew-x-12"
                 initial={{ x: '-100%' }}
                 animate={{ x: '200%' }}
                 transition={{
@@ -119,7 +119,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {showTagline && (
             <motion.p
-              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium"
+              className="text-lg md:text-xl text-muted-foreground font-medium"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ 

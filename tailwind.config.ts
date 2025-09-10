@@ -28,6 +28,32 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
         destructive: 'hsl(var(--destructive))',
         'destructive-foreground': 'hsl(var(--destructive-foreground))',
+        'ai-message': {
+          DEFAULT: 'hsl(var(--ai-message-background))',
+          border: 'hsl(var(--ai-message-border))',
+        },
+        'user-message': {
+          DEFAULT: 'hsl(var(--user-message-background))',
+          border: 'hsl(var(--user-message-border))',
+        },
+        code: {
+          DEFAULT: 'hsl(var(--code-background))',
+          foreground: 'hsl(var(--code-foreground))',
+        },
+        'message-selection': {
+          DEFAULT: 'hsl(var(--message-selection-background))',
+          border: 'hsl(var(--message-selection-border))',
+        },
+        'scrollbar': {
+          thumb: 'hsl(var(--scrollbar-thumb))',
+        },
+        'disabled': {
+          DEFAULT: 'hsl(var(--disabled-background))',
+          foreground: 'hsl(var(--disabled-foreground))',
+        },
+        'warning': {
+          foreground: 'hsl(var(--warning-foreground))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

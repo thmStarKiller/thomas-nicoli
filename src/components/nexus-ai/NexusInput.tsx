@@ -349,7 +349,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 px-4 py-2 pr-2
                 transition-all duration-200 ease-out
                 ${isInputDisabled ? 'opacity-60 cursor-not-allowed' : ''}
-                scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600
+                scrollbar-thin scrollbar-thumb-scrollbar-thumb
                 scrollbar-track-transparent
               `}
               style={{
@@ -367,7 +367,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="absolute top-2 right-2 flex items-center gap-1"
                 >
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />
                   <span className="text-xs text-muted-foreground">
                     {t('input.listening')}
                   </span>
@@ -388,8 +388,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 ${!isSpeechRecognitionSupported 
                   ? 'opacity-40 cursor-not-allowed text-muted-foreground' 
                   : isListening 
-                    ? 'bg-destructive/10 dark:bg-destructive/20 text-destructive' 
-                    : 'hover:bg-muted text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/50'
+                    ? 'bg-destructive/10 text-destructive'
+                    : 'hover:bg-accent text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50'
                 }
                 ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : 
                   isSpeechRecognitionSupported ? 'hover:scale-105 active:scale-95' : ''
@@ -421,7 +421,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 disabled={isInputDisabled}
                 className={`
                   p-2 rounded-xl transition-all duration-200
-                  hover:bg-red-50 dark:hover:bg-red-900/20 
+                  hover:bg-destructive/10
                   text-muted-foreground hover:text-destructive
                   ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
                 `}
@@ -439,8 +439,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               className={`
                 p-2 rounded-xl transition-all duration-200
                 ${canSubmit
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
+                  : 'bg-disabled text-disabled-foreground cursor-not-allowed'
                 }
               `}
               whileTap={canSubmit ? { scale: 0.9 } : {}}
@@ -481,8 +481,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               transition={{ duration: 0.3 }}
               className="px-4 pb-3"
             >
-              <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
-                <span className="w-1 h-1 bg-red-500 rounded-full" />
+              <p className="text-sm text-destructive flex items-center gap-2">
+                <span className="w-1 h-1 bg-destructive rounded-full" />
                 {t('input.emptyError')}
               </p>
             </motion.div>
@@ -499,7 +499,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               transition={{ duration: 0.3 }}
               className="px-4 pb-3"
             >
-              <p className="text-sm text-amber-600 dark:text-amber-400 flex items-center gap-2">
+              <p className="text-sm text-warning-foreground flex items-center gap-2">
                 <Mic className="w-3 h-3" />
                 {voiceError}
               </p>
