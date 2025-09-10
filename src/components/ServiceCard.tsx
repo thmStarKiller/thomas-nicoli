@@ -1,5 +1,4 @@
 "use client";
-import { motion } from 'framer-motion';
 import { MagicCard } from './magicui/magic-card';
 
 export function ServiceCard({title, desc}: {title: string; desc: string}) {

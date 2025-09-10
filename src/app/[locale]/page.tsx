@@ -2,7 +2,6 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { AuroraText } from '@/components/magicui/aurora-text';
 import { BlurFade } from '@/components/magicui/blur-fade';
 import ShimmerButton from '@/components/magicui/shimmer-button';
@@ -144,9 +143,21 @@ export default function Home() {
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">MAGENTO</div>
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">WOOCOMMERCE</div>
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">BIGCOMMERCE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SHOPIFY</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SALESFORCE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">ADOBE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">MAGENTO</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">WOOCOMMERCE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">BIGCOMMERCE</div>
               </div>
               {/* Duplicate set for seamless loop */}
               <div className="flex items-center gap-4 sm:gap-8 mr-4 sm:mr-8">
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SHOPIFY</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SALESFORCE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">ADOBE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">MAGENTO</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">WOOCOMMERCE</div>
+                <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">BIGCOMMERCE</div>
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SHOPIFY</div>
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">SALESFORCE</div>
                 <div className="text-lg sm:text-2xl font-bold text-muted-foreground/40">ADOBE</div>

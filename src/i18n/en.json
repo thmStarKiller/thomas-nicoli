@@ -11,7 +11,7 @@
     "work": "Work",
     "about": "About",
     "contact": "Contact",
-    "chat": "Ask Thomas",
+    "chat": "NEXUS AI",
     "privacy": "Privacy",
     "terms": "Terms"
   },
@@ -19,7 +19,7 @@
     "title": "AI consulting for commerce that actually ships.",
     "subtitle": "SFCC/SFMC · RAG assistants · audits · automation.",
     "ctaPrimary": "Book intro call",
-    "ctaSecondary": "Ask Thomas"
+    "ctaSecondary": "Ask NEXUS AI"
   },
   "home": {
     "servicesTitle": "Services",
@@ -84,13 +84,69 @@
     "error": "Something went wrong. Please email me."
   },
   "chat": {
-    "title": "Ask Thomas",
+    "title": "NEXUS AI",
+    "subtitle": "Your intelligent e-commerce transformation assistant",
     "placeholder": "Ask about pricing, timelines, SFCC experience, process…",
     "chips": ["Pricing", "Timeline", "SFCC experience", "Process", "Audit scope", "Next steps"],
-    "disclaimer": "This assistant uses a small knowledge base. If unsure, it will say so and suggest next steps.",
+    "disclaimer": "NEXUS AI uses Thomas Nicoli's knowledge base. If unsure, it will suggest next steps.",
     "sources": "Sources",
     "contactCTA": "Want detail? Contact me.",
-    "send": "Send"
+    "send": "Send",
+    "thinking": "NEXUS AI is thinking...",
+    "assistant-typing": "NEXUS AI is typing...",
+    "welcome": "Welcome! I'm NEXUS AI, your specialist for e-commerce transformation.",
+    "welcomeDesc": "I can help you with AI consulting, SFCC/SFMC integrations, automation strategies, and more.",
+    "getStarted": "How can I help transform your business today?",
+    "welcomeTagline": "Your intelligent e-commerce transformation assistant",
+    "suggestions": [
+      "Audit my PDP for VTO readiness",
+      "Draft a RAG knowledge build plan", 
+      "Improve my SFCC search relevance",
+      "Plan an AI-powered product recommendation system",
+      "Optimize my checkout flow for conversions",
+      "Design a personalization strategy"
+    ],
+    "regenerate": "Regenerate",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "open": "Open",
+    "copyCitation": "Copy citation",
+    "copyUrl": "Copy URL",
+    "relevance": "Relevance",
+    "expand": "Expand details",
+    "collapse": "Collapse details",
+    "citationCopied": "Citation copied!",
+    "urlCopied": "URL copied!",
+    "input": {
+      "placeholder": "Ask about pricing, timelines, SFCC experience, process…",
+      "generating": "NEXUS AI is responding...",
+      "listening": "Listening...",
+      "startListening": "Start voice input",
+      "stopListening": "Stop voice input",
+      "clear": "Clear conversation",
+      "send": "Send message",
+      "emptyError": "Please enter a message to continue",
+      "helperText": "Press Enter to send, Shift+Enter for new line",
+      "voiceNotSupported": "Voice input not supported in this browser",
+      "voiceNoSpeech": "No speech detected. Please try again.",
+      "voiceAudioCapture": "Microphone not available or blocked.",
+      "voiceNotAllowed": "Microphone permission denied.",
+      "voiceNetwork": "Network error occurred.",
+      "voiceError": "Voice recognition error. Please try again."
+    },
+    "toolbar": {
+      "newChat": "New Chat",
+      "export": "Export",
+      "exportMarkdown": "Export as Markdown",
+      "exportPDF": "Export as PDF",
+      "branchFromHere": "Branch from here",
+      "regenerateLast": "Regenerate last response",
+      "confirmNewChatTitle": "Start New Chat?",
+      "confirmNewChatMessage": "This will create a new chat session. Your current conversation will be saved.",
+      "startNewChat": "Start New Chat",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
   },
   "legal": {
     "privacy": "Privacy",

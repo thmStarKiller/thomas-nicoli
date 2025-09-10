@@ -24,7 +24,7 @@ interface ParticlesProps {
 export const Particles: React.FC<ParticlesProps> = ({
   className,
   quantity = 50,
-  ease = 50,
+  ease = 50, // eslint-disable-line @typescript-eslint/no-unused-vars
   color,
   refresh = false,
 }) => {

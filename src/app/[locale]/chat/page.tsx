@@ -1,109 +1,54 @@
-"use client";
-import {useLocale, useTranslations} from 'next-intl';
-import type {DocWithScore} from '@/lib/rag';
-import {useEffect, useRef, useState} from 'react';
+import { Metadata } from "next";
+import { Sparkles } from "lucide-react";
+import { NexusChat } from "@/components/nexus-ai/NexusChat";
+import { SparklesText } from "@/components/magicui/sparkles-text";
 
-type Msg = {role: 'user' | 'assistant'; content: string};
+export const metadata: Metadata = {
+  title: "NEXUS AI Chat",
+  description: "Intelligent legal assistant powered by AI technology",
+};
 
 export default function ChatPage() {
-  const t = useTranslations('chat');
-  const locale = useLocale() as 'en' | 'es';
-  const [messages, setMessages] = useState<Msg[]>([]);
-  const [input, setInput] = useState('');
-  const [sources, setSources] = useState<DocWithScore[]>([]);
-  const endRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [messages]);
-
-  async function ask(prompt: string) {
-    const next = [...messages, {role: 'user', content: prompt} as Msg, {role: 'assistant', content: ''} as Msg];
-    setMessages(next);
-    setInput('');
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({messages: next.slice(0, -1), locale})
-    });
-    if (res.headers.get('Content-Type')?.includes('application/json')) {
-      const json = await res.json();
-      setMessages((m) => m.map((mm, i) => (i === m.length - 1 ? {...mm, content: json.answer} : mm)));
-      setSources(json.sources || []);
-      return;
-    }
-    const reader = res.body!.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    while (true) {
-      const {done, value} = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, {stream: true});
-      const idx = buffer.indexOf('\n\n<SOURCES>\n');
-      if (idx !== -1) {
-        const answer = buffer.slice(0, idx);
-        const rest = buffer.slice(idx + '\n\n<SOURCES>\n'.length);
-        setMessages((m) => m.map((mm, i) => (i === m.length - 1 ? {...mm, content: answer} : mm)));
-        try { setSources(JSON.parse(rest) as DocWithScore[]); } catch {}
-        buffer = answer; // for final set
-      } else {
-        setMessages((m) => m.map((mm, i) => (i === m.length - 1 ? {...mm, content: buffer} : mm)));
-      }
-    }
-  }
-
-  const chips: string[] = t.raw('chips');
-
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-muted-foreground mb-6">{t('disclaimer')}</p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {chips.map((c) => (
-          <button key={c} onClick={() => ask(c)} className="rounded-full border border-border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors">{c}</button>
-        ))}
-      </div>
-      <div className="rounded-2xl bg-card border border-border p-4 min-h-64">
-        {messages.length === 0 && (
-          <p className="text-muted-foreground">{t('placeholder')}</p>
-        )}
-        {messages.map((m, i) => (
-          <div key={i} className="mb-3">
-            <div className="text-xs text-muted-foreground mb-1">{m.role === 'user' ? 'You' : 'Thomas'}</div>
-            <div className="whitespace-pre-wrap leading-relaxed text-foreground">{m.content}</div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      {/* Hero Section */}
+      <header className="container mx-auto px-4 pt-12 pb-6">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-6" role="banner">
+            <div 
+              className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 flex items-center justify-center shadow-lg dark:shadow-2xl dark:shadow-blue-500/25"
+              aria-hidden="true"
+            >
+              <Sparkles className="w-8 h-8 text-white animate-pulse" />
+            </div>
           </div>
-        ))}
-        <div ref={endRef} />
-      </div>
-      {sources.length > 0 && (
-        <details className="mt-4">
-          <summary className="cursor-pointer text-sm text-foreground">{t('sources')}</summary>
-          <ul className="list-disc pl-5 text-sm text-muted-foreground mt-2">
-            {sources.map((s, i) => (
-              <li key={s.id}>
-                <strong>({i + 1}) {s.title}:</strong> <span className="opacity-80">{s.chunk.slice(0, 160)}…</span>
-              </li>
-            ))}
-          </ul>
-        </details>
-      )}
+          
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 dark:from-blue-300 dark:via-purple-300 dark:to-blue-200 bg-clip-text text-transparent mb-4">
+            <SparklesText 
+              className="inline-block"
+              colors={{
+                first: "#60A5FA",
+                second: "#A78BFA",
+              }}
+              sparklesCount={8}
+            >
+              NEXUS AI Chat
+            </SparklesText>
+          </h1>
+          
+          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-200 max-w-2xl mx-auto leading-relaxed">
+            Your intelligent legal assistant powered by advanced AI technology. 
+            Get instant answers, research assistance, and professional guidance.
+          </p>
+        </div>
+      </header>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!input.trim()) return;
-          ask(input.trim());
-        }}
-        className="mt-4 flex gap-2"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={t('placeholder')}
-          className="form-input flex-1"
-        />
-        <button className="rounded-xl bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 transition-colors">{t('send')}</button>
-      </form>
+      {/* Chat Interface */}
+      <main className="flex-1 px-4" role="main" aria-label="Chat interface">
+        <div className="max-w-4xl mx-auto">
+          <NexusChat />
+        </div>
+      </main>
     </div>
   );
 }
