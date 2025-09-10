@@ -37,7 +37,7 @@ export default async function LocaleLayout({
   }
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className={`${inter.variable} ${space.variable} min-h-screen flex flex-col`}>
+      <div className={`${inter.variable} ${space.variable} min-h-screen flex flex-col`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

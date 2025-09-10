@@ -57,28 +57,28 @@ export default function ChatPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <h1 className="text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-slate-600 mb-6">{t('disclaimer')}</p>
+      <p className="text-muted-foreground mb-6">{t('disclaimer')}</p>
       <div className="flex flex-wrap gap-2 mb-4">
         {chips.map((c) => (
-          <button key={c} onClick={() => ask(c)} className="rounded-full border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-100">{c}</button>
+          <button key={c} onClick={() => ask(c)} className="rounded-full border border-border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors">{c}</button>
         ))}
       </div>
-      <div className="rounded-2xl bg-white border border-slate-200 p-4 min-h-64">
+      <div className="rounded-2xl bg-card border border-border p-4 min-h-64">
         {messages.length === 0 && (
-          <p className="text-slate-500">{t('placeholder')}</p>
+          <p className="text-muted-foreground">{t('placeholder')}</p>
         )}
         {messages.map((m, i) => (
           <div key={i} className="mb-3">
-            <div className="text-xs text-slate-500 mb-1">{m.role === 'user' ? 'You' : 'Thomas'}</div>
-            <div className="whitespace-pre-wrap leading-relaxed">{m.content}</div>
+            <div className="text-xs text-muted-foreground mb-1">{m.role === 'user' ? 'You' : 'Thomas'}</div>
+            <div className="whitespace-pre-wrap leading-relaxed text-foreground">{m.content}</div>
           </div>
         ))}
         <div ref={endRef} />
       </div>
       {sources.length > 0 && (
         <details className="mt-4">
-          <summary className="cursor-pointer text-sm text-slate-700">{t('sources')}</summary>
-          <ul className="list-disc pl-5 text-sm text-slate-600 mt-2">
+          <summary className="cursor-pointer text-sm text-foreground">{t('sources')}</summary>
+          <ul className="list-disc pl-5 text-sm text-muted-foreground mt-2">
             {sources.map((s, i) => (
               <li key={s.id}>
                 <strong>({i + 1}) {s.title}:</strong> <span className="opacity-80">{s.chunk.slice(0, 160)}…</span>
@@ -100,9 +100,9 @@ export default function ChatPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={t('placeholder')}
-          className="flex-1 rounded-xl border border-slate-300 px-3 py-2"
+          className="form-input flex-1"
         />
-        <button className="rounded-xl bg-[#19C7C9] text-white px-4 py-2">Send</button>
+        <button className="rounded-xl bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 transition-colors">{t('send')}</button>
       </form>
     </div>
   );

@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
     <button
       aria-label={other === 'es' ? 'Cambiar a español' : 'Switch to English'}
       onClick={() => router.replace(swapLocaleInPath(pathname, other))}
-      className="rounded-full border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-100"
+      className="rounded-full border border-border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
     >
       {other.toUpperCase()}
     </button>

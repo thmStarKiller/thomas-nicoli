@@ -26,7 +26,26 @@
     "workTitle": "Selected Work",
     "aboutTitle": "About Thomas",
     "chatTitle": "Ask Thomas",
-    "contactStrip": "Have a project? Let's talk."
+    "contactStrip": "Have a project? Let's talk.",
+    "trustedBy": "Trusted by leading e-commerce brands worldwide",
+    "servicesSectionTitle": "That Drive Innovation",
+    "servicesDescription": "Comprehensive AI and e-commerce solutions tailored to your business needs",
+    "workSectionTitle": "Results",
+    "workDescription": "Real transformations for real businesses",
+    "workMetric": "+250% Revenue Growth →",
+    "aboutSectionTitle": "Meet",
+    "aboutDescription1": "Former L'Oréal DEC (Madrid) with 10+ years in digital commerce and e-commerce innovation.",
+    "aboutDescription2": "Specialized in Salesforce Commerce Cloud (SFCC), Marketing Cloud (SFMC), RAG implementations, AI audits, and intelligent automation.",
+    "aboutDescription3": "I help businesses leverage AI to transform their operations, boost efficiency, and drive sustainable growth in the digital economy.",
+    "chatCTATitle": "Ready to",
+    "chatCTATitle2": "Transform",
+    "chatCTATitle3": "Your Business?",
+    "chatCTADescription": "Chat with Thomas about your specific needs, pricing, and timelines. Get expert insights in minutes, not meetings.",
+    "startConversation": "Start Conversation",
+    "finalCTATitle": "Let's Build Something",
+    "finalCTATitle2": "Amazing",
+    "finalCTATitle3": "Together",
+    "getStartedToday": "Get Started Today"
   },
   "services": {
     "title": "Services",
@@ -70,11 +89,26 @@
     "chips": ["Pricing", "Timeline", "SFCC experience", "Process", "Audit scope", "Next steps"],
     "disclaimer": "This assistant uses a small knowledge base. If unsure, it will say so and suggest next steps.",
     "sources": "Sources",
-    "contactCTA": "Want detail? Contact me."
+    "contactCTA": "Want detail? Contact me.",
+    "send": "Send"
   },
   "legal": {
     "privacy": "Privacy",
     "terms": "Terms"
+  },
+  "footer": {
+    "description": "AI Consulting & E-commerce Innovation. Transforming businesses with cutting-edge technology solutions and strategic digital transformation.",
+    "servicesTitle": "Services",
+    "aiStrategy": "AI Strategy",
+    "ecommerceOptimization": "E-commerce Optimization",
+    "ragImplementation": "RAG Implementation",
+    "salesforceCommerce": "Salesforce Commerce",
+    "companyTitle": "Company",
+    "about": "About",
+    "caseStudies": "Case Studies",
+    "contact": "Contact",
+    "aiChat": "AI Chat",
+    "copyright": "All rights reserved."
   }
 }
 

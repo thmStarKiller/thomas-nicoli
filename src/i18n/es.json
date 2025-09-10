@@ -26,7 +26,26 @@
     "workTitle": "Casos",
     "aboutTitle": "Sobre Thomas",
     "chatTitle": "Pregunta a Thomas",
-    "contactStrip": "¿Tienes un proyecto? Hablemos."
+    "contactStrip": "¿Tienes un proyecto? Hablemos.",
+    "trustedBy": "Confiado por marcas líderes de e-commerce a nivel mundial",
+    "servicesSectionTitle": "Que Impulsan la Innovación",
+    "servicesDescription": "Soluciones integrales de IA y e-commerce adaptadas a las necesidades de tu negocio",
+    "workSectionTitle": "Resultados",
+    "workDescription": "Transformaciones reales para negocios reales",
+    "workMetric": "+250% Crecimiento de Ingresos →",
+    "aboutSectionTitle": "Conoce a",
+    "aboutDescription1": "Ex L'Oréal DEC (Madrid) con 10+ años en comercio digital e innovación en e-commerce.",
+    "aboutDescription2": "Especializado en Salesforce Commerce Cloud (SFCC), Marketing Cloud (SFMC), implementaciones RAG, auditorías de IA y automatización inteligente.",
+    "aboutDescription3": "Ayudo a las empresas a aprovechar la IA para transformar sus operaciones, aumentar la eficiencia e impulsar el crecimiento sostenible en la economía digital.",
+    "chatCTATitle": "¿Listo para",
+    "chatCTATitle2": "Transformar",
+    "chatCTATitle3": "Tu Negocio?",
+    "chatCTADescription": "Chatea con Thomas sobre tus necesidades específicas, precios y cronogramas. Obtén insights de experto en minutos, no reuniones.",
+    "startConversation": "Iniciar Conversación",
+    "finalCTATitle": "Construyamos Algo",
+    "finalCTATitle2": "Increíble",
+    "finalCTATitle3": "Juntos",
+    "getStartedToday": "Comienza Hoy"
   },
   "services": {
     "title": "Servicios",
@@ -70,11 +89,26 @@
     "chips": ["Precios", "Tiempos", "Experiencia SFCC", "Proceso", "Alcance de auditoría", "Próximos pasos"],
     "disclaimer": "Este asistente usa una base de conocimiento pequeña. Si no sabe, lo dirá y propondrá próximos pasos.",
     "sources": "Fuentes",
-    "contactCTA": "¿Quieres detalle? Contáctame."
+    "contactCTA": "¿Quieres detalle? Contáctame.",
+    "send": "Enviar"
   },
   "legal": {
     "privacy": "Privacidad",
     "terms": "Términos"
+  },
+  "footer": {
+    "description": "Consultoría de IA e Innovación en E-commerce. Transformando negocios con soluciones tecnológicas de vanguardia y transformación digital estratégica.",
+    "servicesTitle": "Servicios",
+    "aiStrategy": "Estrategia de IA",
+    "ecommerceOptimization": "Optimización E-commerce",
+    "ragImplementation": "Implementación RAG",
+    "salesforceCommerce": "Salesforce Commerce",
+    "companyTitle": "Empresa",
+    "about": "Sobre mí",
+    "caseStudies": "Casos de Estudio",
+    "contact": "Contacto",
+    "aiChat": "Chat IA",
+    "copyright": "Todos los derechos reservados."
   }
 }
 
