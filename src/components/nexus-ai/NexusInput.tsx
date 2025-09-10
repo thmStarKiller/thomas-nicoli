@@ -87,7 +87,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
 
   // Check if speech recognition is supported
   const isSpeechRecognitionSupported = 
-    ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+    typeof window !== 'undefined' && 
+    (('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window));
 
   // Expose focus method to parent via ref
   useImperativeHandle(ref, () => ({
@@ -315,12 +316,12 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
       {/* Input Container */}
       <motion.div
         className={`
-          relative overflow-hidden bg-card backdrop-blur-sm
-          border border-border rounded-2xl
+          relative overflow-hidden bg-white dark:bg-gray-800 backdrop-blur-sm
+          border border-gray-200 dark:border-gray-700 rounded-2xl
           transition-all duration-300 ease-out
           shadow-sm dark:shadow-md dark:shadow-slate-950/30
-          ${isFocused ? 'ring-2 ring-primary/20 border-primary/50' : ''}
-          ${hasError ? 'ring-2 ring-destructive/30 border-destructive/50' : ''}
+          ${isFocused ? 'ring-2 ring-blue-500/20 border-blue-500/50' : ''}
+          ${hasError ? 'ring-2 ring-red-500/30 border-red-500/50' : ''}
         `}
         animate={hasError ? {
           x: [-2, 2, -2, 2, 0],
@@ -343,13 +344,13 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 t('input.placeholder')
               }
               className={`
-                w-full resize-none bg-transparent border-0 outline-none
-                text-foreground placeholder-muted-foreground
+                w-full resize-none bg-white border-0 outline-none
+                text-gray-900 placeholder-gray-500
                 text-base leading-6 min-h-[44px] max-h-[200px]
                 px-4 py-2 pr-2
                 transition-all duration-200 ease-out
                 ${isInputDisabled ? 'opacity-60 cursor-not-allowed' : ''}
-                scrollbar-thin scrollbar-thumb-scrollbar-thumb
+                scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600
                 scrollbar-track-transparent
               `}
               style={{
@@ -367,7 +368,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="absolute top-2 right-2 flex items-center gap-1"
                 >
-                  <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                   <span className="text-xs text-muted-foreground">
                     {t('input.listening')}
                   </span>
@@ -386,10 +387,10 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               className={`
                 p-2 rounded-xl transition-all duration-200
                 ${!isSpeechRecognitionSupported 
-                  ? 'opacity-40 cursor-not-allowed text-muted-foreground' 
+                  ? 'opacity-40 cursor-not-allowed text-gray-400' 
                   : isListening 
-                    ? 'bg-destructive/10 text-destructive'
-                    : 'hover:bg-accent text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50'
+                    ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-blue-500/50'
                 }
                 ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : 
                   isSpeechRecognitionSupported ? 'hover:scale-105 active:scale-95' : ''
@@ -421,8 +422,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 disabled={isInputDisabled}
                 className={`
                   p-2 rounded-xl transition-all duration-200
-                  hover:bg-destructive/10
-                  text-muted-foreground hover:text-destructive
+                  hover:bg-red-50 dark:hover:bg-red-900/20
+                  text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400
                   ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
                 `}
                 whileTap={{ scale: 0.9 }}
@@ -439,8 +440,8 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               className={`
                 p-2 rounded-xl transition-all duration-200
                 ${canSubmit
-                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
-                  : 'bg-disabled text-disabled-foreground cursor-not-allowed'
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                 }
               `}
               whileTap={canSubmit ? { scale: 0.9 } : {}}

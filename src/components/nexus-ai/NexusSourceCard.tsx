@@ -102,7 +102,7 @@ export function NexusSourceCard({ source, index }: NexusSourceCardProps) {
 
   return (
     <motion.div
-      className="group relative bg-card border border-border rounded-xl overflow-hidden hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-200 hover:shadow-md"
+      className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200 hover:shadow-md"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
@@ -112,7 +112,7 @@ export function NexusSourceCard({ source, index }: NexusSourceCardProps) {
       <div className="p-4">
         <div className="flex items-start gap-3 mb-3">
           {/* Domain Favicon */}
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-muted border border-border/50 flex items-center justify-center overflow-hidden">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 flex items-center justify-center overflow-hidden">
             {domain ? (
               <img
                 src={getFaviconUrl(domain)}
@@ -125,20 +125,20 @@ export function NexusSourceCard({ source, index }: NexusSourceCardProps) {
                 }}
               />
             ) : null}
-            <Globe className={`w-3 h-3 text-muted-foreground ${domain ? 'hidden' : ''}`} />
+            <Globe className={`w-3 h-3 text-gray-600 dark:text-gray-400 ${domain ? 'hidden' : ''}`} />
           </div>
 
           {/* Title and Relevance */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-2">
-              <h4 className="font-medium text-sm text-foreground leading-tight pr-2">
+              <h4 className="font-medium text-sm text-gray-900 dark:text-gray-100 leading-tight pr-2">
                 {source.title}
               </h4>
               
               {/* Relevance Badge */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground">{t('relevance')}:</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">{t('relevance')}:</span>
                   <div className={`text-xs font-medium px-2 py-0.5 rounded-full bg-opacity-10 ${getRelevanceTextColor(source.score)}`}
                        style={{ backgroundColor: `${getRelevanceColor(source.score).replace('bg-', '')}20` }}>
                     {scorePercentage}%
@@ -148,7 +148,7 @@ export function NexusSourceCard({ source, index }: NexusSourceCardProps) {
             </div>
 
             {/* Progress Bar */}
-            <div className="relative h-1.5 bg-muted rounded-full overflow-hidden mb-3">
+            <div className="relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-3">
               <motion.div
                 className={`h-full ${getRelevanceColor(source.score)}`}
                 initial={{ width: 0 }}
@@ -158,7 +158,7 @@ export function NexusSourceCard({ source, index }: NexusSourceCardProps) {
             </div>
 
             {/* Snippet Preview */}
-            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
               {source.chunk.slice(0, 150)}
               {source.chunk.length > 150 && '...'}
             </p>

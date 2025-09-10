@@ -352,7 +352,7 @@ export function NexusChat() {
 
   return (
     <motion.div
-      className="flex flex-col h-[700px] max-w-4xl mx-auto bg-card border border-border rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl dark:shadow-2xl"
+      className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-10rem)] max-w-4xl mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl dark:shadow-2xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -403,7 +403,7 @@ export function NexusChat() {
               transition={{ delay: 0.2 }}
             >
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground">{t('sources')}</h3>
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('sources')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {sources.slice(0, 4).map((source, index) => (
                     <NexusSourceCard

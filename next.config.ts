@@ -6,7 +6,15 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  // You can add more Next.js config here
+  webpack: (config, { isServer }) => {
+    // Fix for micromark module resolution issue
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'micromark/dev': 'micromark/lib',
+    };
+    
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 interface ConfirmModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void
   onConfirm: () => void;
   title: string;
   message: string;

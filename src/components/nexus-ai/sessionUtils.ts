@@ -58,6 +58,10 @@ export class SessionUtils {
 
   static loadSessionManager(): SessionManager {
     try {
+      if (typeof window === 'undefined') {
+        return { sessions: {}, currentSessionId: null, lastSessionId: null };
+      }
+      
       const stored = localStorage.getItem(this.STORAGE_KEY);
       const currentSessionId = localStorage.getItem(this.CURRENT_SESSION_KEY);
       
@@ -82,6 +86,8 @@ export class SessionUtils {
 
   static saveSessionManager(manager: SessionManager): void {
     try {
+      if (typeof window === 'undefined') return;
+      
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(manager.sessions));
       if (manager.currentSessionId) {
         localStorage.setItem(this.CURRENT_SESSION_KEY, manager.currentSessionId);

@@ -26,14 +26,14 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
   return (
     <motion.div
-      className="flex-1 flex flex-col items-center justify-center p-8 text-center"
+      className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center min-h-0"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       {/* Animated Logo/Title */}
       <motion.div
-        className="mb-8"
+        className="mb-4 sm:mb-6 md:mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -43,7 +43,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
       >
         {/* Logo Container */}
         <motion.div
-          className="relative inline-flex items-center gap-3 mb-4"
+          className="relative inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4"
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ 
@@ -56,12 +56,12 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {/* Animated Icon */}
           <motion.div
-            className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-primary/80 to-primary/60 flex items-center justify-center shadow-lg"
+            className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg"
             animate={{
               boxShadow: [
-                "0 0 0 0 hsl(var(--primary) / 0.4)",
-                "0 0 0 12px hsl(var(--primary) / 0)",
-                "0 0 0 0 hsl(var(--primary) / 0)"
+                "0 0 0 0 rgba(59, 130, 246, 0.4)",
+                "0 0 0 12px rgba(59, 130, 246, 0)",
+                "0 0 0 0 rgba(59, 130, 246, 0)"
               ]
             }}
             transition={{
@@ -80,7 +80,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
                 scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
               }}
             >
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
+              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </motion.div>
           </motion.div>
 
@@ -91,7 +91,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent relative">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white relative">
               {t('title')}
               {/* Shimmer Effect */}
               <motion.div
@@ -119,7 +119,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {showTagline && (
             <motion.p
-              className="text-lg md:text-xl text-muted-foreground font-medium"
+              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ 
@@ -152,7 +152,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
       {/* Welcome Message */}
       <motion.div
-        className="mb-8 max-w-2xl"
+        className="mb-4 sm:mb-6 md:mb-8 max-w-2xl px-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -161,17 +161,17 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           ease: [0.4, 0.0, 0.2, 1]
         }}
       >
-        <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
           {t('welcome')}
         </p>
-        <p className="text-sm md:text-base text-muted-foreground/80 mt-2">
+        <p className="text-xs sm:text-sm md:text-base text-gray-500 dark:text-gray-400 mt-1 sm:mt-2">
           {t('welcomeDesc')}
         </p>
       </motion.div>
 
       {/* Suggestions */}
       <motion.div
-        className="w-full max-w-3xl"
+        className="w-full max-w-3xl px-4"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -185,7 +185,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
       {/* Disclaimer */}
       <motion.div
-        className="mt-8 max-w-xl"
+        className="mt-4 sm:mt-6 md:mt-8 max-w-xl px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ 
@@ -193,7 +193,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           duration: 0.6
         }}
       >
-        <p className="text-xs text-muted-foreground/60 leading-relaxed">
+        <p className="text-xs text-gray-500 dark:text-gray-500 leading-relaxed">
           {t('disclaimer')}
         </p>
       </motion.div>
