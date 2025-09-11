@@ -1,7 +1,5 @@
 import {useTranslations} from 'next-intl';
 
-export const dynamic = 'force-static';
-
 export default function AboutPage() {
   const t = useTranslations('about');
   return (

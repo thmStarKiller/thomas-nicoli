@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import { Send, Trash2, Mic, MicOff } from 'lucide-react';
+import { Send, Trash2, Mic, MicOff, AlertCircle } from 'lucide-react';
 
 // Type declaration for SpeechRecognition
 declare global {
@@ -313,15 +313,35 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
 
   return (
     <div className="relative w-full">
+      {/* Error/Status messages - positioned above input with proper spacing */}
+      <AnimatePresence>
+        {voiceError && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute bottom-full left-0 right-0 mb-3 px-4"
+          >
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3 shadow-md">
+              <p className="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                {voiceError}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Input Container */}
       <motion.div
         className={`
-          relative overflow-hidden bg-white dark:bg-gray-800 backdrop-blur-sm
-          border border-gray-200 dark:border-gray-700 rounded-2xl
-          transition-all duration-300 ease-out
-          shadow-sm dark:shadow-md dark:shadow-slate-950/30
-          ${isFocused ? 'ring-2 ring-blue-500/20 border-blue-500/50' : ''}
-          ${hasError ? 'ring-2 ring-red-500/30 border-red-500/50' : ''}
+          relative overflow-visible bg-white dark:bg-gray-800 backdrop-blur-sm
+          rounded-xl sm:rounded-2xl transition-all duration-200
+          ${isFocused 
+            ? 'ring-2 ring-blue-500/20 shadow-lg' 
+            : 'ring-1 ring-black/5 shadow-md'
+          }
+          ${hasError ? 'ring-2 ring-red-500/40' : ''}
         `}
         animate={hasError ? {
           x: [-2, 2, -2, 2, 0],
@@ -344,17 +364,20 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
                 t('input.placeholder')
               }
               className={`
-                w-full resize-none bg-white border-0 outline-none
-                text-gray-900 placeholder-gray-500
+                w-full resize-none border-0 outline-none focus:outline-none
                 text-base leading-6 min-h-[44px] max-h-[200px]
                 px-4 py-2 pr-2
                 transition-all duration-200 ease-out
                 ${isInputDisabled ? 'opacity-60 cursor-not-allowed' : ''}
-                scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600
+                scrollbar-thin scrollbar-thumb-gray-300
                 scrollbar-track-transparent
               `}
               style={{
-                height: textareaHeight
+                height: textareaHeight,
+                backgroundColor: 'transparent',
+                color: 'inherit',
+                caretColor: 'currentColor',
+                outline: 'none'
               }}
               rows={1}
             />
@@ -485,24 +508,6 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               <p className="text-sm text-destructive flex items-center gap-2">
                 <span className="w-1 h-1 bg-destructive rounded-full" />
                 {t('input.emptyError')}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Voice Error Message */}
-        <AnimatePresence>
-          {voiceError && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="px-4 pb-3"
-            >
-              <p className="text-sm text-warning-foreground flex items-center gap-2">
-                <Mic className="w-3 h-3" />
-                {voiceError}
               </p>
             </motion.div>
           )}

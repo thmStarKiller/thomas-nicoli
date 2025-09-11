@@ -30,33 +30,33 @@ export default function Home() {
   const services = [
     {
       icon: <Brain className="w-6 h-6" />,
-      title: servicesData[0]?.title || "AI Strategy & Consulting",
-      description: servicesData[0]?.desc || "Custom AI solutions that transform your business operations and drive growth."
+      title: servicesData[0]?.title,
+      description: servicesData[0]?.desc
     },
     {
       icon: <Zap className="w-6 h-6" />,
-      title: servicesData[1]?.title || "RAG Assistants & Automation",
-      description: servicesData[1]?.desc || "Ship assistants that reduce tickets & toil."
+      title: servicesData[1]?.title,
+      description: servicesData[1]?.desc
     },
     {
       icon: <Target className="w-6 h-6" />,
-      title: servicesData[2]?.title || "SFCC/SFMC Integrations",
-      description: servicesData[2]?.desc || "Wire AI into the stack you already use."
+      title: servicesData[2]?.title,
+      description: servicesData[2]?.desc
     },
     {
       icon: <Globe className="w-6 h-6" />,
-      title: servicesData[3]?.title || "AI/E-comm Audits",
-      description: servicesData[3]?.desc || "Low-effort, high-leverage improvements."
+      title: servicesData[3]?.title,
+      description: servicesData[3]?.desc
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
-      title: servicesData[4]?.title || "Data & Tracking",
-      description: servicesData[4]?.desc || "Foundations for attribution and iteration."
+      title: servicesData[4]?.title,
+      description: servicesData[4]?.desc
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
-      title: servicesData[5]?.title || "Enablement",
-      description: servicesData[5]?.desc || "Upskill your team to operate AI safely."
+      title: servicesData[5]?.title,
+      description: servicesData[5]?.desc
     }
   ];
 

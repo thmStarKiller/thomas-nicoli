@@ -30,6 +30,25 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        {/* Keep a stable, accurate viewport height for Nexus components */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+  const setVH = () => {
+    try {
+      const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+      document.documentElement.style.setProperty('--nexus-vh', vh + 'px');
+    } catch {}
+  };
+  setVH();
+  window.addEventListener('resize', setVH, { passive: true });
+  window.addEventListener('orientationchange', setVH);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setVH, { passive: true });
+  }
+})();`,
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

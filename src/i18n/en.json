@@ -81,7 +81,14 @@
     "consent": "I agree to be contacted and accept the privacy policy.",
     "submit": "Send",
     "thanks": "Thanks! I'll reply shortly.",
-    "error": "Something went wrong. Please email me."
+    "error": "Something went wrong. Please email me.",
+    "placeholders": {
+      "name": "Your full name",
+      "email": "your@email.com",
+      "company": "Your company",
+      "website": "https://yourwebsite.com",
+      "message": "Tell us about your project and goals..."
+    }
   },
   "chat": {
     "title": "NEXUS AI",
@@ -150,7 +157,9 @@
   },
   "legal": {
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "termsContent": "Information on this site is provided as-is without warranties. No legal or medical advice. Engagements are governed by a separate Statement of Work (SoW).",
+    "privacyContent": "This website collects minimal personal data. Contact submissions are used solely to respond to your inquiry. No tracking runs without consent. You can request deletion at any time."
   },
   "footer": {
     "description": "AI Consulting & E-commerce Innovation. Transforming businesses with cutting-edge technology solutions and strategic digital transformation.",

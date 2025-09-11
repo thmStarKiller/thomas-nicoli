@@ -37,6 +37,10 @@
   --disabled-background: 210 40% 96.1%;
   --disabled-foreground: 215.4 16.3% 46.9%;
   --warning-foreground: 38 95% 51%;
+
+  /* Viewport height variable for safe/responsive sizing */
+  /* Default to dynamic viewport height where supported */
+  --nexus-vh: 100dvh;
 }
 
 /* Dark theme */
@@ -74,6 +78,31 @@
   --disabled-background: 219 21% 12%;
   --disabled-foreground: 215 15% 65%;
   --warning-foreground: 45 93% 47%;
+}
+
+/* Fallback when 100dvh isn't supported */
+@supports not (height: 100dvh) {
+  :root {
+    --nexus-vh: 100vh;
+  }
+}
+
+/* Utility helpers for Nexus components */
+.nexus-min-h-screen {
+  min-height: var(--nexus-vh);
+}
+
+.nexus-h-screen {
+  height: var(--nexus-vh);
+}
+
+/* Hide scrollbars but keep scroll functionality */
+.nexus-hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.nexus-hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Base styles */

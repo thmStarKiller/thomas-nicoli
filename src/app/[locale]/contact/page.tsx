@@ -54,7 +54,7 @@ export default function ContactPage() {
                   name="name"
                   required
                   className="form-input"
-                  placeholder="Your full name"
+                  placeholder={t('placeholders.name')}
                 />
               </div>
 
@@ -70,7 +70,7 @@ export default function ContactPage() {
                   name="email"
                   required
                   className="form-input"
-                  placeholder="your@email.com"
+                  placeholder={t('placeholders.email')}
                 />
               </div>
 
@@ -85,7 +85,7 @@ export default function ContactPage() {
                     id="company"
                     name="company"
                     className="form-input"
-                    placeholder="Your company"
+                    placeholder={t('placeholders.company')}
                   />
                 </div>
                 <div className="space-y-2">
@@ -97,7 +97,7 @@ export default function ContactPage() {
                     id="website"
                     name="website"
                     className="form-input"
-                    placeholder="https://yourwebsite.com"
+                    placeholder={t('placeholders.website')}
                   />
                 </div>
               </div>
@@ -114,7 +114,7 @@ export default function ContactPage() {
                   required
                   rows={5}
                   className="form-textarea"
-                  placeholder="Tell us about your project and goals..."
+                  placeholder={t('placeholders.message')}
                 />
               </div>
 

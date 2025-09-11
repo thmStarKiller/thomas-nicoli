@@ -3,11 +3,12 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Copy, Check, RotateCcw, Square } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
+import Link from 'next/link';
 import { ChatMessage } from './types';
 import { NexusAvatar } from './NexusAvatar';
 import { NexusSourceCard } from './NexusSourceCard';
@@ -37,6 +38,7 @@ export function NexusMessage({
   isSelected = false
 }: NexusMessageProps) {
   const t = useTranslations('chat');
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
   const isAI = message.role === 'assistant';
 
@@ -108,7 +110,7 @@ export function NexusMessage({
       {/* Message Content */}
       <motion.div
         variants={contentVariants}
-        className={`flex-1 max-w-[85%] ${isAI ? 'mr-8 rtl:ml-8 rtl:mr-0' : 'ml-8 rtl:mr-8 rtl:ml-0'}`}
+        className={`flex-1 max-w-full sm:max-w-[85%] ${isAI ? 'mr-8 rtl:ml-8 rtl:mr-0' : 'ml-8 rtl:mr-8 rtl:ml-0'}`}
       >
         {/* Message Bubble */}
         <motion.div
@@ -163,17 +165,40 @@ export function NexusMessage({
                       </code>
                     );
                   },
-                  // Custom link styling
-                  a: ({ href, children }) => (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      {children}
-                    </a>
-                  ),
+                  // Custom link styling with proper routing
+                  a: ({ href, children }) => {
+                    // Check if it's an internal link
+                    const isInternal = href && (
+                      href.startsWith('/') || 
+                      href.startsWith('#') || 
+                      href.includes(window.location.hostname)
+                    );
+                    
+                    if (isInternal) {
+                      // Handle internal links with Next.js routing
+                      const cleanHref = href?.startsWith('/') ? `/${locale}${href}` : href;
+                      return (
+                        <Link
+                          href={cleanHref || '#'}
+                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          {children}
+                        </Link>
+                      );
+                    }
+                    
+                    // External links open in new tab
+                    return (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        {children}
+                      </a>
+                    );
+                  },
                 }}
               >
                 {message.content || (message.isStreaming ? '...' : '')}

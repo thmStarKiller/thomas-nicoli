@@ -26,7 +26,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
   return (
     <motion.div
-      className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center min-h-0"
+      className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 pt-16 sm:pt-20 md:pt-24 text-center min-h-[calc(var(--nexus-vh)-120px)] relative will-change-[opacity,transform]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -91,7 +91,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white relative">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100 relative">
               {t('title')}
               {/* Shimmer Effect */}
               <motion.div
@@ -119,7 +119,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {showTagline && (
             <motion.p
-              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium"
+              className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ 
@@ -161,10 +161,10 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           ease: [0.4, 0.0, 0.2, 1]
         }}
       >
-        <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg text-gray-900 dark:text-gray-100 leading-relaxed">
           {t('welcome')}
         </p>
-        <p className="text-xs sm:text-sm md:text-base text-gray-500 dark:text-gray-400 mt-1 sm:mt-2">
+        <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 sm:mt-2">
           {t('welcomeDesc')}
         </p>
       </motion.div>
@@ -193,7 +193,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           duration: 0.6
         }}
       >
-        <p className="text-xs text-gray-500 dark:text-gray-500 leading-relaxed">
+        <p className="text-xs text-muted-foreground leading-relaxed">
           {t('disclaimer')}
         </p>
       </motion.div>

@@ -81,7 +81,14 @@
     "consent": "Acepto ser contactado y la política de privacidad.",
     "submit": "Enviar",
     "thanks": "¡Gracias! Responderé pronto.",
-    "error": "Algo falló. Por favor escríbeme por email."
+    "error": "Algo falló. Por favor escríbeme por email.",
+    "placeholders": {
+      "name": "Tu nombre completo",
+      "email": "tu@email.com",
+      "company": "Tu empresa",
+      "website": "https://tuweb.com",
+      "message": "Cuéntanos sobre tu proyecto y objetivos..."
+    }
   },
   "chat": {
     "title": "NEXUS AI",

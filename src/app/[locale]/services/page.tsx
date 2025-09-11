@@ -1,8 +1,6 @@
 import {useTranslations} from 'next-intl';
 import {ServiceCard} from '@/components/ServiceCard';
 
-export const dynamic = 'force-static';
-
 export default function ServicesPage() {
   const t = useTranslations('services');
   return (
