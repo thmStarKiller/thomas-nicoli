@@ -40,24 +40,26 @@ export function NexusChat() {
   const abortController = useRef<AbortController | null>(null);
   const announcementRef = useRef<HTMLDivElement>(null);
 
-  // Initialize session from URL hash or create new one
+  // Initialize session from URL hash or create new one (guarded to avoid update loops)
+  const initRef = useRef(false);
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
     const urlSessionId = SessionUtils.getCurrentSessionIdFromURL();
     let targetSession: ChatSession | null = null;
 
-    if (urlSessionId && sessionManager.sessions[urlSessionId]) {
-      // Load session from URL
-      targetSession = sessionManager.sessions[urlSessionId];
-    } else if (sessionManager.currentSessionId && sessionManager.sessions[sessionManager.currentSessionId]) {
-      // Load current session
-      targetSession = sessionManager.sessions[sessionManager.currentSessionId];
+    const mgr = sessionManager;
+    if (urlSessionId && mgr.sessions[urlSessionId]) {
+      targetSession = mgr.sessions[urlSessionId];
+    } else if (mgr.currentSessionId && mgr.sessions[mgr.currentSessionId]) {
+      targetSession = mgr.sessions[mgr.currentSessionId];
     } else {
-      // Create new session
       targetSession = SessionUtils.createNewSession();
       const newManager = {
-        ...sessionManager,
-        sessions: { ...sessionManager.sessions, [targetSession.id]: targetSession },
-        currentSessionId: targetSession.id
+        ...mgr,
+        sessions: { ...mgr.sessions, [targetSession.id]: targetSession },
+        currentSessionId: targetSession.id,
       };
       setSessionManager(newManager);
       SessionUtils.saveSessionManager(newManager);
@@ -68,24 +70,39 @@ export function NexusChat() {
     setMessages(targetSession.messages);
   }, [sessionManager]);
 
-  // Save session when messages change
+  // Save session when messages change (avoid loops by comparing sanitized messages)
   useEffect(() => {
-    if (currentSession && messages !== currentSession.messages) {
-      const updatedSession = {
-        ...currentSession,
-        messages: messages.map(msg => ({ ...msg, isStreaming: undefined })),
-        updatedAt: Date.now()
-      };
-      
-      const updatedManager = {
-        ...sessionManager,
-        sessions: { ...sessionManager.sessions, [currentSession.id]: updatedSession }
-      };
-      
-      setCurrentSession(updatedSession);
-      setSessionManager(updatedManager);
-      SessionUtils.saveSessionManager(updatedManager);
-    }
+    if (!currentSession) return;
+
+    // Remove ephemeral props before persisting
+    const sanitized = messages.map((m) => ({ ...m, isStreaming: undefined }));
+    const prev = currentSession.messages as typeof sanitized;
+
+    const same =
+      Array.isArray(prev) &&
+      prev.length === sanitized.length &&
+      prev.every((p, i) =>
+        p.id === sanitized[i].id &&
+        p.role === sanitized[i].role &&
+        p.content === sanitized[i].content &&
+        p.createdAt === sanitized[i].createdAt
+      );
+    if (same) return;
+
+    const updatedSession: ChatSession = {
+      ...currentSession,
+      messages: sanitized as any,
+      updatedAt: Date.now(),
+    };
+
+    const updatedManager = {
+      ...sessionManager,
+      sessions: { ...sessionManager.sessions, [currentSession.id]: updatedSession },
+    };
+
+    setCurrentSession(updatedSession);
+    setSessionManager(updatedManager);
+    SessionUtils.saveSessionManager(updatedManager);
   }, [messages, currentSession, sessionManager]);
 
   // Smooth scroll to bottom with optimized performance
@@ -352,7 +369,7 @@ export function NexusChat() {
 
   return (
     <motion.div
-      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[560px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-visible sm:overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl"
+      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[560px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-visible sm:overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl box-border min-w-0 p-2 sm:p-3 md:p-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

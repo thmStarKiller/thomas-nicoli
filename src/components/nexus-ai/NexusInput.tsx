@@ -407,6 +407,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               type="button"
               onClick={toggleVoiceInput}
               disabled={isInputDisabled || !isSpeechRecognitionSupported}
+              suppressHydrationWarning
               className={`
                 p-2 rounded-xl transition-all duration-200
                 ${!isSpeechRecognitionSupported 

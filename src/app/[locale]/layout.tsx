@@ -25,9 +25,9 @@ export default async function LocaleLayout({
   params
 }: {
   children: ReactNode;
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 }) {
-  const {locale} = await params;
+  const { locale } = await params;
   setRequestLocale(locale);
   let messages;
   try {
@@ -36,7 +36,7 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider key={locale} locale={locale} messages={messages}>
       <div className={`${inter.variable} ${space.variable} min-h-screen flex flex-col`} suppressHydrationWarning>
         <script
           type="application/ld+json"
@@ -60,4 +60,9 @@ export default async function LocaleLayout({
       </div>
     </NextIntlClientProvider>
   );
+}
+
+// Ensure both locales are statically generated so client switches re-render correctly
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
 }
