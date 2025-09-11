@@ -106,12 +106,12 @@
     "getStarted": "How can I help transform your business today?",
     "welcomeTagline": "Your intelligent e-commerce transformation assistant",
     "suggestions": [
-      "Audit my PDP for VTO readiness",
-      "Draft a RAG knowledge build plan", 
-      "Improve my SFCC search relevance",
-      "Plan an AI-powered product recommendation system",
-      "Optimize my checkout flow for conversions",
-      "Design a personalization strategy"
+      "What services do you offer?",
+      "What can you build for our team?",
+      "How do you work: audit → quick wins → scale?",
+      "How much would a lightweight RAG chatbot cost?",
+      "Can you integrate with SFCC/SFMC and our CRM?",
+      "What are your availability and languages?"
     ],
     "regenerate": "Regenerate",
     "copy": "Copy",
@@ -176,4 +176,3 @@
     "copyright": "All rights reserved."
   }
 }
-

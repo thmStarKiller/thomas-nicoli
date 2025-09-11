@@ -26,7 +26,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
   return (
     <motion.div
-      className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 pt-16 sm:pt-20 md:pt-24 text-center min-h-[calc(var(--nexus-vh)-120px)] relative will-change-[opacity,transform]"
+      className="flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 pt-8 sm:pt-16 md:pt-24 text-center min-h-[calc(var(--nexus-vh)-120px)] relative will-change-[opacity,transform]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -43,7 +43,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
       >
         {/* Logo Container */}
         <motion.div
-          className="relative inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4"
+          className="relative inline-flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4"
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ 
@@ -56,7 +56,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
         >
           {/* Animated Icon */}
           <motion.div
-            className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg"
+            className="relative w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg"
             animate={{
               boxShadow: [
                 "0 0 0 0 rgba(59, 130, 246, 0.4)",
@@ -91,7 +91,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100 relative">
+            <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100 relative text-balance">
               {t('title')}
               {/* Shimmer Effect */}
               <motion.div
@@ -112,14 +112,14 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
         {/* Typewriter Tagline */}
         <motion.div
-          className="h-8 flex items-center justify-center"
+          className="h-7 sm:h-8 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: showTagline ? 1 : 0 }}
           transition={{ duration: 0.4 }}
         >
           {showTagline && (
             <motion.p
-              className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium"
+              className="text-base sm:text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium text-balance"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ 
@@ -152,7 +152,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
       {/* Welcome Message */}
       <motion.div
-        className="mb-4 sm:mb-6 md:mb-8 max-w-2xl px-4"
+        className="mb-3 sm:mb-6 md:mb-8 max-w-2xl px-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -161,17 +161,17 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           ease: [0.4, 0.0, 0.2, 1]
         }}
       >
-        <p className="text-sm sm:text-base md:text-lg text-gray-900 dark:text-gray-100 leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg text-gray-900 dark:text-gray-100 leading-relaxed text-balance">
           {t('welcome')}
         </p>
-        <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 sm:mt-2">
+        <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 sm:mt-2 text-balance">
           {t('welcomeDesc')}
         </p>
       </motion.div>
 
       {/* Suggestions */}
       <motion.div
-        className="w-full max-w-3xl px-4"
+        className="w-full max-w-3xl px-3 sm:px-4"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 

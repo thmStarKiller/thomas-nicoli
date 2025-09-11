@@ -348,7 +348,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
           transition: { duration: 0.5, ease: "easeInOut" }
         } : {}}
       >
-        <form onSubmit={handleSubmit} className="flex items-end gap-2 p-3">
+        <form onSubmit={handleSubmit} className="flex items-end gap-2 px-4 py-3 sm:px-3">
           {/* Textarea */}
           <div className="flex-1 relative">
             <textarea
@@ -366,7 +366,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               className={`
                 w-full resize-none border-0 outline-none focus:outline-none
                 text-base leading-6 min-h-[44px] max-h-[200px]
-                px-4 py-2 pr-2
+                pl-5 pr-3 sm:pl-4 sm:pr-2 py-2
                 transition-all duration-200 ease-out
                 ${isInputDisabled ? 'opacity-60 cursor-not-allowed' : ''}
                 scrollbar-thin scrollbar-thumb-gray-300

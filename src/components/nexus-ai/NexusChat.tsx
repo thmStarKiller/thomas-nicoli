@@ -369,7 +369,7 @@ export function NexusChat() {
 
   return (
     <motion.div
-      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[560px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-visible sm:overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl box-border min-w-0 p-2 sm:p-3 md:p-4"
+      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[520px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl box-border min-w-0 p-2 sm:p-3 md:p-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

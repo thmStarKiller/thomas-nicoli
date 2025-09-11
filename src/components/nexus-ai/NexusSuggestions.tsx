@@ -79,7 +79,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
 
       {/* Suggestion Chips Grid */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl mx-auto"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 max-w-4xl mx-auto"
         variants={containerVariants}
       >
         {suggestions.map((suggestion, index) => {
@@ -89,7 +89,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
             <motion.button
               key={suggestion}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="group relative p-4 text-left bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 rounded-xl transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="group relative w-full p-3 sm:p-4 text-left bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               variants={chipVariants}
               whileHover={{ 
                 scale: 1.02,
@@ -131,7 +131,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-relaxed">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-relaxed whitespace-normal break-words">
                     {suggestion}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
 
               {/* Ripple Effect */}
               <motion.div
-                className="absolute inset-0 rounded-xl"
+                className="absolute inset-0 rounded-lg sm:rounded-xl"
                 initial={{ scale: 0, opacity: 0.5 }}
                 whileTap={{ 
                   scale: 1.5, 

@@ -445,3 +445,9 @@ select:disabled {
     transform: translateZ(0) rotate(360deg);
   }
 }
+
+/* Nexus AI Chat: force black text in both themes */
+.nexus-text-black,
+.nexus-text-black * {
+  color: #000 !important;
+}

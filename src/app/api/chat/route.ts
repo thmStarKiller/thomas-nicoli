@@ -1,7 +1,8 @@
-import {NextRequest} from 'next/server';
+﻿import {NextRequest} from 'next/server';
 import {getRetriever} from '@/lib/rag';
 import type { DocWithScore } from '@/lib/rag';
 import {systemPrompt} from '@/lib/prompts';
+import { getQuotingModel } from '@/lib/quoting';
 
 export const runtime = 'nodejs';
 
@@ -30,10 +31,10 @@ export async function POST(req: NextRequest) {
   if (!hasGemini && !hasOpenAI) {
     const outline =
       locale === 'es'
-        ? `Sin clave de OpenAI configurada. Basado en recuperación BM25, esto es lo que parece relevante:`
+        ? `Sin clave de OpenAI configurada. Basado en recuperaciÃ³n BM25, esto es lo que parece relevante:`
         : `No OpenAI key configured. Based on BM25 retrieval, here is what seems relevant:`;
     const answer = `${outline}\n\n` +
-      top.map((d, i) => `• (${i + 1}) ${d.title}`).join('\n') +
+      top.map((d, i) => `â€¢ (${i + 1}) ${d.title}`).join('\n') +
       `\n\n` +
       (locale === 'es'
         ? `Siguiente paso: agenda una llamada para validar detalles.`
@@ -50,7 +51,7 @@ export async function POST(req: NextRequest) {
       const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
       const model = genAI.getGenerativeModel({
         model: process.env.GEMINI_MODEL || 'gemini-2.5-pro',
-        systemInstruction: systemPrompt(locale, snippets),
+        systemInstruction: systemPrompt(locale, snippets, getQuotingModel()),
       });
 
       // Map messages to Gemini format
@@ -69,9 +70,9 @@ export async function POST(req: NextRequest) {
       const msg = e?.message || 'Gemini request failed';
       const answer =
         (locale === 'es'
-          ? `No se pudo completar la solicitud a Gemini: ${msg}. Aquí tienes el contenido relevante:`
+          ? `No se pudo completar la solicitud a Gemini: ${msg}. AquÃ­ tienes el contenido relevante:`
           : `Gemini request failed: ${msg}. Here is the relevant content:`) +
-        `\n\n` + top.map((d, i) => `• (${i + 1}) ${d.title}`).join('\n');
+        `\n\n` + top.map((d, i) => `â€¢ (${i + 1}) ${d.title}`).join('\n');
       return new Response(JSON.stringify({ answer, sources: top }), {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -82,7 +83,7 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       try {
         const encoder = new TextEncoder();
-        const sys = systemPrompt(locale, snippets);
+        const sys = systemPrompt(locale, snippets, getQuotingModel());
 
         // Fallback: OpenAI streaming
         const { default: OpenAI } = await import('openai');

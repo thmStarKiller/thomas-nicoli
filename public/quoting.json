@@ -1,0 +1,483 @@
+{
+  "version": "2025-09-11",
+  "currency_base": "EUR",
+  "purpose": "Quoting model for Thomas's AI + Automation + Web services",
+  "notes": [
+    "All prices exclude VAT and third-party tool costs (e.g., SaaS subscriptions, API credits).",
+    "Currency conversions (USD/GBP/etc.) are calculated at invoice date.",
+    "Travel and accommodation, if required, are billed at cost.",
+    "This document avoids vendor-specific suites and is platform-agnostic."
+  ],
+  "pricing_model": {
+    "formula": "TOTAL = (sum(base_price_eur for selected services) × client_type.multiplier × geography.multiplier × engagement.multiplier × surcharge.multiplier × bundle.multiplier) + recurring_components",
+    "minimum_invoice_eur": 400,
+    "payment_terms": {
+      "deposits": "50% upfront for projects ≥ €2,000; remainder Net 15 upon delivery",
+      "retainers": "Monthly in advance",
+      "late_payment": "2% monthly interest after 15 days past due",
+      "cancellation": "≥5 business days notice or 25% of remaining PO value"
+    }
+  },
+  "client_types": [
+    {
+      "id": "SOLO",
+      "label": "Solo / Creator",
+      "demographics": "Self-employed or 1-person operation",
+      "typical_headcount": "1",
+      "multiplier": 0.85
+    },
+    {
+      "id": "MICRO_SME",
+      "label": "Micro-SME",
+      "demographics": "Very small business",
+      "typical_headcount": "1–9",
+      "multiplier": 0.90
+    },
+    {
+      "id": "SME",
+      "label": "SME",
+      "demographics": "Small to medium enterprise",
+      "typical_headcount": "10–49",
+      "multiplier": 1.00
+    },
+    {
+      "id": "MID_MARKET",
+      "label": "Mid-Market",
+      "demographics": "Growing org or multi-team",
+      "typical_headcount": "50–249",
+      "multiplier": 1.25
+    },
+    {
+      "id": "ENTERPRISE",
+      "label": "Enterprise",
+      "demographics": "Large org / multi-country",
+      "typical_headcount": "250+",
+      "multiplier": 1.60
+    },
+    {
+      "id": "STARTUP_PRESEED",
+      "label": "Startup (Pre-seed/Seed)",
+      "demographics": "Early stage, limited budget",
+      "typical_headcount": "2–20",
+      "multiplier": 0.90
+    },
+    {
+      "id": "STARTUP_SERIES_A",
+      "label": "Startup (Series A+)",
+      "demographics": "Funded, growth focus",
+      "typical_headcount": "10–100",
+      "multiplier": 1.15
+    },
+    {
+      "id": "NONPROFIT_EDU",
+      "label": "Nonprofit / Education",
+      "demographics": "Charities, foundations, schools",
+      "typical_headcount": "Any",
+      "multiplier": 0.80
+    },
+    {
+      "id": "PUBLIC_SECTOR",
+      "label": "Public Sector",
+      "demographics": "Government bodies",
+      "typical_headcount": "Any",
+      "multiplier": 1.20
+    }
+  ],
+  "geographies": [
+    {
+      "id": "SPAIN_T1",
+      "regions": "Spain Tier-1 (Madrid, Barcelona)",
+      "multiplier": 1.00
+    },
+    {
+      "id": "SPAIN_T23",
+      "regions": "Spain Tier-2/3 cities",
+      "multiplier": 0.95
+    },
+    {
+      "id": "PORT_ITALY_GREECE",
+      "regions": "Portugal, Italy, Greece",
+      "multiplier": 1.05
+    },
+    {
+      "id": "FR_BENELUX_DE_AT",
+      "regions": "France, Benelux, Germany, Austria",
+      "multiplier": 1.20
+    },
+    {
+      "id": "NORDICS_CH",
+      "regions": "Nordics, Switzerland",
+      "multiplier": 1.30
+    },
+    {
+      "id": "UK_IE",
+      "regions": "United Kingdom, Ireland",
+      "multiplier": 1.25
+    },
+    {
+      "id": "CEE",
+      "regions": "Poland, Czechia, Hungary and similar",
+      "multiplier": 1.10
+    },
+    {
+      "id": "US_CA",
+      "regions": "United States, Canada",
+      "multiplier": 1.40
+    },
+    {
+      "id": "LATAM",
+      "regions": "Latin America (major metros)",
+      "multiplier": 1.05
+    }
+  ],
+  "maturity_modifiers": [
+    {
+      "id": "LOW_DIGITAL_MATURITY",
+      "description": "Limited internal processes, requires extra enablement",
+      "multiplier": 1.10
+    },
+    {
+      "id": "HIGH_DIGITAL_MATURITY",
+      "description": "Strong internal team/processes",
+      "multiplier": 0.95
+    }
+  ],
+  "engagement_modifiers": [
+    {
+      "id": "REMOTE_ONLY",
+      "description": "Project delivered fully remote",
+      "multiplier": 0.95
+    },
+    {
+      "id": "STANDARD",
+      "description": "Hybrid or unspecified",
+      "multiplier": 1.00
+    },
+    {
+      "id": "ONSITE_REQUIRED",
+      "description": "Onsite presence required for key phases",
+      "multiplier": 1.10
+    }
+  ],
+  "surcharge_modifiers": [
+    {
+      "id": "NONE",
+      "description": "No rush / standard hours",
+      "multiplier": 1.00
+    },
+    {
+      "id": "RUSH",
+      "description": "Delivery window < 7 business days",
+      "multiplier": 1.25
+    },
+    {
+      "id": "AFTER_HOURS",
+      "description": "Evenings/weekends or holiday delivery",
+      "multiplier": 1.50
+    }
+  ],
+  "bundle_discounts": [
+    {
+      "id": "NONE",
+      "description": "No bundle",
+      "multiplier": 1.00
+    },
+    {
+      "id": "BUNDLE_3PLUS",
+      "description": "Any package of 3+ services",
+      "multiplier": 0.90
+    }
+  ],
+  "rates": {
+    "hourly_base_spain_sme_eur": 85,
+    "day_rate_rule": "day_rate = hourly × 7 × 0.95",
+    "example_day_rate_spain_sme_eur": 565
+  },
+  "services": [
+    {
+      "code": "AUD-01",
+      "name": "AI & Web Foundations Audit",
+      "base_price_eur": 1200,
+      "deliverables": [
+        "Technical web review (structure, performance, accessibility, i18n, SEO sanity)",
+        "Automation inventory and gap analysis",
+        "Tooling/data map (forms, CRM/helpdesk, analytics)",
+        "Low-risk AI opportunities",
+        "Prioritized action plan (30–90 days)"
+      ],
+      "typical_timeline_days": "5–10"
+    },
+    {
+      "code": "AUT-01",
+      "name": "Quick-Wins Automation Sprint",
+      "base_price_eur": 2400,
+      "deliverables": [
+        "Design and build 2–4 automations (lead routing, notifications, PDFs, data cleanup)",
+        "Checklists, logs, and error handling",
+        "Handover guide"
+      ],
+      "typical_timeline_days": "7–15"
+    },
+    {
+      "code": "AI-01",
+      "name": "Lightweight RAG Chatbot (Web or Internal)",
+      "base_price_eur": 3800,
+      "deliverables": [
+        "Knowledge base build scripts",
+        "Embeddings + BM25 retrieval",
+        "Streaming endpoint + minimal React widget with citations",
+        "Maintenance and evaluation guide"
+      ],
+      "typical_timeline_days": "10–20"
+    },
+    {
+      "code": "DATA-01",
+      "name": "Data Pipeline Mini-Stack",
+      "base_price_eur": 2200,
+      "deliverables": [
+        "ETL from APIs/CSV/DB to DB/Sheets",
+        "Cleaning/enrichment rules",
+        "Dashboard (Looker Studio / Metabase)",
+        "Scheduled exports"
+      ],
+      "typical_timeline_days": "7–14"
+    },
+    {
+      "code": "COMM-01",
+      "name": "Transactional Communications Setup",
+      "base_price_eur": 1200,
+      "deliverables": [
+        "Provider setup (e.g., Postmark/SendGrid/Mailgun/Twilio)",
+        "Accessible HTML templates + text versions",
+        "Webhooks and delivery logs"
+      ],
+      "typical_timeline_days": "5–10"
+    },
+    {
+      "code": "QA-01",
+      "name": "QA & Monitoring Setup",
+      "base_price_eur": 1100,
+      "deliverables": [
+        "Playwright/Puppeteer checks for critical flows",
+        "Alerting into Slack/Teams",
+        "Monthly report template"
+      ],
+      "typical_timeline_days": "5–8"
+    },
+    {
+      "code": "QA-02",
+      "name": "QA Monitoring — Monthly",
+      "recurring_price_eur": 350,
+      "deliverables": [
+        "Scheduled checks",
+        "Incident triage and logs",
+        "Monthly summary"
+      ],
+      "typical_timeline_days": "Recurring"
+    },
+    {
+      "code": "PERF-01",
+      "name": "Performance & UX Tune-Up",
+      "base_price_eur": 1600,
+      "deliverables": [
+        "Core Web Vitals analysis",
+        "Image/fonts/JS budget and fixes",
+        "Caching and lazy-loading recommendations"
+      ],
+      "typical_timeline_days": "7–12"
+    },
+    {
+      "code": "CNT-01",
+      "name": "Content & Asset Hygiene",
+      "base_price_eur": 1000,
+      "deliverables": [
+        "Structure and naming standards",
+        "i18n content rules",
+        "Duplication and broken link checks"
+      ],
+      "typical_timeline_days": "4–7"
+    },
+    {
+      "code": "OPS-01",
+      "name": "Back-Office Automation",
+      "base_price_eur": 1500,
+      "deliverables": [
+        "OCR/Classification for invoices",
+        "Payment/order reconciliation",
+        "Follow-ups with logs and retries"
+      ],
+      "typical_timeline_days": "5–10"
+    },
+    {
+      "code": "LEAD-01",
+      "name": "Lead Funnels & Booking Basics",
+      "base_price_eur": 1200,
+      "deliverables": [
+        "Validated forms with consent and anti-spam",
+        "Booking/calendar integration",
+        "CRM/Sheets sync + autoresponses"
+      ],
+      "typical_timeline_days": "5–8"
+    },
+    {
+      "code": "TRN-01",
+      "name": "Training & Enablement — Half-Day",
+      "base_price_eur": 450,
+      "deliverables": [
+        "Workshop on prompts, guardrails, and ops practices",
+        "Mini-playbook and runbooks"
+      ],
+      "typical_timeline_days": "0.5"
+    },
+    {
+      "code": "TRN-02",
+      "name": "Training & Enablement — Full Day",
+      "base_price_eur": 800,
+      "deliverables": [
+        "Hands-on team training",
+        "Q&A clinic and scenario drills"
+      ],
+      "typical_timeline_days": "1"
+    },
+    {
+      "code": "RET-30",
+      "name": "Mini-Retention (30 Days)",
+      "base_price_eur": 2200,
+      "deliverables": [
+        "Prioritized backlog, 2 sprints",
+        "Weekly reports",
+        "Limited ad-hoc support"
+      ],
+      "typical_timeline_days": "30"
+    },
+    {
+      "code": "RET-60",
+      "name": "Mini-Retention (60 Days)",
+      "base_price_eur": 3800,
+      "deliverables": [
+        "Prioritized backlog, up to 4 sprints",
+        "Weekly reports and metrics",
+        "Limited ad-hoc support"
+      ],
+      "typical_timeline_days": "60"
+    }
+  ],
+  "addons": [
+    { "code": "ADD-INT", "name": "Extra Integration", "price_eur": 400 },
+    { "code": "ADD-DATA", "name": "Extra Data Source", "price_eur": 300 },
+    { "code": "ADD-KB", "name": "Extra Chatbot Collection", "price_eur": 350 },
+    { "code": "ADD-QA", "name": "Email/Dark-Mode Extra QA", "price_eur": 250 },
+    { "code": "ADD-DOC", "name": "Premium Documentation Pack", "price_eur": 300 }
+  ],
+  "example_quotes": [
+    {
+      "id": "A",
+      "title": "Micro-SME, Madrid (Remote), 3-service bundle",
+      "client_type": "MICRO_SME",
+      "geography": "SPAIN_T1",
+      "engagement": "REMOTE_ONLY",
+      "surcharge": "NONE",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["AUD-01", "AUT-01", "LEAD-01"],
+      "base_sum_eur": 4800,
+      "effective_multiplier": 0.7695,
+      "one_off_total_eur": 3693.60,
+      "recurring": []
+    },
+    {
+      "id": "B",
+      "title": "SME, Spain Tier-2, audit + data + comms + QA setup",
+      "client_type": "SME",
+      "geography": "SPAIN_T23",
+      "engagement": "STANDARD",
+      "surcharge": "NONE",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["AUD-01", "DATA-01", "COMM-01", "QA-01"],
+      "base_sum_eur": 5700,
+      "effective_multiplier": 0.855,
+      "one_off_total_eur": 4873.50,
+      "recurring": [
+        {
+          "code": "QA-02",
+          "monthly_eur": 332.50,
+          "note": "QA monitoring monthly"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Mid-Market, France (Onsite), bundle with chatbot",
+      "client_type": "MID_MARKET",
+      "geography": "FR_BENELUX_DE_AT",
+      "engagement": "ONSITE_REQUIRED",
+      "surcharge": "NONE",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["AUD-01", "AUT-01", "AI-01", "QA-01", "TRN-01"],
+      "base_sum_eur": 8950,
+      "effective_multiplier": 1.485,
+      "one_off_total_eur": 13290.75,
+      "recurring": [
+        {
+          "code": "QA-02",
+          "monthly_eur": 577.50,
+          "note": "QA monitoring monthly"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Enterprise, UK (Onsite + Rush), bundle with retainer",
+      "client_type": "ENTERPRISE",
+      "geography": "UK_IE",
+      "engagement": "ONSITE_REQUIRED",
+      "surcharge": "RUSH",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["AUD-01", "AI-01", "DATA-01", "PERF-01", "QA-01", "RET-60"],
+      "base_sum_eur": 13700,
+      "effective_multiplier": 2.475,
+      "one_off_total_eur": 33907.50,
+      "recurring": [
+        {
+          "code": "QA-02",
+          "monthly_eur": 962.50,
+          "note": "QA monitoring monthly"
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Nonprofit, Spain Tier-3 (Remote), lean lead + comms + training",
+      "client_type": "NONPROFIT_EDU",
+      "geography": "SPAIN_T23",
+      "engagement": "REMOTE_ONLY",
+      "surcharge": "NONE",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["LEAD-01", "COMM-01", "TRN-01"],
+      "base_sum_eur": 2850,
+      "effective_multiplier": 0.6498,
+      "one_off_total_eur": 1851.93,
+      "recurring": []
+    },
+    {
+      "id": "F",
+      "title": "Startup (Pre-seed), Portugal, audit + automation sprint",
+      "client_type": "STARTUP_PRESEED",
+      "geography": "PORT_ITALY_GREECE",
+      "engagement": "STANDARD",
+      "surcharge": "NONE",
+      "bundle": "BUNDLE_3PLUS",
+      "services": ["AUD-01", "AUT-01"],
+      "base_sum_eur": 3600,
+      "effective_multiplier": 0.8505,
+      "one_off_total_eur": 3061.80,
+      "recurring": []
+    }
+  ],
+  "quote_builder_hints": [
+    "Prefer bundles of 2–3 services for SMEs to keep scope lean.",
+    "Use REMOTE_ONLY where feasible in Spain to maintain affordability.",
+    "Add TRAINING for low-maturity teams; remove it for high-maturity orgs.",
+    "For enterprise: require QA-01 + QA-02 and consider DATA-01 with dashboards."
+  ]
+}
+

@@ -9,9 +9,9 @@ export function ChatPageContent() {
   const t = useTranslations('chat');
 
   return (
-    <div className="nexus-min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black">
+    <div className="nexus-min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black nexus-text-black">
       {/* Header section - more compact */}
-      <header className="flex-shrink-0 py-3 sm:py-4 md:py-6 text-center" role="banner" aria-label="NEXUS AI Chat">
+      <header className="hidden sm:block flex-shrink-0 py-3 sm:py-4 md:py-6 text-center" role="banner" aria-label="NEXUS AI Chat">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-2" role="banner">
             <div 

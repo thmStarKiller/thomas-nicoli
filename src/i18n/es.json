@@ -106,12 +106,12 @@
     "getStarted": "¿Cómo puedo ayudarte a transformar tu negocio hoy?",
     "welcomeTagline": "Tu asistente inteligente para transformación e-commerce",
     "suggestions": [
-      "Audita mi PDP para prepararlo para VTO",
-      "Elabora un plan de construcción de base de conocimientos RAG",
-      "Mejora la relevancia de búsqueda en mi SFCC",
-      "Planifica un sistema de recomendaciones impulsado por IA",
-      "Optimiza mi flujo de checkout para conversiones",
-      "Diseña una estrategia de personalización"
+      "¿Qué servicios ofreces?",
+      "¿Qué puedes construir para nuestro equipo?",
+      "¿Cómo trabajas: auditoría → quick wins → escalar?",
+      "¿Cuánto costaría un chatbot RAG ligero?",
+      "¿Puedes integrarte con SFCC/SFMC y nuestro CRM?",
+      "¿Disponibilidad e idiomas?"
     ],
     "regenerate": "Regenerar",
     "copy": "Copiar",
