@@ -35,14 +35,14 @@ export function ChatPageContent() {
             </SparklesText>
           </h1>
           
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 mt-1 sm:mt-2 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 mt-1 sm:mt-2 max-w-2xl mx-auto leading-relaxed text-balance whitespace-normal break-words">
             {t('subtitle')}
           </p>
         </div>
       </header>
 
       {/* Main chat container */}
-      <main className="flex-1 flex items-center justify-center px-3 sm:px-4 pb-3 sm:pb-4 md:pb-6" role="main" aria-label="Chat interface">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 pb-3 sm:pb-4 md:pb-6" role="main" aria-label="Chat interface">
         <div className="max-w-7xl mx-auto h-full">
           <NexusChat />
         </div>

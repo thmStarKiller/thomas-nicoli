@@ -26,7 +26,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
   return (
     <motion.div
-      className="flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 pt-8 sm:pt-16 md:pt-24 text-center min-h-[calc(var(--nexus-vh)-120px)] relative will-change-[opacity,transform]"
+      className="flex flex-col items-center justify-center px-4 py-3 sm:px-6 sm:py-6 md:px-8 md:py-8 pt-8 sm:pt-16 md:pt-24 text-center min-h-[calc(var(--nexus-vh)-120px)] relative will-change-[opacity,transform]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -112,14 +112,14 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
         {/* Typewriter Tagline */}
         <motion.div
-          className="h-7 sm:h-8 flex items-center justify-center"
+          className="h-7 sm:h-8 flex items-center justify-center px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: showTagline ? 1 : 0 }}
           transition={{ duration: 0.4 }}
         >
           {showTagline && (
             <motion.p
-              className="text-base sm:text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium text-balance"
+              className="text-base sm:text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium text-balance whitespace-normal sm:whitespace-nowrap break-words"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ 
@@ -127,8 +127,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
                 ease: "easeInOut"
               }}
               style={{ 
-                overflow: "hidden", 
-                whiteSpace: "nowrap",
+                overflow: "hidden",
                 borderRight: "2px solid currentColor"
               }}
             >
@@ -152,7 +151,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
 
       {/* Welcome Message */}
       <motion.div
-        className="mb-3 sm:mb-6 md:mb-8 max-w-2xl px-4"
+        className="mb-4 sm:mb-6 md:mb-8 max-w-2xl px-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -161,17 +160,17 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           ease: [0.4, 0.0, 0.2, 1]
         }}
       >
-        <p className="text-sm sm:text-base md:text-lg text-gray-900 dark:text-gray-100 leading-relaxed text-balance">
+        <p className="text-sm sm:text-base md:text-lg text-gray-900 dark:text-gray-100 leading-relaxed text-balance whitespace-normal break-words">
           {t('welcome')}
         </p>
-        <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 sm:mt-2 text-balance">
+        <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 sm:mt-2 text-balance whitespace-normal break-words">
           {t('welcomeDesc')}
         </p>
       </motion.div>
 
       {/* Suggestions */}
       <motion.div
-        className="w-full max-w-3xl px-3 sm:px-4"
+        className="w-full max-w-3xl px-4 sm:px-6"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
@@ -193,7 +192,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
           duration: 0.6
         }}
       >
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs text-muted-foreground leading-relaxed whitespace-normal break-words">
           {t('disclaimer')}
         </p>
       </motion.div>

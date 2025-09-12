@@ -43,7 +43,10 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
         }
         className={cn(
           "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-4 py-2 sm:px-6 sm:py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-white",
-          "transform-gpu transition-transform duration-300 ease-in-out active:scale-95",
+          // Hover/active scale and focus-visible outline
+          "transform-gpu transition-transform duration-300 ease-in-out hover:scale-[1.02] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          // Subtle glow on hover
+          "hover:ring-2 hover:ring-primary/30 hover:ring-offset-2",
           className
         )}
         ref={ref}

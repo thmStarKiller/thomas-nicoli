@@ -7,11 +7,12 @@ import type { DocWithScore } from '@/lib/rag';
 import { ChatMessage } from './types';
 import { ChatSession, SessionUtils, SessionManager } from './sessionUtils';
 import { NexusMessage } from './NexusMessage';
-import { NexusTypingIndicator } from './NexusTypingIndicator';
+// import { NexusTypingIndicator } from './NexusTypingIndicator';
 import { NexusWelcome } from './NexusWelcome';
 import { NexusInput } from './NexusInput';
 import { NexusSourceCard } from './NexusSourceCard';
 import { NexusToolbar } from './NexusToolbar';
+// Tour feature removed
 
 // Extended ChatMessage with streaming state
 interface ChatMessageWithStreaming extends ChatMessage {
@@ -288,9 +289,7 @@ export function NexusChat() {
         i === prev.length - 1 
           ? { 
               ...msg, 
-              content: locale === 'es' 
-                ? 'Lo siento, ocurrió un error. Por favor intenta de nuevo.' 
-                : 'Sorry, an error occurred. Please try again.',
+              content: t('errorGeneric'),
               isStreaming: false
             }
           : msg
@@ -369,15 +368,16 @@ export function NexusChat() {
 
   return (
     <motion.div
-      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[520px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl box-border min-w-0 p-2 sm:p-3 md:p-4"
+      className="flex flex-col w-full h-[calc(var(--nexus-vh)-8rem)] sm:h-[calc(var(--nexus-vh)-9rem)] md:h-[calc(var(--nexus-vh)-10rem)] min-h-[520px] sm:min-h-[600px] max-w-7xl mx-auto bg-white dark:bg-gray-800 border-0 sm:border border-gray-200 dark:border-gray-700 rounded-none sm:rounded-2xl overflow-hidden backdrop-blur-sm shadow-none sm:shadow-xl dark:shadow-none sm:dark:shadow-2xl box-border min-w-0 px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {messages.length === 0 ? (
         <div className="h-full overflow-y-auto nexus-hide-scrollbar">
-          <div className="min-h-full flex items-start justify-center p-4 sm:p-6 md:p-8">
+          <div className="min-h-full flex items-start justify-center px-4 pt-6 pb-8 sm:px-6 sm:pt-10 sm:pb-10 md:px-8 relative">
             <NexusWelcome onSuggestionClick={handleSuggestionClick} />
+            
           </div>
         </div>
       ) : (
@@ -394,7 +394,7 @@ export function NexusChat() {
           />
           
           {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto nexus-hide-scrollbar p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
+          <div className="flex-1 overflow-y-auto nexus-hide-scrollbar px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 space-y-4 sm:space-y-6">
             <AnimatePresence mode="popLayout">
               {messages.map((message, index) => (
                 <NexusMessage
@@ -408,35 +408,37 @@ export function NexusChat() {
                   isSelected={selectedMessageIndex === index}
                 />
               ))}
-              {isTyping && !messages[messages.length - 1]?.content && (
-                <NexusTypingIndicator />
+              {false && isTyping && !messages[messages.length - 1]?.content && (
+                <></>
               )}
             </AnimatePresence>
             <div ref={messagesEndRef} />
           </div>
 
           {/* Sources */}
-          {sources.length > 0 && (
-            <motion.div
-              className="px-4 pb-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('sources')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {sources.slice(0, 4).map((source, index) => (
-                    <NexusSourceCard
-                      key={source.id}
-                      source={source}
-                      index={index + 1}
-                    />
-                  ))}
+          <div>
+            {sources.length > 0 && (
+              <motion.div
+                className="px-4 pb-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('sources')}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {sources.slice(0, 4).map((source, index) => (
+                      <NexusSourceCard
+                        key={source.id}
+                        source={source}
+                        index={index + 1}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </div>
         </>
       )}
 

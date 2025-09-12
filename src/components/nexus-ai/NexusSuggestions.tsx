@@ -64,7 +64,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
     >
       {/* Section Title */}
       <motion.div
-        className="mb-6 text-center"
+        className="mb-6 text-center mx-auto max-w-screen-sm px-4 sm:px-0 whitespace-normal break-words"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -72,8 +72,8 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
           {t('getStarted')}
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Click a suggestion to get started, or type your own question below.
+        <p className="text-base leading-normal text-gray-600 dark:text-gray-400 whitespace-normal break-words">
+          {t('suggestionsSubtitle')}
         </p>
       </motion.div>
 
@@ -115,7 +115,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
               <div className="relative flex items-start gap-3">
                 {/* Icon */}
                 <motion.div
-                  className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-sm"
+                  className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-sm"
                   whileHover={{ 
                     rotate: 360,
                     scale: 1.1
@@ -126,12 +126,12 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
                     stiffness: 200
                   }}
                 >
-                  <IconComponent className="w-4 h-4 text-white" />
+                  <IconComponent className="w-6 h-6 text-white" />
                 </motion.div>
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-relaxed whitespace-normal break-words">
+                  <p className="text-base font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-tight whitespace-normal break-words">
                     {suggestion}
                   </p>
                 </div>
@@ -178,13 +178,13 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
 
       {/* Additional CTA */}
       <motion.div
-        className="mt-8 text-center"
+        className="mt-8 text-center px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.5 }}
       >
-        <p className="text-xs text-muted-foreground/70 leading-relaxed max-w-lg mx-auto">
-          These suggestions are powered by Thomas&apos;s expertise in AI consulting, SFCC implementations, and e-commerce transformation strategies.
+        <p className="text-sm text-muted-foreground/70 leading-normal max-w-screen-sm mx-auto whitespace-normal break-words">
+          {t('suggestionsCta')}
         </p>
       </motion.div>
     </motion.div>

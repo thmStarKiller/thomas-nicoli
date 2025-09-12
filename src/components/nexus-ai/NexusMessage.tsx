@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { ChatMessage } from './types';
 import { NexusAvatar } from './NexusAvatar';
 import { NexusSourceCard } from './NexusSourceCard';
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Extended ChatMessage with streaming state for compatibility
 interface ChatMessageWithStreaming extends ChatMessage {
@@ -126,9 +127,16 @@ export function NexusMessage({
           layout
         >
           {/* Content */}
-          <div className={`prose prose-sm dark:prose-invert max-w-none ${
-            isAI ? 'prose-blue' : ''
-          }`}>
+          {isAI && message.isStreaming && !message.content ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-11/12" />
+              <Skeleton className="h-4 w-4/5" />
+            </div>
+          ) : (
+            <div className={`prose prose-sm dark:prose-invert max-w-none ${
+              isAI ? 'prose-blue' : ''
+            }`}>
             {isAI ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -208,7 +216,8 @@ export function NexusMessage({
                 {message.content}
               </p>
             )}
-          </div>
+            </div>
+          )}
 
           {/* Streaming indicator */}
           {message.isStreaming && isAI && (
@@ -279,7 +288,7 @@ export function NexusMessage({
                 whileTap={{ scale: 0.95 }}
               >
                 <Square className="w-3 h-3" />
-                <span>Stop</span>
+                <span>{t('stop')}</span>
               </motion.button>
             )}
 

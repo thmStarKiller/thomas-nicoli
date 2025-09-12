@@ -166,7 +166,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
     setVoiceError(null);
 
     if (!isSpeechRecognitionSupported) {
-      setVoiceError('Speech recognition not supported in this browser');
+      setVoiceError(t('input.voiceNotSupported'));
       return;
     }
 
@@ -213,19 +213,19 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
         // Handle different error types gracefully
         switch (event.error) {
           case 'no-speech':
-            setVoiceError('No speech detected. Please try again.');
+            setVoiceError(t('input.voiceNoSpeech'));
             break;
           case 'audio-capture':
-            setVoiceError('Microphone not available or blocked.');
+            setVoiceError(t('input.voiceAudioCapture'));
             break;
           case 'not-allowed':
-            setVoiceError('Microphone permission denied.');
+            setVoiceError(t('input.voiceNotAllowed'));
             break;
           case 'network':
-            setVoiceError('Network error occurred.');
+            setVoiceError(t('input.voiceNetwork'));
             break;
           default:
-            setVoiceError('Voice recognition error. Please try again.');
+            setVoiceError(t('input.voiceError'));
         }
         
         // Clear error after 3 seconds
@@ -246,7 +246,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
       recognition.start();
     } catch (error) {
       console.error('Error starting speech recognition:', error);
-      setVoiceError('Failed to start voice recognition');
+      setVoiceError(t('input.voiceStartError'));
       setIsListening(false);
       recognitionRef.current = null;
       // Clear error after 3 seconds
@@ -348,7 +348,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
           transition: { duration: 0.5, ease: "easeInOut" }
         } : {}}
       >
-        <form onSubmit={handleSubmit} className="flex items-end gap-2 px-4 py-3 sm:px-3">
+        <form onSubmit={handleSubmit} className="flex items-end gap-2 px-4 py-3 sm:px-6">
           {/* Textarea */}
           <div className="flex-1 relative">
             <textarea
@@ -423,7 +423,7 @@ export const NexusInput = forwardRef<HTMLTextAreaElement, NexusInputProps>(({
               whileTap={isSpeechRecognitionSupported && !isInputDisabled ? { scale: 0.9 } : {}}
               title={
                 !isSpeechRecognitionSupported 
-                  ? 'Voice input not supported in this browser'
+                  ? t('input.voiceNotSupported')
                   : voiceError 
                     ? voiceError
                     : isListening 
