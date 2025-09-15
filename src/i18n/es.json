@@ -45,7 +45,12 @@
     "finalCTATitle": "Construyamos Algo",
     "finalCTATitle2": "Increíble",
     "finalCTATitle3": "Juntos",
-    "getStartedToday": "Comienza Hoy"
+    "getStartedToday": "Comienza Hoy",
+    "videoTitle": "Descubre Cómo Transformamos Tu Negocio",
+    "videoDescription": "Mira nuestro video explicativo para entender cómo ayudamos a las empresas a lograr resultados extraordinarios con soluciones innovadoras.",
+    "videoCtaPrimary": "Comenzar",
+    "videoCtaSecondary": "Más información",
+    "videoTranscript": "Leer transcripción"
   },
   "services": {
     "title": "Servicios",
@@ -178,4 +183,4 @@
     "aiChat": "Chat IA",
     "copyright": "Todos los derechos reservados."
   }
-
+}

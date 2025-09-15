@@ -17,7 +17,7 @@ export default function AboutPage() {
       </BlurFade>
       <BlurFade delay={0.2}>
         <div>
-          <img src="/images/placeholders/about-portrait.svg" alt="Portrait placeholder" className="w-full h-auto rounded-xl border border-border" />
+          <img src="/images/placeholders/thomas-card-portrait.jpg" alt="Portrait placeholder" className="w-full h-auto rounded-xl border border-border" />
         </div>
       </BlurFade>
     </div>

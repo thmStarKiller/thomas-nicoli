@@ -11,6 +11,7 @@ import { Particles } from '@/components/magicui/particles';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { ArrowRight, Sparkles, Zap, Target, Brain, Globe, MessageSquare } from 'lucide-react';
+import ExplainerVideo from '@/components/ExplainerVideo';
 
 export default function Home() {
   const tHero = useTranslations('hero');
@@ -128,6 +129,11 @@ export default function Home() {
             </BlurFade>
           </div>
         </div>
+      </section>
+
+      {/* Explainer Video Section (high priority placement) */}
+      <section className="relative z-10 py-12 md:py-20">
+        <ExplainerVideo />
       </section>
 
       {/* Animated Logo Banner */}
@@ -281,7 +287,7 @@ export default function Home() {
               <div className="relative">
                 <MagicCard className="p-8">
                   <img 
-                    src="/images/placeholders/about-portrait.svg" 
+                    src="/images/placeholders/thomas-card-portrait.jpg" 
                     alt="Thomas Nicoli"
                     className="w-full h-auto rounded-lg"
                   />
@@ -304,20 +310,24 @@ export default function Home() {
                 <p className="text-xl text-muted-foreground mb-8">
                   {tHome('chatCTADescription')}
                 </p>
-                <ShimmerButton
-                  background="rgba(0, 0, 0, 1)"
-                  shimmerColor="#ffffff"
-                  className="text-white dark:text-white text-sm sm:text-lg"
-                >
-                  <Link href={`/${locale}/chat`} className="flex items-center gap-1.5 sm:gap-2">
-                    <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
-                    {tHome('startConversation')}
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="flex justify-center">
+                  <Link href={`/${locale}/chat`} className="inline-block">
+                    <ShimmerButton
+                      background="rgba(0, 0, 0, 1)"
+                      shimmerColor="#ffffff"
+                      className="text-white dark:text-white text-sm sm:text-lg"
+                    >
+                      <span className="flex items-center gap-1.5 sm:gap-2">
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+                        {tHome('startConversation')}
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </span>
+                    </ShimmerButton>
                   </Link>
-                </ShimmerButton>
+                </div>
                 <div className="mt-6">
                   <img 
-                    src="/images/placeholders/chatbot-illustration.svg" 
+                    src="/images/placeholders/brainAi.png" 
                     alt="AI Chat Interface"
                     className="w-full max-w-md mx-auto opacity-80"
                   />
@@ -349,4 +359,3 @@ export default function Home() {
     </div>
   );
 }
-

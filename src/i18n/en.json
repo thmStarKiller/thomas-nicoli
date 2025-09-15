@@ -45,7 +45,12 @@
     "finalCTATitle": "Let's Build Something",
     "finalCTATitle2": "Amazing",
     "finalCTATitle3": "Together",
-    "getStartedToday": "Get Started Today"
+    "getStartedToday": "Get Started Today",
+    "videoTitle": "Discover How We Transform Your Business",
+    "videoDescription": "Watch our explainer to understand how we help businesses achieve extraordinary results through innovative solutions.",
+    "videoCtaPrimary": "Get Started",
+    "videoCtaSecondary": "Learn More",
+    "videoTranscript": "Read transcript"
   },
   "services": {
     "title": "Services",
@@ -180,3 +185,4 @@
     "aiChat": "AI Chat",
     "copyright": "All rights reserved."
   }
+}
