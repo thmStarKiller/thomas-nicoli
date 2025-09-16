@@ -13,11 +13,11 @@ const space = Space_Grotesk({subsets: ['latin'], variable: '--font-space'});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Thomas Nicoli — AI Consulting for E-commerce',
-    template: '%s · Thomas Nicoli'
+    default: 'Thomas & Virginia - Strategy, Editorial, AI',
+    template: '%s | Thomas & Virginia'
   },
   description:
-    'AI consulting for commerce that actually ships. SFCC/SFMC · RAG assistants · audits · automation.'
+    'Clarity-first strategy, bilingual editorial, and AI alignment for modern teams.'
 };
 
 export default async function LocaleLayout({
@@ -44,10 +44,10 @@ export default async function LocaleLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Person',
-              name: 'Thomas Nicoli',
+              name: 'Thomas & Virginia',
               url: 'https://'+(process.env.SITE_URL?.replace(/^https?:\/\//,'') || 'example.com'),
-              jobTitle: 'AI Consultant',
-              knowsAbout: ['SFCC', 'SFMC', 'RAG', 'E-commerce']
+              jobTitle: 'Strategy and AI Partners',
+              knowsAbout: ['Strategy', 'Editorial', 'AI alignment', 'Bilingual content']
             })
           }}
         />

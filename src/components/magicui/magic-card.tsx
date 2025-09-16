@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
@@ -30,9 +30,13 @@ export function MagicCard({
   const mouseX = useMotionValue(-gradientSize);
   const mouseY = useMotionValue(-gradientSize);
 
-  // Use theme-aware default gradient color
-  const defaultGradientColor = resolvedTheme === 'dark' ? "#262626" : "#e5e5e5";
-  const effectiveGradientColor = gradientColor || defaultGradientColor;
+  // Track mount time so the initial render matches the server output
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const themeGradientColor = resolvedTheme === "dark" ? "#262626" : "#e5e5e5";
+  const effectiveGradientColor = gradientColor ?? (mounted ? themeGradientColor : "#e5e5e5");
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -113,3 +117,4 @@ export function MagicCard({
     </div>
   );
 }
+

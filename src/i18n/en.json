@@ -1,126 +1,181 @@
 {
   "site": {
-    "title": "Thomas Nicoli — AI Consulting for E-commerce",
-    "description": "AI consulting for commerce that actually ships. SFCC/SFMC · RAG assistants · audits · automation.",
-    "ctaPrimary": "Book intro call",
-    "ctaSecondary": "Ask Thomas"
+    "title": "Thomas & Virginia - Strategy, Editorial, AI",
+    "description": "Clarity-first strategy, bilingual editorial, and AI alignment for modern teams.",
+    "ctaPrimary": "See packages",
+    "ctaSecondary": "Talk to us"
   },
   "nav": {
     "home": "Home",
     "services": "Services",
-    "work": "Work",
+    "work": "Case Studies",
     "about": "About",
     "contact": "Contact",
     "chat": "NEXUS AI",
+    "packages": "Packages",
+    "caseStudies": "Case Studies",
+    "blog": "Insights",
     "privacy": "Privacy",
     "terms": "Terms"
   },
   "hero": {
-    "title": "AI consulting for commerce that actually ships.",
-    "subtitle": "SFCC/SFMC · RAG assistants · audits · automation.",
-    "ctaPrimary": "Book intro call",
-    "ctaSecondary": "Ask NEXUS AI"
+    "title": "Strategy, editorial, and AI working as one",
+    "subtitle": "We help teams turn complex ideas into clear offers, bilingual content, and an AI assistant that answers like your best consultant.",
+    "ctaPrimary": "See packages",
+    "ctaSecondary": "Talk to us"
   },
   "home": {
-    "servicesTitle": "Services",
-    "workTitle": "Selected Work",
-    "aboutTitle": "About Thomas",
-    "chatTitle": "Ask Thomas",
-    "contactStrip": "Have a project? Let's talk.",
-    "trustedBy": "Trusted by leading e-commerce brands worldwide",
-    "servicesSectionTitle": "That Drive Innovation",
-    "servicesDescription": "Comprehensive AI and e-commerce solutions tailored to your business needs",
-    "workSectionTitle": "Results",
-    "workDescription": "Real transformations for real businesses",
-    "workMetric": "+250% Revenue Growth →",
-    "aboutSectionTitle": "Meet",
-    "aboutDescription1": "Former L'Oréal DEC (Madrid) with 10+ years in digital commerce and e-commerce innovation.",
-    "aboutDescription2": "Specialized in Salesforce Commerce Cloud (SFCC), Marketing Cloud (SFMC), RAG implementations, AI audits, and intelligent automation.",
-    "aboutDescription3": "I help businesses leverage AI to transform their operations, boost efficiency, and drive sustainable growth in the digital economy.",
-    "chatCTATitle": "Ready to",
-    "chatCTATitle2": "Transform",
-    "chatCTATitle3": "Your Business?",
-    "chatCTADescription": "Chat with Thomas about your specific needs, pricing, and timelines. Get expert insights in minutes, not meetings.",
-    "startConversation": "Start Conversation",
-    "finalCTATitle": "Let's Build Something",
-    "finalCTATitle2": "Amazing",
-    "finalCTATitle3": "Together",
-    "getStartedToday": "Get Started Today",
-    "videoTitle": "Discover How We Transform Your Business",
-    "videoDescription": "Watch our explainer to understand how we help businesses achieve extraordinary results through innovative solutions.",
-    "videoCtaPrimary": "Get Started",
-    "videoCtaSecondary": "Learn More",
-    "videoTranscript": "Read transcript"
+    "servicesTitle": "Value pillars",
+    "servicesSectionTitle": "Working as one",
+    "servicesDescription": "Clarity-first positioning, bilingual editorial, and an aligned assistant across EN/ES.",
+    "workSectionTitle": "Outcomes, not outputs",
+    "workDescription": "Proof that clarity lifts conversions, velocity, and confidence.",
+    "workMetric": "Consistent EN/ES + AI alignment",
+    "aboutSectionTitle": "About",
+    "aboutDescription1": "We pair strategy, editorial craft, and AI enablement so your message lands.",
+    "aboutDescription2": "Every deliverable ships in English and Spanish with an aligned knowledge base.",
+    "aboutDescription3": "The result: faster approvals, confident teams, and a site that scales with NEXUS AI.",
+    "chatCTATitle": "Ready to align",
+    "chatCTATitle2": "Content",
+    "chatCTATitle3": "and AI?",
+    "chatCTADescription": "Ask NEXUS AI how we work, what is included, or how we tailor the engagement.",
+    "startConversation": "Start the conversation",
+    "finalCTATitle": "Pick your",
+    "finalCTATitle2": "Next",
+    "finalCTATitle3": "Step",
+    "getStartedToday": "Book a call",
+    "videoTitle": "See how the packages work",
+    "videoDescription": "Watch the quick explainer on pairing positioning, editorial, and AI enablement.",
+    "videoCtaPrimary": "Talk to us",
+    "videoCtaSecondary": "See packages",
+    "videoTranscript": "Read transcript",
+    "trustedBy": "Trusted for clarity",
+    "seo": {
+      "title": "Strategy, Editorial & AI (EN/ES)",
+      "description": "Clarity-first editorial and AI alignment. English and Spanish."
+    }
   },
   "services": {
-    "title": "Services",
+    "title": "What we do",
     "items": [
-      {"title": "AI Strategy & Roadmap", "desc": "Shape pragmatic, outcome-focused initiatives."},
-      {"title": "RAG Assistants & Automation", "desc": "Ship assistants that reduce tickets & toil."},
-      {"title": "SFCC/SFMC Integrations", "desc": "Wire AI into the stack you already use."},
-      {"title": "AI/E-comm Audits", "desc": "Low-effort, high-leverage improvements."},
-      {"title": "Data & Tracking", "desc": "Foundations for attribution and iteration."},
-      {"title": "Enablement", "desc": "Upskill your team to operate AI safely."}
-    ]
+      {
+        "title": "Clear positioning",
+        "desc": "Say exactly who you serve, the outcomes, and how to start."
+      },
+      {
+        "title": "Bilingual by design",
+        "desc": "English and Spanish content shipped together, page by page."
+      },
+      {
+        "title": "AI-aligned",
+        "desc": "Your website and assistant tell the same story, consistently."
+      },
+      {
+        "title": "Offer architecture",
+        "desc": "Structure packages, pricing, and proof so decisions feel simple."
+      },
+      {
+        "title": "Editorial systems",
+        "desc": "Voice, glossary, and playbooks to keep teams shipping on cadence."
+      },
+      {
+        "title": "Knowledge handoff",
+        "desc": "Answer Cards and summaries to keep NEXUS AI current."
+      }
+    ],
+    "seo": {
+      "title": "Services — Strategy, Editorial, AI",
+      "description": "Positioning, editorial, bilingual delivery, and AI alignment."
+    },
+    "description": "We craft the narrative, structure your pages, and tune your AI assistant so prospects understand value fast."
   },
   "work": {
-    "title": "Selected Work",
+    "title": "Case studies",
     "tiles": [
-      {"title": "Checkout uplift", "result": "+12% conversion, −28% load"},
-      {"title": "Support RAG", "result": "<10s first-response, CSAT up"},
-      {"title": "SFMC triggers revamp", "result": "Deliverability & opens up"}
-    ]
+      {
+        "title": "B2B SaaS: Clearer offer, +32% demo requests",
+        "result": "Refined positioning, bilingual pages, and AI-aligned FAQs accelerated the buyer journey."
+      },
+      {
+        "title": "Fintech: Fewer questions, faster closes",
+        "result": "Sitewide FAQs and Answer Cards reduced friction and lifted close rates."
+      },
+      {
+        "title": "Product studio: Unified story across EN/ES",
+        "result": "Editorial system and NEXUS AI bundle kept sales, marketing, and CS in sync."
+      }
+    ],
+    "seo": {
+      "title": "Case Studies — Outcomes with clarity",
+      "description": "Proven results from bilingual editorial and AI alignment."
+    },
+    "description": "Outcomes over outputs. Here is how clarity improved conversions and velocity."
   },
   "about": {
-    "title": "About",
-    "bio": "L’Oréal DEC (Madrid). 10+ yrs digital/e-comm. Strong SFCC/SFMC. RAG, automation, audits. Languages ES/EN/FR. Side-hustle evenings/weekends. Engagements: Kickstart (2 wks), Pilot (4–6 wks). Boundaries: no big-bang rewrites, no 24/7.",
-    "cta": "See services"
+    "title": "About Thomas & Virginia",
+    "bio": "We blend strategy, editorial craft, and AI enablement so your message lands and scales. Thomas leads positioning, offer architecture, outcomes framing, and NEXUS AI alignment. Virginia shapes voice and structure, writes bilingual copy, and keeps every page coherent.",
+    "seo": {
+      "title": "About — Thomas & Virginia",
+      "description": "Strategy, editorial, and AI enablement partners."
+    }
   },
   "contact": {
-    "title": "Contact",
+    "title": "Let's make it clear",
+    "body": "Share your goals. We will map the smallest step to real outcomes.",
     "name": "Name",
-    "email": "Work email",
+    "email": "Email",
     "company": "Company",
     "website": "Website (optional)",
     "message": "Message",
     "consent": "I agree to be contacted and accept the privacy policy.",
-    "submit": "Send",
-    "thanks": "Thanks! I'll reply shortly.",
-    "error": "Something went wrong. Please email me.",
+    "submit": "Send message",
+    "thanks": "Thanks - talk soon!",
+    "error": "Please check required fields.",
     "placeholders": {
       "name": "Your full name",
-      "email": "your@email.com",
-      "company": "Your company",
+      "email": "you@company.com",
+      "company": "Company name",
       "website": "https://yourwebsite.com",
-      "message": "Tell us about your project and goals..."
+      "message": "What are you trying to achieve?"
+    },
+    "seo": {
+      "title": "Contact — Thomas & Virginia",
+      "description": "Start with a quick conversation about outcomes."
     }
   },
   "chat": {
     "title": "NEXUS AI",
-    "subtitle": "Your intelligent e-commerce transformation assistant",
-    "errorGeneric": "Sorry, an error occurred. Please try again.",
-    "placeholder": "Ask about pricing, timelines, SFCC experience, process…",
-    "chips": ["Pricing", "Timeline", "SFCC experience", "Process", "Audit scope", "Next steps"],
-    "disclaimer": "NEXUS AI uses Thomas Nicoli's knowledge base. If unsure, it will suggest next steps.",
+    "subtitle": "Your bilingual strategy, editorial, and AI alignment assistant.",
+    "errorGeneric": "Sorry, something went wrong. Please try again.",
+    "placeholder": "Ask about packages, EN/ES delivery, or AI alignment...",
+    "chips": [
+      "Packages",
+      "EN/ES delivery",
+      "AI alignment",
+      "Answer Cards",
+      "Timelines",
+      "Next steps"
+    ],
+    "disclaimer": "NEXUS AI uses Thomas & Virginia's knowledge base. If unsure, it will suggest next steps.",
     "sources": "Sources",
-    "contactCTA": "Want detail? Contact me.",
+    "contactCTA": "Need more detail? Contact us.",
     "send": "Send",
     "thinking": "NEXUS AI is thinking...",
     "assistant-typing": "NEXUS AI is typing...",
-    "welcome": "Welcome! I'm NEXUS AI, your specialist for e-commerce transformation.",
-    "welcomeDesc": "I can help you with AI consulting, SFCC/SFMC integrations, automation strategies, and more.",
-    "getStarted": "How can I help transform your business today?",
-    "suggestionsSubtitle": "Click a suggestion to get started, or type your own question below.",
-    "welcomeTagline": "Your intelligent e-commerce transformation assistant",
+    "welcome": "Welcome! I'm NEXUS AI, aligned with Thomas & Virginia's approach.",
+    "welcomeDesc": "Ask how we pair strategy, editorial, and AI so prospects get clear answers fast.",
+    "getStarted": "How can I help you ship bilingual clarity today?",
+    "suggestionsSubtitle": "Pick a prompt to begin or write your own question below.",
+    "welcomeTagline": "Your bilingual clarity assistant",
     "suggestions": [
-      "What services do you offer?",
-      "What can you build for our team?",
-      "How do you work: audit → quick wins → scale?",
-      "How much would a lightweight RAG chatbot cost?",
-      "Can you integrate with SFCC/SFMC and our CRM?",
-      "What are your availability and languages?"
+      "What is included in the packages?",
+      "How do you align the site with AI?",
+      "Can we launch EN/ES together?",
+      "What does the knowledge bundle cover?",
+      "How fast can we ship?",
+      "Who leads strategy vs. editorial?"
     ],
-    "suggestionsCta": "These suggestions are powered by Thomas's expertise in AI consulting, SFCC implementations, and e-commerce transformation strategies.",
+    "suggestionsCta": "Suggestions reflect our process for bilingual editorial and AI alignment.",
     "regenerate": "Regenerate",
     "stop": "Stop",
     "copy": "Copy",
@@ -134,33 +189,33 @@
     "citationCopied": "Citation copied!",
     "urlCopied": "URL copied!",
     "input": {
-      "placeholder": "Ask about pricing, timelines, SFCC experience, process…",
+      "placeholder": "Ask about packages, EN/ES delivery, or AI alignment...",
       "generating": "NEXUS AI is responding...",
       "listening": "Listening...",
       "startListening": "Start voice input",
       "stopListening": "Stop voice input",
       "clear": "Clear conversation",
       "send": "Send message",
-      "emptyError": "Please enter a message to continue",
-      "helperText": "Press Enter to send, Shift+Enter for new line",
-      "voiceNotSupported": "Voice input not supported in this browser",
+      "emptyError": "Please enter a message to continue.",
+      "helperText": "Press Enter to send, Shift+Enter for a new line.",
+      "voiceNotSupported": "Voice input is not supported in this browser.",
       "voiceNoSpeech": "No speech detected. Please try again.",
       "voiceAudioCapture": "Microphone not available or blocked.",
       "voiceNotAllowed": "Microphone permission denied.",
-      "voiceNetwork": "Network error occurred.",
+      "voiceNetwork": "A network error occurred.",
       "voiceError": "Voice recognition error. Please try again.",
-      "voiceStartError": "Failed to start voice recognition"
+      "voiceStartError": "Failed to start voice recognition."
     },
     "toolbar": {
-      "newChat": "New Chat",
+      "newChat": "New chat",
       "export": "Export",
       "exportMarkdown": "Export as Markdown",
       "exportPDF": "Export as PDF",
       "branchFromHere": "Branch from here",
       "regenerateLast": "Regenerate last response",
-      "confirmNewChatTitle": "Start New Chat?",
-      "confirmNewChatMessage": "This will create a new chat session. Your current conversation will be saved.",
-      "startNewChat": "Start New Chat",
+      "confirmNewChatTitle": "Start new chat?",
+      "confirmNewChatMessage": "This creates a new chat session. Your current conversation will be saved.",
+      "startNewChat": "Start new chat",
       "cancel": "Cancel",
       "confirm": "Confirm"
     }
@@ -168,21 +223,39 @@
   "legal": {
     "privacy": "Privacy",
     "terms": "Terms",
-    "termsContent": "Information on this site is provided as-is without warranties. No legal or medical advice. Engagements are governed by a separate Statement of Work (SoW).",
-    "privacyContent": "This website collects minimal personal data. Contact submissions are used solely to respond to your inquiry. No tracking runs without consent. You can request deletion at any time."
+    "privacyContent": "Your data is handled with care. We collect only what is needed to reply and never sell it.",
+    "termsContent": "Using this site means you agree to responsible use. Engagements run under a separate agreement.",
+    "privacySeo": {
+      "title": "Privacy Policy",
+      "description": "We handle your data carefully and respond with minimal collection."
+    },
+    "termsSeo": {
+      "title": "Terms of Use",
+      "description": "Using this site means you agree to responsible use."
+    }
   },
   "footer": {
-    "description": "AI Consulting & E-commerce Innovation. Transforming businesses with cutting-edge technology solutions and strategic digital transformation.",
+    "description": "Clarity-first strategy, editorial, and AI enablement.",
     "servicesTitle": "Services",
-    "aiStrategy": "AI Strategy",
-    "ecommerceOptimization": "E-commerce Optimization",
-    "ragImplementation": "RAG Implementation",
-    "salesforceCommerce": "Salesforce Commerce",
+    "aiStrategy": "Positioning & offers",
+    "ecommerceOptimization": "Editorial systems",
+    "ragImplementation": "EN/ES delivery",
+    "salesforceCommerce": "AI alignment",
     "companyTitle": "Company",
     "about": "About",
     "caseStudies": "Case Studies",
     "contact": "Contact",
-    "aiChat": "AI Chat",
+    "aiChat": "NEXUS AI",
     "copyright": "All rights reserved."
+  },
+  "microcopy": {
+    "forms": {
+      "emailPlaceholder": "you@company.com",
+      "messagePlaceholder": "What are you trying to achieve?"
+    },
+    "ui": {
+      "loading": "Loading...",
+      "empty": "Nothing here yet."
+    }
   }
 }
