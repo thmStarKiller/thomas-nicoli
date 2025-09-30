@@ -90,26 +90,210 @@
     "description": "Definimos la narrativa, estructuramos tus páginas y ajustamos tu asistente de AI para que el valor se entienda al instante."
   },
   "work": {
-    "title": "Casos de éxito",
+    "title": "Portafolio de Proyectos",
+    "subtitle": "Experiencia en desarrollo full-stack con integración de IA, automatización y diseño centrado en el usuario",
+    "seo": {
+      "title": "Portafolio — Proyectos de Thomas Nicoli",
+      "description": "Explora el portafolio de Thomas Nicoli: aplicaciones web, herramientas con IA y soluciones empresariales construidas con React, Next.js, Python y tecnologías modernas."
+    },
+    "description": "Desde sitios de marketing con chatbots de IA hasta aplicaciones creativas de generación de imágenes, demostrando versatilidad en desarrollo web, integración de IA/ML y automatización.",
     "tiles": [
       {
-        "title": "SaaS B2B: Oferta clara, +32% demos",
-        "result": "Posicionamiento refinado, páginas bilingües y FAQs alineadas con AI aceleraron el ciclo de compra."
+        "title": "Thomas Nicoli Consulting — Sitio Web con IA",
+        "result": "Sitio bilingüe moderno con chatbot IA, Q&A de base de conocimiento y captura de leads. En vivo en Vercel."
       },
       {
-        "title": "Fintech: Menos dudas, cierres más rápidos",
-        "result": "FAQs globales y Tarjetas de Respuesta redujeron fricción y aumentaron cierres."
+        "title": "Property Finder — Búsqueda Inmobiliaria Offline",
+        "result": "App de escritorio para buscar listados de propiedades offline con arquitectura de privacidad first."
       },
       {
-        "title": "Studio de producto: Historia unificada EN/ES",
-        "result": "Sistema editorial y bundle NEXUS AI alinearon ventas, marketing y soporte."
+        "title": "SFCC Inspector — Herramienta de Análisis de Código IA",
+        "result": "Herramienta con IA que ayuda a no-desarrolladores a entender código de Salesforce Commerce Cloud vía WebDAV."
       }
     ],
-    "seo": {
-      "title": "Casos de Éxito — Resultados con claridad",
-      "description": "Resultados con editorial bilingüe y AI alineada."
-    },
-    "description": "Resultados por encima de entregables. Así la claridad mejoró conversiones y velocidad."
+    "projects": [
+      {
+        "id": "thomas-nicoli-consulting",
+        "title": "Sitio de Consultoría Thomas Nicoli",
+        "subtitle": "Sitio Web de Marketing con IA",
+        "type": "Aplicación Web Completa",
+        "badge": "En Vivo en Vercel",
+        "purpose": "Un sitio web moderno bilingüe (EN/ES) de consultoría que presenta servicios de IA para e-commerce. Incluye un chatbot con recuperación aumentada que responde preguntas de visitantes desde una base de conocimiento curada, proporcionando Q&A interactivo. Captura leads mediante formulario de contacto con entrega de emails por API.",
+        "tech": [
+          "Next.js 14/15",
+          "React 18+",
+          "TypeScript",
+          "Tailwind CSS v4",
+          "Framer Motion",
+          "OpenAI API",
+          "next-intl",
+          "Vercel"
+        ],
+        "highlights": [
+          "Contenido bilingüe (EN/ES) con localización next-intl",
+          "Chatbot IA con embeddings OpenAI y chat streaming",
+          "Respaldo a búsqueda local BM25 sin API key",
+          "Gestión de base de conocimiento en Markdown",
+          "Despliegue serverless en Vercel",
+          "Captura de leads con integración Resend API"
+        ],
+        "deployment": "Despliegue en vivo en Vercel (serverless). Completamente estático + funciones serverless para rendimiento óptimo.",
+        "githubUrl": "https://github.com/thmStarKiller/thomas-nicoli"
+      },
+      {
+        "id": "property-finder",
+        "title": "Property Finder",
+        "subtitle": "Herramienta de Búsqueda Inmobiliaria Offline",
+        "type": "Aplicación Completa",
+        "badge": "App de Escritorio",
+        "purpose": "Una aplicación web local para buscar listados inmobiliarios desde cartuchos de datos offline. Los usuarios suben archivos ZIP/RAR de datos de propiedades y realizan búsquedas de texto completo con filtros (ubicación, tipo de propiedad, precio) para obtener listados coincidentes. Resuelve el desafío de filtrar rápidamente grandes conjuntos de datos de propiedades offline garantizando privacidad completa.",
+        "tech": [
+          "Python",
+          "Flask",
+          "HTML/JS/CSS",
+          "Tailwind CSS",
+          "PyInstaller",
+          "Windows Desktop"
+        ],
+        "highlights": [
+          "Arquitectura offline-first para privacidad de datos",
+          "Algoritmos de búsqueda eficientes para consultas rápidas",
+          "Interfaz web intuitiva con estilos Tailwind",
+          "Lanzador de escritorio con un clic para Windows",
+          "No requiere conexión a internet",
+          "Maneja grandes conjuntos de datos eficientemente"
+        ],
+        "deployment": "App local/offline distribuida como aplicación independiente para Windows. Acceso vía localhost:5000."
+      },
+      {
+        "id": "bingus-geocoder",
+        "title": "Bingus Geocoder",
+        "subtitle": "Asistente de Geocodificación Batch con IA",
+        "type": "Herramienta Web Prototipo",
+        "badge": "Demo/Local",
+        "purpose": "Una aplicación de geocodificación batch divertida para direcciones en archivos Excel. Usa el geocodificador Nominatim para encontrar coordenadas de cada dirección. Incluye un asistente IA ('Bingus') que corrige o interpreta direcciones problemáticas y reintenta la geocodificación. Agiliza la búsqueda masiva de direcciones con asistencia IA para casos extremos como errores tipográficos o direcciones incompletas.",
+        "tech": [
+          "Python",
+          "Flask",
+          "geopy (Nominatim)",
+          "OpenAI API",
+          "Kluster AI",
+          "Tailwind CSS",
+          "Bootstrap"
+        ],
+        "highlights": [
+          "Geocodificación batch desde hojas Excel",
+          "Corrección e interpretación de direcciones con IA",
+          "Chat interactivo con la persona IA 'Bingus'",
+          "Interfaz de carga de archivos drag-and-drop",
+          "Seguimiento de progreso y retroalimentación animada",
+          "Diseño divertido y colorido con UX atractiva"
+        ],
+        "deployment": "Local o auto-alojado. Ejecutar en localhost:5000 para uso personal o demo."
+      },
+      {
+        "id": "sitesync-pro",
+        "title": "SiteSync Pro",
+        "subtitle": "Descargador de Contenido Empresarial (SFCC)",
+        "type": "Herramienta Empresarial",
+        "badge": "Desplegable en Cloud",
+        "purpose": "Aplicación web para descargar y empaquetar contenido HTML desde sitios staging de Salesforce Commerce Cloud protegidos con contraseña. Permite exportación fácil de múltiples archivos HTML de páginas para respaldos, sincronización de contenido o revisión offline. Maneja automáticamente la autenticación y descarga masiva de páginas en un archivo ZIP, ahorrando tiempo significativo a desarrolladores y gestores de contenido.",
+        "tech": [
+          "Python",
+          "Flask",
+          "Vanilla JS",
+          "HTML5/CSS3",
+          "Netlify Functions",
+          "Heroku/Railway",
+          "Multi-threading"
+        ],
+        "highlights": [
+          "Autenticación automatizada en sitios staging SFCC",
+          "Obtención paralela de páginas multi-hilo",
+          "UI profesional con glassmorfismo y animaciones",
+          "Cola de trabajos asíncrona con seguimiento de estado",
+          "Compilación ZIP de páginas descargadas",
+          "Desplegable en Netlify, Heroku o Railway"
+        ],
+        "deployment": "Desplegable en cloud con Netlify Functions o hosting tradicional. Diseñado para uso empresarial interno."
+      },
+      {
+        "id": "ai-instagram-automation",
+        "title": "Automatización de Instagram con IA",
+        "subtitle": "Bot Social Inteligente",
+        "type": "Script de Automatización",
+        "badge": "Prototipo",
+        "purpose": "Sistema de automatización inteligente para Instagram usando toma de decisiones impulsada por IA. Analiza perfiles de seguidores con IA para determinar interacciones óptimas, gestionando listas de Amigos Cercanos estratégicamente. Mantiene sigilo con patrones de comportamiento humano, priorizando seguridad de cuenta sobre automatización agresiva para hacer crecer redes inteligentemente evitando detección.",
+        "tech": [
+          "Python",
+          "Selenium",
+          "undetected-chromedriver",
+          "OpenAI API",
+          "Magistral-Small-2506",
+          "Chrome Browser"
+        ],
+        "highlights": [
+          "Análisis de perfiles y estrategia impulsados por IA",
+          "Gestión de navegador sigiloso para evitar detección de bots",
+          "Ritmo de interacción humano y aleatorización",
+          "Scripts de prueba completos y logging",
+          "Arquitectura modular para mantenibilidad",
+          "Lista de verificación de preparación para producción incluida"
+        ],
+        "deployment": "Ejecutar localmente como herramienta de línea de comandos. Requiere credenciales IG personales y API key para funciones IA."
+      },
+      {
+        "id": "sfcc-inspector",
+        "title": "SFCC Inspector",
+        "subtitle": "Análisis de Código IA para Salesforce Commerce Cloud",
+        "type": "Aplicación Full-Stack",
+        "badge": "Prueba de Concepto",
+        "purpose": "Herramienta impulsada por IA que ayuda a no-desarrolladores a inspeccionar y comprender código de proyectos SFCC. Se conecta a instancias SFCC en vivo vía WebDAV para explorar estructura de código de cartuchos. Presenta un explorador de archivos estilo VSCode con IA integrada que genera explicaciones en lenguaje natural del propósito y lógica del código. Desmitifica implementaciones complejas de SFCC mediante resúmenes contextuales y Q&A en lenguaje natural.",
+        "tech": [
+          "React",
+          "TypeScript",
+          "Vite",
+          "Python",
+          "FastAPI",
+          "WebDAV",
+          "OpenAI API"
+        ],
+        "highlights": [
+          "Conexión WebDAV a instancias SFCC en vivo",
+          "Interfaz de explorador de archivos estilo VSCode",
+          "Análisis y explicaciones de código impulsados por IA",
+          "Búsqueda de texto completo en toda la base de código",
+          "Detección de patrones específicos SFCC (hooks, preferencias)",
+          "Tema de diseño cósmico en modo oscuro"
+        ],
+        "deployment": "Prototipo para uso interno. Ejecutar localmente o en servidores internos con credenciales SFCC válidas."
+      },
+      {
+        "id": "tattoo-previewer",
+        "title": "Tattoo Previewer",
+        "subtitle": "Visualización de Tatuajes con IA",
+        "type": "Aplicación Web Completa",
+        "badge": "MVP/Beta",
+        "purpose": "Servicio interactivo de vista previa de tatuajes para visualizar tatuajes en tu cuerpo antes de hacerlos. Proceso de dos pasos: (1) IA transforma imágenes de inspiración en calcomanías de tatuaje en estilos elegidos (Neo-tradicional, Old School, Blanco y Negro, etc.), (2) IA aplica el tatuaje generado sobre fotos del cuerpo para vistas previas compuestas realistas. Aborda el punto de dolor de imaginar resultados finales con maquetas impulsadas por IA.",
+        "tech": [
+          "React",
+          "TypeScript",
+          "Supabase",
+          "Stable Diffusion",
+          "Cloud Functions",
+          "Vercel/Netlify"
+        ],
+        "highlights": [
+          "Generación de diseño de tatuaje IA desde imágenes de inspiración",
+          "Vista previa corporal realista con adaptación de tono de piel/iluminación",
+          "Múltiples opciones de estilo de tatuaje (Neo-tradicional, etc.)",
+          "Autenticación de usuario y seguimiento de perfil",
+          "Presets de tamaño (S-XL) para ajuste de escala de tatuaje",
+          "UI pulida con medidores de progreso y manejo de errores"
+        ],
+        "deployment": "Aplicación web (beta). Backend Supabase con cliente React, funciones cloud para renderizado IA."
+      }
+    ]
   },
   "about": {
     "title": "Sobre Thomas y Virginia",

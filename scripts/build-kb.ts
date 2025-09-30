@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+/* eslint-disable no-console */
 /*
   Build a searchable KB index from /content/knowledge
   - If OPENAI_API_KEY set: create embeddings (text-embedding-3-small)
@@ -66,70 +68,74 @@ function readFiles() {
 }
 
 async function build() {
-  if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, {recursive: true});
-  const docs = readFiles();
+  try {
+    if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, {recursive: true});
+    const docs = readFiles();
 
-  const hasKey = !!process.env.OPENAI_API_KEY;
+    const hasKey = !!process.env.OPENAI_API_KEY;
 
-  if (hasKey) {
-    const {default: OpenAI} = await import('openai');
-    const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
-    console.log(`[kb] Building embeddings for ${docs.length} chunks...`);
-    // Batch embeddings in groups of 128 to stay under token limits
-    const batches: Doc[][] = [];
-    const batchSize = 64;
-    for (let i = 0; i < docs.length; i += batchSize) {
-      batches.push(docs.slice(i, i + batchSize));
-    }
-    let idx = 0;
-    for (const batch of batches) {
-      idx++;
-      const res = await openai.embeddings.create({
+    if (hasKey) {
+      const {default: OpenAI} = await import('openai');
+      const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+      console.log(`[kb] Building embeddings for ${docs.length} chunks...`);
+      // Batch embeddings in groups of 128 to stay under token limits
+      const batches: Doc[][] = [];
+      const batchSize = 64;
+      for (let i = 0; i < docs.length; i += batchSize) {
+        batches.push(docs.slice(i, i + batchSize));
+      }
+      let idx = 0;
+      for (const batch of batches) {
+        idx++;
+        const res = await openai.embeddings.create({
+          model: 'text-embedding-3-small',
+          input: batch.map((d) => d.chunk)
+        });
+        res.data.forEach((e, i) => (batch[i].embedding = e.embedding as unknown as number[]));
+        console.log(`[kb] Embedded batch ${idx}/${batches.length}`);
+      }
+      const payload = {
+        type: 'embeddings' as const,
         model: 'text-embedding-3-small',
-        input: batch.map((d) => d.chunk)
-      });
-      res.data.forEach((e, i) => (batch[i].embedding = e.embedding as unknown as number[]));
-      console.log(`[kb] Embedded batch ${idx}/${batches.length}`);
+        locales: {
+          en: docs.filter((d) => d.locale === 'en'),
+          es: docs.filter((d) => d.locale === 'es')
+        }
+      };
+      fs.writeFileSync(OUT_FILE, JSON.stringify(payload));
+      console.log(`[kb] Wrote ${OUT_FILE}`);
+      return;
     }
+
+    console.log(`[kb] No OPENAI_API_KEY, building BM25 index with MiniSearch`);
+    const enDocs = docs.filter((d) => d.locale === 'en');
+    const esDocs = docs.filter((d) => d.locale === 'es');
+
+    function buildMini(docs: Doc[]) {
+      const mini = new MiniSearch<Doc>({
+        fields: ['chunk', 'title'],
+        storeFields: ['id', 'locale', 'title', 'chunk']
+      });
+      mini.addAll(docs);
+      return {serialized: mini.toJSON(), docs};
+    }
+
     const payload = {
-      type: 'embeddings' as const,
-      model: 'text-embedding-3-small',
+      type: 'bm25' as const,
       locales: {
-        en: docs.filter((d) => d.locale === 'en'),
-        es: docs.filter((d) => d.locale === 'es')
+        en: buildMini(enDocs),
+        es: buildMini(esDocs)
       }
     };
     fs.writeFileSync(OUT_FILE, JSON.stringify(payload));
     console.log(`[kb] Wrote ${OUT_FILE}`);
-    return;
+  } catch (error) {
+    console.error('[kb] Build failed:', error);
+    throw error;
   }
-
-  console.log(`[kb] No OPENAI_API_KEY, building BM25 index with MiniSearch`);
-  const enDocs = docs.filter((d) => d.locale === 'en');
-  const esDocs = docs.filter((d) => d.locale === 'es');
-
-  function buildMini(docs: Doc[]) {
-    const mini = new MiniSearch<Doc>({
-      fields: ['chunk', 'title'],
-      storeFields: ['id', 'locale', 'title', 'chunk']
-    });
-    mini.addAll(docs);
-    return {serialized: mini.toJSON(), docs};
-  }
-
-  const payload = {
-    type: 'bm25' as const,
-    locales: {
-      en: buildMini(enDocs),
-      es: buildMini(esDocs)
-    }
-  };
-  fs.writeFileSync(OUT_FILE, JSON.stringify(payload));
-  console.log(`[kb] Wrote ${OUT_FILE}`);
 }
 
-build().catch((e) => {
-  console.error('[kb] Failed', e);
-  process.exit(0);
+build().catch((error) => {
+  console.error('[kb] Fatal error:', error);
+  process.exit(1);
 });
-

@@ -2,6 +2,7 @@
 
 import { Sparkles } from "lucide-react";
 import { NexusChat } from "@/components/nexus-ai/NexusChat";
+import { NexusErrorBoundary } from "@/components/nexus-ai/NexusErrorBoundary";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { useTranslations } from 'next-intl';
 
@@ -44,7 +45,9 @@ export function ChatPageContent() {
       {/* Main chat container */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 pb-3 sm:pb-4 md:pb-6" role="main" aria-label="Chat interface">
         <div className="max-w-7xl mx-auto h-full">
-          <NexusChat />
+          <NexusErrorBoundary>
+            <NexusChat />
+          </NexusErrorBoundary>
         </div>
       </main>
     </div>

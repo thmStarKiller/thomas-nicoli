@@ -11,7 +11,8 @@ export function getQuotingModel(): string {
   try {
     const file = path.join(process.cwd(), 'public', 'quoting.json');
     cached = fs.readFileSync(file, 'utf8');
-  } catch (e) {
+  } catch (error) {
+    console.error('Error loading quoting.json:', error);
     cached = JSON.stringify({ error: 'quoting.json not found' });
   }
   return cached!;

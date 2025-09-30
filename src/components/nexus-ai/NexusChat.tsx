@@ -92,7 +92,7 @@ export function NexusChat() {
 
     const updatedSession: ChatSession = {
       ...currentSession,
-      messages: sanitized as any,
+      messages: sanitized as ChatMessage[],
       updatedAt: Date.now(),
     };
 

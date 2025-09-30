@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
   try {
     const retriever = await getRetriever();
     top = await retriever.retrieve(userText, locale, 6);
-  } catch (e) {
+  } catch (error) {
+    console.error('Error retrieving documents:', error);
     top = [] as unknown as DocWithScore[];
   }
 
@@ -61,18 +62,20 @@ export async function POST(req: NextRequest) {
       }));
 
       const result = await model.generateContent({ contents });
-      const text = (result as any)?.response?.text?.() || '';
+      const response = result as { response?: { text?: () => string } };
+      const text = response?.response?.text?.() || '';
       return new Response(
         JSON.stringify({ answer: text, sources: top }),
         { headers: { 'Content-Type': 'application/json' } }
       );
-    } catch (e: any) {
-      const msg = e?.message || 'Gemini request failed';
+    } catch (error) {
+      const err = error as Error;
+      const msg = err?.message || 'Gemini request failed';
       const answer =
         (locale === 'es'
-          ? `No se pudo completar la solicitud a Gemini: ${msg}. AquÃ­ tienes el contenido relevante:`
+          ? `No se pudo completar la solicitud a Gemini: ${msg}. Aquí tienes el contenido relevante:`
           : `Gemini request failed: ${msg}. Here is the relevant content:`) +
-        `\n\n` + top.map((d, i) => `â€¢ (${i + 1}) ${d.title}`).join('\n');
+        `\n\n` + top.map((d, i) => `• (${i + 1}) ${d.title}`).join('\n');
       return new Response(JSON.stringify({ answer, sources: top }), {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -107,7 +110,10 @@ export async function POST(req: NextRequest) {
 
   return new Response(stream, {
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8'
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no', // Disable Nginx buffering
     }
   });
 }

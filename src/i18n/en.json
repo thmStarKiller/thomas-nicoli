@@ -90,26 +90,210 @@
     "description": "We craft the narrative, structure your pages, and tune your AI assistant so prospects understand value fast."
   },
   "work": {
-    "title": "Case studies",
+    "title": "Project Portfolio",
+    "subtitle": "Full-stack development expertise with AI integration, automation, and user-centric design",
+    "seo": {
+      "title": "Portfolio — Thomas Nicoli's Projects",
+      "description": "Explore Thomas Nicoli's portfolio of web applications, AI-powered tools, and enterprise solutions built with React, Next.js, Python, and modern tech stacks."
+    },
+    "description": "From marketing websites with AI chatbots to creative AI image generation apps, showcasing versatility in web development, AI/ML integration, and automation.",
     "tiles": [
       {
-        "title": "B2B SaaS: Clearer offer, +32% demo requests",
-        "result": "Refined positioning, bilingual pages, and AI-aligned FAQs accelerated the buyer journey."
+        "title": "Thomas Nicoli Consulting — AI-Powered Website",
+        "result": "Modern bilingual site with AI chatbot, knowledge base Q&A, and lead capture. Live on Vercel."
       },
       {
-        "title": "Fintech: Fewer questions, faster closes",
-        "result": "Sitewide FAQs and Answer Cards reduced friction and lifted close rates."
+        "title": "Property Finder — Offline Real Estate Search",
+        "result": "Desktop app for searching property listings offline with privacy-first architecture."
       },
       {
-        "title": "Product studio: Unified story across EN/ES",
-        "result": "Editorial system and NEXUS AI bundle kept sales, marketing, and CS in sync."
+        "title": "SFCC Inspector — AI Code Analysis Tool",
+        "result": "AI-powered tool helping non-developers understand Salesforce Commerce Cloud code via WebDAV."
       }
     ],
-    "seo": {
-      "title": "Case Studies — Outcomes with clarity",
-      "description": "Proven results from bilingual editorial and AI alignment."
-    },
-    "description": "Outcomes over outputs. Here is how clarity improved conversions and velocity."
+    "projects": [
+      {
+        "id": "thomas-nicoli-consulting",
+        "title": "Thomas Nicoli Consulting Site",
+        "subtitle": "AI-Powered Marketing Website",
+        "type": "Complete Web Application",
+        "badge": "Live on Vercel",
+        "purpose": "A modern bilingual (EN/ES) consulting website showcasing AI consulting for e-commerce. Features a retrieval-augmented chatbot that answers visitor questions from a curated knowledge base, providing interactive Q&A. Captures leads via contact form with API-based email delivery.",
+        "tech": [
+          "Next.js 14/15",
+          "React 18+",
+          "TypeScript",
+          "Tailwind CSS v4",
+          "Framer Motion",
+          "OpenAI API",
+          "next-intl",
+          "Vercel"
+        ],
+        "highlights": [
+          "Bilingual content (EN/ES) with next-intl localization",
+          "AI chatbot with OpenAI embeddings and streaming chat",
+          "Falls back to local BM25 search when API key unavailable",
+          "Markdown-based knowledge base management",
+          "Serverless deployment on Vercel",
+          "Lead capture with Resend API integration"
+        ],
+        "deployment": "Live deployment on Vercel (serverless). Fully static + serverless functions for optimal performance.",
+        "githubUrl": "https://github.com/thmStarKiller/thomas-nicoli"
+      },
+      {
+        "id": "property-finder",
+        "title": "Property Finder",
+        "subtitle": "Offline Real Estate Search Tool",
+        "type": "Complete Application",
+        "badge": "Desktop App",
+        "purpose": "A local web app for searching real estate listings from offline data cartridges. Users upload ZIP/RAR archives of property data and perform full-text searches with filters (location, property type, price) to get matching listings. Solves the challenge of quickly sifting through large offline property datasets while ensuring complete privacy.",
+        "tech": [
+          "Python",
+          "Flask",
+          "HTML/JS/CSS",
+          "Tailwind CSS",
+          "PyInstaller",
+          "Windows Desktop"
+        ],
+        "highlights": [
+          "Offline-first architecture for data privacy",
+          "Efficient search algorithms for fast text querying",
+          "Intuitive web interface with Tailwind styling",
+          "One-click desktop launcher for Windows",
+          "No internet connection required",
+          "Handles large property datasets efficiently"
+        ],
+        "deployment": "Local/offline app distributed as standalone Windows application. Access via localhost:5000."
+      },
+      {
+        "id": "bingus-geocoder",
+        "title": "Bingus Geocoder",
+        "subtitle": "Batch Geocoding Assistant with AI",
+        "type": "Prototype Web Tool",
+        "badge": "Demo/Local",
+        "purpose": "A playful batch geocoding application for addresses in Excel files. Uses Nominatim geocoder to find coordinates for each address. Features an AI assistant ('Bingus') that corrects or interprets problematic addresses and retries geocoding. Streamlines bulk address lookup with AI assistance for edge cases like typos or incomplete addresses.",
+        "tech": [
+          "Python",
+          "Flask",
+          "geopy (Nominatim)",
+          "OpenAI API",
+          "Kluster AI",
+          "Tailwind CSS",
+          "Bootstrap"
+        ],
+        "highlights": [
+          "Batch geocoding from Excel spreadsheets",
+          "AI-powered address correction and interpretation",
+          "Interactive chat with 'Bingus' AI persona",
+          "Drag-and-drop file upload interface",
+          "Progress tracking and animated feedback",
+          "Fun, colorful design with engaging UX"
+        ],
+        "deployment": "Local or self-hosted. Run on localhost:5000 for personal or demo use."
+      },
+      {
+        "id": "sitesync-pro",
+        "title": "SiteSync Pro",
+        "subtitle": "Enterprise Content Downloader (SFCC)",
+        "type": "Enterprise Tool",
+        "badge": "Cloud Deployable",
+        "purpose": "Web app for downloading and packaging HTML content from password-protected Salesforce Commerce Cloud staging sites. Enables easy export of multiple page HTML files for backups, content syncing, or offline review. Automatically handles authentication and bulk-downloads pages into a ZIP file, saving significant time for developers and content managers.",
+        "tech": [
+          "Python",
+          "Flask",
+          "Vanilla JS",
+          "HTML5/CSS3",
+          "Netlify Functions",
+          "Heroku/Railway",
+          "Multi-threading"
+        ],
+        "highlights": [
+          "Automated SFCC staging site authentication",
+          "Multi-threaded parallel page fetching",
+          "Professional glassmorphism UI with animations",
+          "Async job queue with status tracking",
+          "ZIP compilation of downloaded pages",
+          "Deployable on Netlify, Heroku, or Railway"
+        ],
+        "deployment": "Cloud deployable with Netlify Functions or traditional hosting. Designed for internal enterprise use."
+      },
+      {
+        "id": "ai-instagram-automation",
+        "title": "AI-Enhanced Instagram Automation",
+        "subtitle": "Smart Social Bot",
+        "type": "Automation Script",
+        "badge": "Prototype",
+        "purpose": "Intelligent automation system for Instagram using AI-driven decision-making. Analyzes follower profiles with AI to determine optimal interactions, managing Close Friends lists strategically. Maintains stealth with human-like behavior patterns, prioritizing account safety over aggressive automation to grow networks smartly while avoiding detection.",
+        "tech": [
+          "Python",
+          "Selenium",
+          "undetected-chromedriver",
+          "OpenAI API",
+          "Magistral-Small-2506",
+          "Chrome Browser"
+        ],
+        "highlights": [
+          "AI-powered profile analysis and strategy",
+          "Stealth browser management for bot detection avoidance",
+          "Human-like interaction pacing and randomization",
+          "Comprehensive test scripts and logging",
+          "Modular architecture for maintainability",
+          "Production readiness checklist included"
+        ],
+        "deployment": "Run locally as command-line tool. Requires personal IG credentials and API key for AI features."
+      },
+      {
+        "id": "sfcc-inspector",
+        "title": "SFCC Inspector",
+        "subtitle": "AI Code Analysis for Salesforce Commerce Cloud",
+        "type": "Full-Stack Application",
+        "badge": "Proof of Concept",
+        "purpose": "AI-powered tool helping non-developers inspect and understand SFCC project code. Connects to live SFCC instances via WebDAV to browse cartridge code structure. Presents VSCode-like file explorer with integrated AI that generates plain-language explanations of code purpose and logic. Demystifies complex SFCC implementations through context-aware summaries and natural language Q&A.",
+        "tech": [
+          "React",
+          "TypeScript",
+          "Vite",
+          "Python",
+          "FastAPI",
+          "WebDAV",
+          "OpenAI API"
+        ],
+        "highlights": [
+          "WebDAV connection to live SFCC instances",
+          "VSCode-like file explorer interface",
+          "AI-powered code analysis and explanations",
+          "Full-text search across codebase",
+          "SFCC-specific pattern detection (hooks, preferences)",
+          "Dark mode cosmic design theme"
+        ],
+        "deployment": "Prototype for internal use. Run locally or on internal servers with valid SFCC credentials."
+      },
+      {
+        "id": "tattoo-previewer",
+        "title": "Tattoo Previewer",
+        "subtitle": "AI-Powered Tattoo Visualization",
+        "type": "Complete Web Application",
+        "badge": "MVP/Beta",
+        "purpose": "Interactive tattoo preview service for visualizing tattoos on your body before getting inked. Two-step process: (1) AI transforms inspiration images into tattoo decals in chosen styles (Neo-traditional, Old School, Black & Grey, etc.), (2) AI applies generated tattoo onto body photos for realistic composite previews. Addresses the pain point of imagining end results with AI-driven mockups.",
+        "tech": [
+          "React",
+          "TypeScript",
+          "Supabase",
+          "Stable Diffusion",
+          "Cloud Functions",
+          "Vercel/Netlify"
+        ],
+        "highlights": [
+          "AI tattoo design generation from inspiration images",
+          "Realistic body preview with skin tone/lighting adaptation",
+          "Multiple tattoo style options (Neo-traditional, etc.)",
+          "User authentication and profile tracking",
+          "Size presets (S-XL) for tattoo scale adjustment",
+          "Polished UI with progress meters and error handling"
+        ],
+        "deployment": "Web application (beta). Supabase backend with React client, cloud functions for AI rendering."
+      }
+    ]
   },
   "about": {
     "title": "About Thomas & Virginia",
