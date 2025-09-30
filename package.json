@@ -6,12 +6,17 @@
     "dev": "next dev --turbopack",
     "dev:classic": "next dev",
     "build": "next build --turbopack",
+    "build:cloudflare": "npm run kb && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "kb": "tsx scripts/build-kb.ts",
     "predev": "npm run kb || echo Skipping KB build",
-    "prebuild": "npm run kb || echo Skipping KB build"
+    "prebuild": "npm run kb || echo Skipping KB build",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy",
+    "pages:watch": "npx @cloudflare/next-on-pages --watch",
+    "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

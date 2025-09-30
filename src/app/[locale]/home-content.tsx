@@ -87,12 +87,9 @@ export default function HomeContent() {
             </BlurFade>
 
             <BlurFade delay={0.55} inView>
-              <div className="text-sm text-muted-foreground mb-8">{tHome('trustedBy')}</div>
-              <img
-                src="/images/placeholders/logo-strip.svg"
-                alt="Client logos"
-                className="w-full max-w-2xl mx-auto opacity-60 dark:invert"
-              />
+              <div className="text-sm text-muted-foreground">
+                {tHome('trustedBy')}
+              </div>
             </BlurFade>
           </div>
         </div>
@@ -180,12 +177,14 @@ export default function HomeContent() {
 
             <BlurFade delay={0.4} inView>
               <div className="relative">
-                <MagicCard className="p-8">
-                  <img
-                    src="/images/placeholders/thomas-card-portrait.jpg"
-                    alt="Thomas Nicoli"
-                    className="w-full h-auto rounded-lg"
-                  />
+                <MagicCard className="p-8 flex items-center justify-center min-h-[400px]">
+                  <div className="text-center">
+                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center">
+                      <Target className="w-16 h-16 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground">Thomas Nicoli</h3>
+                    <p className="text-muted-foreground mt-2">Strategy & AI Consultant</p>
+                  </div>
                 </MagicCard>
               </div>
             </BlurFade>
@@ -216,13 +215,6 @@ export default function HomeContent() {
                       </span>
                     </ShimmerButton>
                   </Link>
-                </div>
-                <div className="mt-6">
-                  <img
-                    src="/images/placeholders/brainAi.png"
-                    alt="AI Chat Interface"
-                    className="w-full max-w-md mx-auto opacity-80"
-                  />
                 </div>
               </MagicCard>
               <BorderBeam size={400} duration={15} />

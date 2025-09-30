@@ -1,0 +1,35 @@
+# Cloudflare Pages Configuration for Next.js Application
+# This file is used for advanced Cloudflare Pages configuration
+
+name = "thomas-nicoli"
+compatibility_date = "2024-01-01"
+
+# Pages Project Configuration
+pages_build_output_dir = ".vercel/output/static"
+
+# Environment Variables
+# These should be set in Cloudflare Pages dashboard under Settings > Environment Variables
+# - OPENAI_API_KEY
+# - GOOGLE_API_KEY
+# - GEMINI_MODEL
+# - RESEND_API_KEY
+# - RESEND_TO
+# - SITE_URL
+
+# Build Configuration (set in Cloudflare Pages UI)
+# Build command: npm run build:cloudflare
+# Build output directory: .vercel/output/static
+# Root directory: (leave empty)
+
+# Node.js Compatibility
+[build]
+command = "npm run build"
+
+# Functions Configuration
+[functions]
+# Enable Node.js compatibility for Cloudflare Workers
+compatibility_flags = ["nodejs_compat"]
+
+# Environment Variables for Functions (if needed)
+# [vars]
+# ENVIRONMENT = "production"
