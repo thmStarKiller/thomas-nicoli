@@ -90,7 +90,7 @@ export function NexusMessage({
       }}
       className={`flex gap-3 ${isAI ? '' : 'flex-row-reverse'} group rtl:${isAI ? 'flex-row-reverse' : ''} ${
         onClick ? 'cursor-pointer' : ''
-      } ${isSelected ? 'bg-message-selection border-message-selection-border rounded-xl p-3 -m-3 border' : ''}`}
+      } ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 rounded-xl p-3 -m-3 border' : ''}`}
       onClick={onClick}
     >
       {/* Avatar */}
@@ -117,8 +117,8 @@ export function NexusMessage({
         <motion.div
           className={`relative p-4 rounded-2xl ${
             isAI
-              ? 'bg-ai-message border-ai-message-border'
-              : 'bg-user-message border-user-message-border'
+              ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+              : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'
           } border shadow-sm dark:shadow-md dark:shadow-slate-950/30 backdrop-blur-sm group-hover:shadow-md dark:group-hover:shadow-lg dark:group-hover:shadow-blue-500/10 transition-all duration-200`}
           whileHover={{ 
             scale: 1.01,
@@ -134,9 +134,7 @@ export function NexusMessage({
               <Skeleton className="h-4 w-4/5" />
             </div>
           ) : (
-            <div className={`prose prose-sm dark:prose-invert max-w-none ${
-              isAI ? 'prose-blue' : ''
-            }`}>
+            <div className="max-w-none text-gray-900 dark:text-gray-100">
             {isAI ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -147,8 +145,8 @@ export function NexusMessage({
                     const match = /language-(\w+)/.exec(className || '');
                     const isInline = !match;
                     return !isInline ? (
-                      <div className="relative group/code">
-                        <pre className="bg-code text-code-foreground rounded-lg p-4 overflow-x-auto border border-ai-message-border dark:border-border shadow-sm">
+                      <div className="relative group/code my-4">
+                        <pre className="bg-gray-900 text-gray-100 dark:bg-gray-950 dark:text-gray-200 rounded-lg p-4 overflow-x-auto border border-gray-700 dark:border-gray-800 shadow-sm">
                           <code className={`${className} text-sm leading-relaxed`} {...props}>
                             {children}
                           </code>
@@ -160,7 +158,7 @@ export function NexusMessage({
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           }}
-                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-muted hover:bg-muted/80 text-muted-foreground p-1.5 rounded-md text-xs shadow-sm border border-border"
+                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-gray-700 hover:bg-gray-600 text-gray-200 p-1.5 rounded-md text-xs shadow-sm border border-gray-600"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -168,7 +166,7 @@ export function NexusMessage({
                         </motion.button>
                       </div>
                     ) : (
-                      <code className="bg-code text-code-foreground px-1.5 py-0.5 rounded text-sm font-mono border border-ai-message-border dark:border-border" {...props}>
+                      <code className="bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono border border-gray-300 dark:border-gray-700" {...props}>
                         {children}
                       </code>
                     );
@@ -188,7 +186,7 @@ export function NexusMessage({
                       return (
                         <Link
                           href={cleanHref || '#'}
-                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium"
                         >
                           {children}
                         </Link>
@@ -201,7 +199,7 @@ export function NexusMessage({
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium"
                       >
                         {children}
                       </a>
@@ -212,7 +210,7 @@ export function NexusMessage({
                 {message.content || (message.isStreaming ? '...' : '')}
               </ReactMarkdown>
             ) : (
-              <p className="whitespace-pre-wrap leading-relaxed">
+              <p className="whitespace-pre-wrap leading-relaxed text-gray-900 dark:text-gray-100">
                 {message.content}
               </p>
             )}
@@ -262,13 +260,13 @@ export function NexusMessage({
             {/* Copy Button */}
             <motion.button
               onClick={handleCopy}
-              className="flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground bg-muted hover:bg-muted/80 rounded-md transition-colors shadow-sm border border-border"
+              className="flex items-center gap-1 px-2 py-1 text-xs text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-600"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               {copied ? (
                 <>
-                  <Check className="w-3 h-3 text-primary" />
+                  <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
                   <span>{t('copied')}</span>
                 </>
               ) : (
@@ -283,7 +281,7 @@ export function NexusMessage({
             {canStop && (
               <motion.button
                 onClick={onStop}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 rounded-md transition-colors shadow-sm border border-orange-200 dark:border-orange-800"
+                className="flex items-center gap-1 px-2 py-1 text-xs text-orange-700 dark:text-orange-400 hover:text-orange-900 dark:hover:text-orange-300 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/40 rounded-md transition-colors shadow-sm border border-orange-300 dark:border-orange-700"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -296,7 +294,7 @@ export function NexusMessage({
             {onRegenerate && !message.isStreaming && (
               <motion.button
                 onClick={onRegenerate}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground bg-muted hover:bg-muted/80 rounded-md transition-colors shadow-sm border border-border"
+                className="flex items-center gap-1 px-2 py-1 text-xs text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-600"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -315,7 +313,7 @@ export function NexusMessage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="text-xs text-muted-foreground font-semibold mb-2 tracking-wide uppercase">
+            <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold mb-2 tracking-wide uppercase">
               {t('sources')}
             </div>
             <div className="grid gap-2">
