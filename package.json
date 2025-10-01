@@ -13,9 +13,9 @@
     "kb": "tsx scripts/build-kb.ts",
     "predev": "npm run kb || echo Skipping KB build",
     "prebuild": "npm run kb || echo Skipping KB build",
-    "pages:build": "@cloudflare/next-on-pages",
+    "pages:build": "npx @cloudflare/next-on-pages",
     "pages:deploy": "npm run pages:build && wrangler pages deploy",
-    "pages:watch": "@cloudflare/next-on-pages --watch",
+    "pages:watch": "npx @cloudflare/next-on-pages --watch",
     "pages:dev": "wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat"
   },
   "dependencies": {
