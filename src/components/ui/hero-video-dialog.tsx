@@ -140,18 +140,18 @@ export function HeroVideoDialog({
             }}
             onClick={() => setIsVideoOpen(false)}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md overflow-y-auto p-4 md:p-0"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
           >
             <motion.div
               {...selectedAnimation}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative my-auto aspect-video w-full max-w-4xl"
+              className="relative aspect-video w-full max-w-4xl max-h-[80vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.button
                 onClick={() => setIsVideoOpen(false)}
                 aria-label="Close video"
-                className="absolute -top-16 right-0 rounded-full bg-neutral-900/50 p-2 text-xl text-white ring-1 backdrop-blur-md dark:bg-neutral-100/50 dark:text-black">
+                className="absolute -top-12 right-0 md:-top-16 rounded-full bg-white/90 dark:bg-gray-800/90 p-2 text-gray-900 dark:text-white shadow-lg hover:bg-white dark:hover:bg-gray-800 transition-colors">
                 <XIcon className="size-5" />
               </motion.button>
               <div className="relative isolate z-[1] size-full overflow-hidden rounded-2xl border-2 border-white bg-black">
