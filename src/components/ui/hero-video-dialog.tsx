@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Play, XIcon } from "lucide-react";
@@ -81,7 +81,13 @@ export function HeroVideoDialog({
 }: HeroVideoProps) {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [thumbLoaded, setThumbLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const selectedAnimation = animationVariants[animationStyle];
+
+  // Ensure component only renders interactive elements on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className={cn("relative", className)}>

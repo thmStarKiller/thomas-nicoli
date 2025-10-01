@@ -4,28 +4,14 @@ import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 
 // Hero video section using Magic UI's dialog.
 // Uses a local MP4 and a custom thumbnail poster.
 export default function ExplainerVideo() {
   const locale = useLocale();
   const tHome = useTranslations('home');
-  const [videoSrc, setVideoSrc] = useState("/videos/explainerThomas.mp4");
-
-  // If a remuxed file exists (explainerThomas-fixed.mp4), prefer it.
-  useEffect(() => {
-    let active = true;
-    fetch("/videos/explainerThomas-fixed.mp4", { method: "HEAD" })
-      .then((res) => {
-        if (!active) return;
-        if (res.ok) setVideoSrc("/videos/explainerThomas-fixed.mp4");
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, []);
+  // Use the default video - remove the check for -fixed.mp4 to avoid 404 errors
+  const videoSrc = "/videos/explainerThomas.mp4";
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 md:px-6">
