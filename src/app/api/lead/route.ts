@@ -5,32 +5,73 @@ import {Resend} from 'resend';
 export const runtime = 'edge';
 
 const schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
   company: z.string().optional().default(''),
   website: z.string().url().optional().or(z.literal('')).default(''),
-  message: z.string().min(10),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
   consent: z.boolean().refine((v) => v === true, {message: 'Consent required'})
 });
 
 export async function POST(req: NextRequest) {
-  const json = await req.json().catch(() => null);
-  if (!json) return NextResponse.json({error: 'Invalid JSON'}, {status: 400});
+  console.log('[lead] Received request');
+  
+  // Parse JSON with better error handling
+  let json;
+  try {
+    json = await req.json();
+  } catch (error) {
+    console.error('[lead] JSON parse error:', error);
+    return NextResponse.json({error: 'Invalid JSON body'}, {status: 400});
+  }
+
+  // Validate data
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
-    return NextResponse.json({error: parsed.error.flatten()}, {status: 400});
+    console.error('[lead] Validation error:', parsed.error.flatten());
+    return NextResponse.json({
+      error: 'Validation failed', 
+      details: parsed.error.flatten()
+    }, {status: 400});
   }
+  
   const data = parsed.data;
+  console.log('[lead] Valid data received for:', data.email);
 
-  const hasResend = !!process.env.RESEND_API_KEY && !!process.env.RESEND_TO;
+  // Check environment variables
+  const apiKey = process.env.RESEND_API_KEY;
+  const recipientEmail = process.env.RESEND_TO;
+  const mailDomain = process.env.MAIL_DOMAIN;
 
-  if (!hasResend) {
-    console.log('[lead] dev log:', data);
-    return NextResponse.json({ok: true, sent: false});
+  console.log('[lead] Environment check:', {
+    hasApiKey: !!apiKey,
+    hasRecipient: !!recipientEmail,
+    hasDomain: !!mailDomain,
+    apiKeyLength: apiKey?.length || 0,
+    domain: mailDomain || 'NOT SET'
+  });
+
+  if (!apiKey || !recipientEmail) {
+    console.error('[lead] Missing required environment variables');
+    console.error('[lead] RESEND_API_KEY:', apiKey ? 'SET' : 'MISSING');
+    console.error('[lead] RESEND_TO:', recipientEmail ? 'SET' : 'MISSING');
+    console.error('[lead] MAIL_DOMAIN:', mailDomain ? 'SET' : 'MISSING');
+    
+    // In development, log the data instead
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[lead] DEV MODE - Would send:', data);
+      return NextResponse.json({ok: true, sent: false, dev: true});
+    }
+    
+    return NextResponse.json({
+      error: 'Email service not configured',
+      sent: false
+    }, {status: 500});
   }
 
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    console.log('[lead] Initializing Resend...');
+    const resend = new Resend(apiKey);
     
     // Create HTML email template
     const htmlEmail = `
@@ -133,17 +174,50 @@ ${data.message}
 Sent from thomas-nicoli.com contact form
 ${new Date().toLocaleString()}`;
     
-    await resend.emails.send({
-      from: 'Leads <noreply@' + (process.env.MAIL_DOMAIN || 'example.com') + '>',
-      to: [process.env.RESEND_TO!],
+    console.log('[lead] Sending email...');
+    console.log('[lead] From:', `Leads <noreply@${mailDomain || 'example.com'}>`);
+    console.log('[lead] To:', recipientEmail);
+    console.log('[lead] Subject:', `🎯 New lead: ${data.name}${data.company ? ` (${data.company})` : ''}`);
+    
+    const result = await resend.emails.send({
+      from: 'Leads <noreply@' + (mailDomain || 'example.com') + '>',
+      to: [recipientEmail],
+      replyTo: data.email, // Allow direct reply to the sender
       subject: `🎯 New lead: ${data.name}${data.company ? ` (${data.company})` : ''}`,
       html: htmlEmail,
       text: textEmail
     });
-    return NextResponse.json({ok: true, sent: true});
-  } catch (e) {
-    console.error('Resend error', e);
-    return NextResponse.json({ok: true, sent: false}, {status: 200});
+    
+    console.log('[lead] Resend result:', result);
+    
+    if (result.error) {
+      console.error('[lead] Resend returned error:', result.error);
+      return NextResponse.json({
+        error: 'Failed to send email',
+        details: result.error,
+        sent: false
+      }, {status: 500});
+    }
+    
+    console.log('[lead] Email sent successfully! ID:', result.data?.id);
+    return NextResponse.json({
+      ok: true, 
+      sent: true, 
+      emailId: result.data?.id
+    });
+    
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('[lead] Exception caught:', error);
+    console.error('[lead] Error name:', err?.name);
+    console.error('[lead] Error message:', err?.message);
+    console.error('[lead] Error stack:', err?.stack);
+    
+    return NextResponse.json({
+      error: 'Failed to send email',
+      message: err?.message || 'Unknown error',
+      sent: false
+    }, {status: 500});
   }
 }
 

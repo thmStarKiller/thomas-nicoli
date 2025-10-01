@@ -12,12 +12,15 @@ export default function ContactContent() {
   const locale = useLocale();
   const t = useTranslations('contact');
   const [status, setStatus] = useState<'idle' | 'ok' | 'error' | 'loading'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
     setStatus('loading');
+    setErrorMessage('');
+    
     try {
       const res = await fetch('/api/lead', {
         method: 'POST',
@@ -31,9 +34,22 @@ export default function ContactContent() {
         }),
         headers: { 'Content-Type': 'application/json' },
       });
-      setStatus(res.ok ? 'ok' : 'error');
-    } catch {
+      
+      const result = await res.json();
+      
+      if (res.ok && result.sent) {
+        setStatus('ok');
+        // Reset form on success
+        form.reset();
+      } else {
+        setStatus('error');
+        setErrorMessage(result.error || result.message || 'Failed to send message');
+        console.error('API error:', result);
+      }
+    } catch (error) {
       setStatus('error');
+      setErrorMessage('Network error. Please try again.');
+      console.error('Submit error:', error);
     }
   }
 
@@ -131,22 +147,31 @@ export default function ContactContent() {
               </div>
 
               {status === 'ok' && (
-                <motion.p
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-green-600 dark:text-green-400 text-center font-medium"
+                  className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
                 >
-                  {t('thanks')}
-                </motion.p>
+                  <p className="text-green-600 dark:text-green-400 text-center font-medium">
+                    ✅ {t('thanks')}
+                  </p>
+                </motion.div>
               )}
               {status === 'error' && (
-                <motion.p
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-red-600 dark:text-red-400 text-center font-medium"
+                  className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
                 >
-                  {t('error')}
-                </motion.p>
+                  <p className="text-red-600 dark:text-red-400 text-center font-medium">
+                    ❌ {t('error')}
+                  </p>
+                  {errorMessage && (
+                    <p className="text-red-500 dark:text-red-400 text-center text-sm mt-2">
+                      {errorMessage}
+                    </p>
+                  )}
+                </motion.div>
               )}
             </form>
           </MagicCard>
