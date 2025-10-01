@@ -28,6 +28,7 @@ export default function HomeContent() {
   }, [resolvedTheme]);
 
   const servicesData = tServices.raw('items') as Array<{ title: string; desc: string }>;
+  const servicesTitle = tServices('title'); // Cache this explicitly
 
   const services = [
     { icon: <Brain className="w-6 h-6" />, title: servicesData[0]?.title, description: servicesData[0]?.desc },
@@ -100,7 +101,7 @@ export default function HomeContent() {
           <BlurFade delay={0.2} inView>
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {tServices('title')} <AuroraText>{tHome('servicesSectionTitle')}</AuroraText>
+                {servicesTitle} <AuroraText>{tHome('servicesSectionTitle')}</AuroraText>
               </h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
                 {tHome('servicesDescription')}
