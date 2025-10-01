@@ -140,12 +140,16 @@ export function HeroVideoDialog({
             }}
             onClick={() => setIsVideoOpen(false)}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 overflow-hidden"
           >
             <motion.div
               {...selectedAnimation}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative aspect-video w-full max-w-4xl max-h-[80vh]"
+              className="relative w-full max-w-4xl"
+              style={{ 
+                maxHeight: '80vh',
+                aspectRatio: '16/9'
+              }}
               onClick={(e) => e.stopPropagation()}
             >
               <motion.button
