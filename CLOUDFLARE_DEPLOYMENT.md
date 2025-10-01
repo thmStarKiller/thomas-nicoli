@@ -30,8 +30,8 @@ This is the easiest method - Cloudflare will automatically build and deploy on e
    Project name: thomas-nicoli
    Production branch: main
    
-   Build command: npm run build:cloudflare
-   Build output directory: .next
+   Build command: npm run pages:build
+   Build output directory: .vercel/output/static
    
    Root directory: (leave empty)
    ```

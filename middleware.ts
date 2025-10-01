@@ -10,3 +10,6 @@ export const config = {
   matcher: ['/', '/(en|es)/:path*']
 };
 
+// Specify edge runtime for Cloudflare compatibility
+export const runtime = 'edge';
+
