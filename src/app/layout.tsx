@@ -13,11 +13,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const runtime = "edge";
+
 export const metadata: Metadata = {
-  title: "Thomas Nicoli — AI Consulting",
+  title: "Thomas Nicoli - AI Consulting",
   description: "AI consulting for commerce that actually ships.",
-  viewport: "width=device-width, initial-scale=1",
 };
+
+export const viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({
   children,

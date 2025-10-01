@@ -1,10 +1,10 @@
-﻿import {NextRequest} from 'next/server';
+import {NextRequest} from 'next/server';
 import {getRetriever} from '@/lib/rag';
 import type { DocWithScore } from '@/lib/rag';
 import {systemPrompt} from '@/lib/prompts';
 import { getQuotingModel } from '@/lib/quoting';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   let top: DocWithScore[] = [] as unknown as DocWithScore[];
   try {
-    const retriever = await getRetriever();
+    const retriever = await getRetriever(req.nextUrl.origin);
     top = await retriever.retrieve(userText, locale, 6);
   } catch (error) {
     console.error('Error retrieving documents:', error);
@@ -45,6 +45,8 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const quotingModel = await getQuotingModel(req.nextUrl.origin);
+
   // Prefer Gemini when configured, else fall back to OpenAI (streaming)
   if (hasGemini) {
     try {
@@ -52,7 +54,7 @@ export async function POST(req: NextRequest) {
       const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
       const model = genAI.getGenerativeModel({
         model: process.env.GEMINI_MODEL || 'gemini-2.5-pro',
-        systemInstruction: systemPrompt(locale, snippets, getQuotingModel()),
+        systemInstruction: systemPrompt(locale, snippets, quotingModel),
       });
 
       // Map messages to Gemini format
@@ -86,7 +88,7 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       try {
         const encoder = new TextEncoder();
-        const sys = systemPrompt(locale, snippets, getQuotingModel());
+        const sys = systemPrompt(locale, snippets, quotingModel);
 
         // Fallback: OpenAI streaming
         const { default: OpenAI } = await import('openai');
@@ -117,3 +119,4 @@ export async function POST(req: NextRequest) {
     }
   });
 }
+

@@ -2,6 +2,8 @@ import {NextRequest, NextResponse} from 'next/server';
 import {z} from 'zod';
 import {Resend} from 'resend';
 
+export const runtime = 'edge';
+
 const schema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -32,7 +34,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: 'Leads <noreply@' + (process.env.MAIL_DOMAIN || 'example.com') + '>',
       to: [process.env.RESEND_TO!],
-      subject: `New lead: ${data.name} (${data.company || '—'})`,
+      subject: `New lead: ${data.name} (${data.company || '-'})`,
       text: `Name: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company}\nWebsite: ${data.website}\n\n${data.message}`
     });
     return NextResponse.json({ok: true, sent: true});
