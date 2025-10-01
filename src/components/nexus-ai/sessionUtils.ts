@@ -62,6 +62,14 @@ export class SessionUtils {
         return { sessions: {}, currentSessionId: null, lastSessionId: null };
       }
       
+      // Check if localStorage is accessible (may be blocked by browser security)
+      try {
+        const test = localStorage.length;
+      } catch (e) {
+        // localStorage is blocked (SecurityError, QuotaExceededError, etc.)
+        return { sessions: {}, currentSessionId: null, lastSessionId: null };
+      }
+      
       const stored = localStorage.getItem(this.STORAGE_KEY);
       const currentSessionId = localStorage.getItem(this.CURRENT_SESSION_KEY);
       
@@ -87,6 +95,14 @@ export class SessionUtils {
   static saveSessionManager(manager: SessionManager): void {
     try {
       if (typeof window === 'undefined') return;
+      
+      // Check if localStorage is accessible (may be blocked by browser security)
+      try {
+        const test = localStorage.length;
+      } catch (e) {
+        // localStorage is blocked - silently fail
+        return;
+      }
       
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(manager.sessions));
       if (manager.currentSessionId) {
