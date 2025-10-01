@@ -89,7 +89,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
             <motion.button
               key={suggestion}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="group relative w-full p-3 sm:p-4 text-left bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="group relative w-full p-3 sm:p-4 text-left bg-white dark:bg-white hover:bg-gray-50 dark:hover:bg-gray-50 border border-gray-200 dark:border-gray-200 hover:border-blue-300 dark:hover:border-blue-300 rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               variants={chipVariants}
               whileHover={{ 
                 scale: 1.02,
@@ -131,19 +131,19 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-base font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-tight whitespace-normal break-words">
+                  <p className="text-base font-medium text-black dark:text-black group-hover:text-blue-600 dark:group-hover:text-blue-600 transition-colors duration-200 leading-tight whitespace-normal break-words">
                     {suggestion}
                   </p>
                 </div>
 
                 {/* Arrow Indicator */}
                 <motion.div
-                  className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
+                  className="flex-shrink-0 w-5 h-5 rounded-full bg-white dark:bg-white group-hover:bg-blue-100 dark:group-hover:bg-blue-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
                   initial={{ x: -10 }}
                   whileHover={{ x: 0 }}
                 >
                   <svg 
-                    className="w-3 h-3 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" 
+                    className="w-3 h-3 text-black dark:text-black group-hover:text-blue-600 dark:group-hover:text-blue-600" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"

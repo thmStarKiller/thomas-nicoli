@@ -16,7 +16,8 @@ function isLocalStorageAvailable(): boolean {
   
   try {
     // Try to access localStorage - this will throw if blocked
-    const test = window.localStorage.length;
+    const storage = window.localStorage;
+    const test = storage.length;
     return true;
   } catch (e) {
     // localStorage is blocked (SecurityError, QuotaExceededError, etc.)

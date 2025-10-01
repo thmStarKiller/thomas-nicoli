@@ -64,7 +64,9 @@ export class SessionUtils {
       
       // Check if localStorage is accessible (may be blocked by browser security)
       try {
-        const test = localStorage.length;
+        // Access localStorage object - this is what throws SecurityError if blocked
+        const storage = window.localStorage;
+        const test = storage.length;
       } catch (e) {
         // localStorage is blocked (SecurityError, QuotaExceededError, etc.)
         return { sessions: {}, currentSessionId: null, lastSessionId: null };
@@ -98,7 +100,9 @@ export class SessionUtils {
       
       // Check if localStorage is accessible (may be blocked by browser security)
       try {
-        const test = localStorage.length;
+        // Access localStorage object - this is what throws SecurityError if blocked
+        const storage = window.localStorage;
+        const test = storage.length;
       } catch (e) {
         // localStorage is blocked - silently fail
         return;

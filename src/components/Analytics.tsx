@@ -8,9 +8,15 @@ export function Analytics() {
   const [consent, setConsent] = useState(false);
   useEffect(() => {
     try {
-      // Check if localStorage is accessible (may be blocked by browser security)
-      const test = localStorage.length;
-      setConsent(localStorage.getItem('analytics_consent') === 'true');
+      if (typeof window === 'undefined') {
+        setConsent(false);
+        return;
+      }
+      
+      // Access localStorage object first - this is what throws SecurityError
+      const storage = window.localStorage;
+      const consentValue = storage.getItem('analytics_consent');
+      setConsent(consentValue === 'true');
     } catch (e) {
       // localStorage blocked - default to false
       setConsent(false);

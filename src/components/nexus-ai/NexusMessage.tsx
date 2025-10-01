@@ -117,9 +117,9 @@ export function NexusMessage({
         <motion.div
           className={`relative p-4 rounded-2xl ${
             isAI
-              ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-              : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'
-          } border shadow-sm dark:shadow-md dark:shadow-slate-950/30 backdrop-blur-sm group-hover:shadow-md dark:group-hover:shadow-lg dark:group-hover:shadow-blue-500/10 transition-all duration-200`}
+              ? 'bg-white dark:bg-white border-gray-200 dark:border-gray-200'
+              : 'bg-white dark:bg-white border-blue-200 dark:border-blue-200'
+          } border shadow-sm backdrop-blur-sm group-hover:shadow-md transition-all duration-200`}
           whileHover={{ 
             scale: 1.01,
             transition: { type: "spring", stiffness: 400, damping: 25 }
@@ -134,7 +134,7 @@ export function NexusMessage({
               <Skeleton className="h-4 w-4/5" />
             </div>
           ) : (
-            <div className="max-w-none text-gray-900 dark:text-gray-100">
+            <div className="max-w-none text-black dark:text-black">
             {isAI ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -146,7 +146,7 @@ export function NexusMessage({
                     const isInline = !match;
                     return !isInline ? (
                       <div className="relative group/code my-4">
-                        <pre className="bg-gray-900 text-gray-100 dark:bg-gray-950 dark:text-gray-200 rounded-lg p-4 overflow-x-auto border border-gray-700 dark:border-gray-800 shadow-sm">
+                        <pre className="bg-black text-white dark:bg-black dark:text-white rounded-lg p-4 overflow-x-auto border border-gray-300 dark:border-gray-300 shadow-sm">
                           <code className={`${className} text-sm leading-relaxed`} {...props}>
                             {children}
                           </code>
@@ -158,7 +158,7 @@ export function NexusMessage({
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           }}
-                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-gray-700 hover:bg-gray-600 text-gray-200 p-1.5 rounded-md text-xs shadow-sm border border-gray-600"
+                          className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-white hover:bg-gray-100 text-black p-1.5 rounded-md text-xs shadow-sm border border-gray-300"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -166,7 +166,7 @@ export function NexusMessage({
                         </motion.button>
                       </div>
                     ) : (
-                      <code className="bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono border border-gray-300 dark:border-gray-700" {...props}>
+                      <code className="bg-white text-black dark:bg-white dark:text-black px-1.5 py-0.5 rounded text-sm font-mono border border-gray-300 dark:border-gray-300" {...props}>
                         {children}
                       </code>
                     );
@@ -210,7 +210,7 @@ export function NexusMessage({
                 {message.content || (message.isStreaming ? '...' : '')}
               </ReactMarkdown>
             ) : (
-              <p className="whitespace-pre-wrap leading-relaxed text-gray-900 dark:text-gray-100">
+              <p className="whitespace-pre-wrap leading-relaxed text-black dark:text-black">
                 {message.content}
               </p>
             )}
@@ -260,13 +260,13 @@ export function NexusMessage({
             {/* Copy Button */}
             <motion.button
               onClick={handleCopy}
-              className="flex items-center gap-1 px-2 py-1 text-xs text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-600"
+              className="flex items-center gap-1 px-2 py-1 text-xs text-black dark:text-black hover:text-black dark:hover:text-black bg-white dark:bg-white hover:bg-gray-100 dark:hover:bg-gray-100 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               {copied ? (
                 <>
-                  <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
+                  <Check className="w-3 h-3 text-green-600 dark:text-green-600" />
                   <span>{t('copied')}</span>
                 </>
               ) : (
@@ -281,7 +281,7 @@ export function NexusMessage({
             {canStop && (
               <motion.button
                 onClick={onStop}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-orange-700 dark:text-orange-400 hover:text-orange-900 dark:hover:text-orange-300 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/40 rounded-md transition-colors shadow-sm border border-orange-300 dark:border-orange-700"
+                className="flex items-center gap-1 px-2 py-1 text-xs text-orange-700 dark:text-orange-700 hover:text-orange-900 dark:hover:text-orange-900 bg-orange-50 dark:bg-orange-50 hover:bg-orange-100 dark:hover:bg-orange-100 rounded-md transition-colors shadow-sm border border-orange-300 dark:border-orange-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -294,7 +294,7 @@ export function NexusMessage({
             {onRegenerate && !message.isStreaming && (
               <motion.button
                 onClick={onRegenerate}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-600"
+                className="flex items-center gap-1 px-2 py-1 text-xs text-black dark:text-black hover:text-black dark:hover:text-black bg-white dark:bg-white hover:bg-gray-100 dark:hover:bg-gray-100 rounded-md transition-colors shadow-sm border border-gray-300 dark:border-gray-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -313,7 +313,7 @@ export function NexusMessage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold mb-2 tracking-wide uppercase">
+            <div className="text-xs text-black dark:text-black font-semibold mb-2 tracking-wide uppercase">
               {t('sources')}
             </div>
             <div className="grid gap-2">
