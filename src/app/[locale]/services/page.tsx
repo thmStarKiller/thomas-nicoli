@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { ServiceCard } from '@/components/ServiceCard';
 import { BlurFade } from '@/components/magicui/blur-fade';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('services');
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services' });
   const seo = t.raw('seo') as { title: string; description: string };
   return {
     title: seo.title,
@@ -13,8 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ServicesPage() {
-  const t = await getTranslations('services');
+export default async function ServicesPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'services' });
   const title = t('title');
   const description = t('description');
   const items = t.raw('items') as Array<{ title: string; desc: string }>;
