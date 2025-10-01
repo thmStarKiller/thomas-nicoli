@@ -43,7 +43,21 @@ export default function ContactContent() {
         form.reset();
       } else {
         setStatus('error');
-        setErrorMessage(result.error || result.message || 'Failed to send message');
+        // Better error message formatting
+        let errorMsg = result.error || result.message || 'Failed to send message';
+        
+        // If there are field errors, list them
+        if (result.details?.fieldErrors) {
+          const fieldErrors = Object.entries(result.details.fieldErrors)
+            .map(([field, errors]) => {
+              const errorArray = Array.isArray(errors) ? errors : [String(errors)];
+              return `${field}: ${errorArray.join(', ')}`;
+            })
+            .join('; ');
+          errorMsg += ` - ${fieldErrors}`;
+        }
+        
+        setErrorMessage(errorMsg);
         console.error('API error:', result);
       }
     } catch (error) {
