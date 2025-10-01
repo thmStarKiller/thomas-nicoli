@@ -8,7 +8,10 @@ const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   company: z.string().optional().default(''),
-  website: z.string().url().optional().or(z.literal('')).default(''),
+  website: z.string().optional().default('').refine(
+    (val) => !val || val === '' || z.string().url().safeParse(val).success,
+    { message: 'Website must be a valid URL or empty' }
+  ),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   consent: z.boolean().refine((v) => v === true, {message: 'Consent required'})
 });
