@@ -126,7 +126,7 @@ export function NexusSuggestions({ onSuggestionClick }: NexusSuggestionsProps) {
                     stiffness: 200
                   }}
                 >
-                  <IconComponent className="w-6 h-6 text-white" />
+                  <IconComponent className="w-6 h-6 text-white stroke-white fill-white [&>*]:stroke-white [&>*]:fill-white" style={{ color: 'white', stroke: 'white' }} />
                 </motion.div>
 
                 {/* Text */}
