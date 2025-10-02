@@ -27,8 +27,8 @@ export function ChatPageContent() {
             <SparklesText 
               className="inline-block"
               colors={{
-                first: "#60A5FA",
-                second: "#A78BFA",
+                first: "#FFFFFF",
+                second: "#FFFFFF",
               }}
               sparklesCount={8}
             >
