@@ -19,7 +19,7 @@ export function ChatPageContent() {
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 flex items-center justify-center shadow-lg dark:shadow-2xl dark:shadow-blue-500/25"
               aria-hidden="true"
             >
-              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white animate-pulse" />
+              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 !text-white !stroke-white animate-pulse" style={{ color: 'white !important', stroke: 'white !important' }} strokeWidth={2} />
             </div>
           </div>
           

@@ -229,7 +229,7 @@ export function NexusAvatar({
             style={{ willChange: 'transform' }}
             className="relative z-10"
           >
-            <Sparkles className={`${config.icon} text-white drop-shadow-sm`} />
+            <Sparkles className={`${config.icon} !text-white !stroke-white drop-shadow-sm`} style={{ color: 'white !important', stroke: 'white !important' }} strokeWidth={2} />
           </motion.div>
 
           {/* Shimmer Effect */}

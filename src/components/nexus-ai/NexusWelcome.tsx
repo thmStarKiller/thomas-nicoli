@@ -80,7 +80,7 @@ export function NexusWelcome({ onSuggestionClick }: NexusWelcomeProps) {
                 scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
               }}
             >
-              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 !text-white !stroke-white" style={{ color: 'white !important', stroke: 'white !important' }} strokeWidth={2} />
             </motion.div>
           </motion.div>
 
