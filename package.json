@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:classic": "next dev",
-    "build": "next build --turbopack",
+    "build": "next build",
+    "build:turbopack": "next build --turbopack",
     "build:cloudflare": "npm run kb && next build",
     "start": "next start",
     "lint": "eslint",
