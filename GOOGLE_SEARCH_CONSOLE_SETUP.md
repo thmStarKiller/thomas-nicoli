@@ -1,6 +1,15 @@
 # Google Search Console Setup Guide
 
-This guide will walk you through setting up Google Search Console for **thomas-nicoli.pages.dev** and submitting your sitemap for Google indexing.
+This guide will walk you through setting up3. Wait for deployment to complete
+5. Return to Google Search Console and click **Verify**
+
+### Method 3: HTML File Upload
+
+1. Google will provide an HTML file to download
+2. Upload it to your `public/` folder in your project
+3. Commit and push to GitHub (this will trigger a Cloudflare deployment)
+4. Verify the file is accessible at: `https://thomas-nicoli.com/google[verification-code].html`
+5. Return to Google Search Console and click **Verify**arch Console for **thomas-nicoli.com** and submitting your sitemap for Google indexing.
 
 ---
 
@@ -26,12 +35,12 @@ You have two options for adding your property:
 
 ### Option A: Domain Property (Recommended)
 - Allows you to track all subdomains and protocols (http/https)
-- **Enter**: `thomas-nicoli.pages.dev`
+- **Enter**: `thomas-nicoli.com`
 - Click **Continue**
 
 ### Option B: URL Prefix Property
 - Tracks only the exact URL you specify
-- **Enter**: `https://thomas-nicoli.pages.dev`
+- **Enter**: `https://thomas-nicoli.com`
 - Click **Continue**
 
 > **Recommendation**: Use **Domain Property** for complete coverage.
@@ -100,7 +109,7 @@ Once verified, submit your sitemap to help Google discover all your pages:
 1. In Google Search Console, go to **Sitemaps** (left sidebar)
 2. Under "Add a new sitemap", enter:
    ```
-   https://thomas-nicoli.pages.dev/sitemap.xml
+   https://thomas-nicoli.com/sitemap.xml
    ```
 3. Click **Submit**
 
@@ -133,12 +142,12 @@ To speed up the indexing process, manually request indexing for important pages:
 1. In Google Search Console, use the **URL Inspection** tool (top search bar)
 2. Enter your key URLs one by one:
    ```
-   https://thomas-nicoli.pages.dev/en
-   https://thomas-nicoli.pages.dev/es
-   https://thomas-nicoli.pages.dev/en/services
-   https://thomas-nicoli.pages.dev/es/services
-   https://thomas-nicoli.pages.dev/en/contact
-   https://thomas-nicoli.pages.dev/es/contact
+   https://thomas-nicoli.com/en
+   https://thomas-nicoli.com/es
+   https://thomas-nicoli.com/en/services
+   https://thomas-nicoli.com/es/services
+   https://thomas-nicoli.com/en/contact
+   https://thomas-nicoli.com/es/contact
    ```
 3. For each URL:
    - Click **Request Indexing**
@@ -189,8 +198,8 @@ After 2-7 days, you'll start seeing data in Google Search Console:
 ## ⚠️ Troubleshooting
 
 ### "Sitemap could not be read"
-- Check that `https://thomas-nicoli.pages.dev/sitemap.xml` is accessible in your browser
-- Ensure your latest code is deployed to Cloudflare Pages
+- Check that `https://thomas-nicoli.com/sitemap.xml` is accessible in your browser
+- Ensure your latest code is deployed to Cloudflare Pages (mapped to thomas-nicoli.com)
 - Try re-submitting the sitemap
 
 ### "Coverage issues detected"

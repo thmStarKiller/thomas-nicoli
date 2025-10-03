@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const runtime = "edge";
 
-const siteUrl = process.env.SITE_URL || 'https://thomas-nicoli.pages.dev';
+const siteUrl = process.env.SITE_URL || 'https://thomas-nicoli.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

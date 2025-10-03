@@ -1,7 +1,7 @@
 import type {MetadataRoute} from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.SITE_URL || 'https://thomas-nicoli.pages.dev';
+  const base = process.env.SITE_URL || 'https://thomas-nicoli.com';
   const locales: ('en' | 'es')[] = ['en', 'es'];
   const now = new Date();
   

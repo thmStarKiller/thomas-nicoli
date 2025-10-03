@@ -11,7 +11,7 @@ import {Analytics} from '@/components/Analytics';
 const inter = Inter({subsets: ['latin'], variable: '--font-inter'});
 const space = Space_Grotesk({subsets: ['latin'], variable: '--font-space'});
 
-const siteUrl = process.env.SITE_URL || 'https://thomas-nicoli.pages.dev';
+const siteUrl = process.env.SITE_URL || 'https://thomas-nicoli.com';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
