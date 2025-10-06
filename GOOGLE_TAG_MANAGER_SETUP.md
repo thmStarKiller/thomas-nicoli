@@ -1,46 +1,77 @@
-# Google Tag Manager (GTM) Setup Guide
+# Google Analytics & Tag Manager Setup Guide
 
-This guide explains how Google Tag Manager is implemented on your website and how to configure it.
+This guide explains how Google Analytics 4 (GA4) and Google Tag Manager (GTM) are implemented on your website.
 
 ---
 
 ## ✅ What's Already Implemented
 
-Google Tag Manager has been added to your website with the container ID: **GTM-57HZSFXQ**
+### Google Analytics 4 (GA4)
+Your website has **direct GA4 tracking** implemented with Measurement ID: **G-TRSDJXRJD9**
+
+### Google Tag Manager (GTM)
+Your website also has **GTM** implemented with container ID: **GTM-57HZSFXQ**
+
+> **Note**: You can use both GA4 and GTM together. GTM provides more flexibility for adding additional tracking tags beyond just Google Analytics.
 
 ### Implementation Details
 
-The GTM code is added in two places in `src/app/layout.tsx`:
+Both tracking systems are added in `src/app/layout.tsx`:
 
-1. **In the `<head>` section** - The main GTM script
-2. **After the `<body>` tag** - The noscript fallback iframe for users with JavaScript disabled
-
-This follows Google's recommended implementation exactly as shown in your GTM dashboard.
+1. **In the `<head>` section**:
+   - GTM script
+   - GA4 gtag.js script
+2. **After the `<body>` tag**:
+   - GTM noscript fallback iframe
 
 ---
 
 ## 🔧 Configuration
 
-### Environment Variable (Optional)
+### Environment Variables (Optional)
 
-You can override the GTM container ID using an environment variable:
+You can override the default IDs using environment variables:
 
 **In Cloudflare Pages:**
 1. Go to your project → **Settings** → **Environment Variables**
-2. Add: `NEXT_PUBLIC_GTM_ID` = `GTM-57HZSFXQ` (or your GTM ID)
+2. Add the following:
+   - `NEXT_PUBLIC_GTM_ID` = `GTM-57HZSFXQ`
+   - `NEXT_PUBLIC_GA4_ID` = `G-TRSDJXRJD9`
 3. Save and deploy
 
 **For local development:**
 Add to your `.env.local` file:
 ```bash
 NEXT_PUBLIC_GTM_ID=GTM-57HZSFXQ
+NEXT_PUBLIC_GA4_ID=G-TRSDJXRJD9
 ```
 
-> **Note**: If you don't set this variable, it will default to `GTM-57HZSFXQ`
+> **Note**: If you don't set these variables, they will default to the values above.
 
 ---
 
-## 📊 How to Use GTM
+## 📊 Google Analytics 4 (GA4)
+
+### Verify GA4 is Working
+
+1. Go to [Google Analytics](https://analytics.google.com/)
+2. Select your property with ID **G-TRSDJXRJD9**
+3. Go to **Reports** → **Realtime**
+4. Visit your website in another tab: `https://thomas-nicoli.com`
+5. You should see yourself as an active user in real-time ✅
+
+### What GA4 Tracks Automatically
+
+- **Page views** - Every page visit
+- **Scroll depth** - How far users scroll
+- **Outbound clicks** - Clicks on external links
+- **File downloads** - PDF, ZIP downloads
+- **Video engagement** - If you have embedded videos
+- **Site search** - If you implement search tracking
+
+---
+
+## � Google Tag Manager (GTM)
 
 ### 1. Access Your GTM Container
 

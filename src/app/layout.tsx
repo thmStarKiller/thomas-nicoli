@@ -82,6 +82,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-57HZSFXQ';
+  const ga4Id = process.env.NEXT_PUBLIC_GA4_ID || 'G-TRSDJXRJD9';
   
   return (
     <html lang="en" suppressHydrationWarning>
@@ -97,6 +98,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         {/* End Google Tag Manager */}
+        
+        {/* Google Analytics 4 (GA4) */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${ga4Id}');
+`,
+          }}
+        />
+        {/* End Google Analytics 4 */}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
