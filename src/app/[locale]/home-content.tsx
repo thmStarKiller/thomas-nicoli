@@ -8,6 +8,7 @@ import { ArrowRight, Sparkles, Zap, Target, Brain, Globe, MessageSquare } from '
 
 import { AuroraText } from '@/components/magicui/aurora-text';
 import { BlurFade } from '@/components/magicui/blur-fade';
+import { FuzzyText } from '@/components/magicui/fuzzy-text';
 import ShimmerButton from '@/components/magicui/shimmer-button';
 import { MagicCard } from '@/components/magicui/magic-card';
 import { BorderBeam } from '@/components/magicui/border-beam';
@@ -50,9 +51,13 @@ export default function HomeContent() {
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
                 {tHero('title').split(' ').slice(0, -3).join(' ')}
                 <br />
-                <AuroraText className="text-5xl md:text-7xl font-bold">
+                <FuzzyText 
+                  className="text-5xl md:text-7xl font-bold"
+                  duration={0.05}
+                  intensity={3}
+                >
                   {tHero('title').split(' ').slice(-3).join(' ')}
-                </AuroraText>
+                </FuzzyText>
               </h1>
             </BlurFade>
 
@@ -101,7 +106,7 @@ export default function HomeContent() {
           <BlurFade delay={0.2} inView>
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {servicesTitle} <AuroraText>{tHome('servicesSectionTitle')}</AuroraText>
+                {servicesTitle} <FuzzyText duration={0.05} intensity={3}>{tHome('servicesSectionTitle')}</FuzzyText>
               </h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
                 {tHome('servicesDescription')}
