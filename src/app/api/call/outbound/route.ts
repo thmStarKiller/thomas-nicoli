@@ -22,7 +22,6 @@ export async function POST(request: Request) {
     const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
     const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
     const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '+14785002626';
-    const TARGET_PHONE_NUMBER = process.env.TARGET_PHONE_NUMBER || '+15074161239';
 
     if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
       console.error('Missing Twilio credentials in environment variables');
@@ -36,7 +35,7 @@ export async function POST(request: Request) {
     const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Calls.json`;
     
     const formData = new URLSearchParams({
-      To: TARGET_PHONE_NUMBER, // Your phone number to receive the call
+      To: to_number, // Use the phone number from the request (from ElevenLabs tool)
       From: TWILIO_PHONE_NUMBER, // Twilio phone number
       Url: `https://${request.headers.get('host')}/api/call/twiml`, // TwiML endpoint
     });
