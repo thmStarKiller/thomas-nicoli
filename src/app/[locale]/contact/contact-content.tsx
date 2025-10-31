@@ -49,21 +49,22 @@ export default function ContactContent() {
 
         console.log('[Widget] Registering client tools...');
         config.clientTools = {
-          // Client tool to initiate phone call via Twilio
-          initiatePhoneCall: async (params: Record<string, unknown>) => {
-            console.log('[Widget] 🔥 initiatePhoneCall CALLED WITH PARAMS:', params);
+          // Client tool to create 3-way conference call: User + Thomas + Agent
+          createConferenceCall: async (params: Record<string, unknown>) => {
+            console.log('[Widget] 🔥 createConferenceCall CALLED WITH PARAMS:', params);
             
             try {
-              // Extract phone number - try different possible parameter names
-              const phoneNumber = (params?.phoneNumber || 
-                                  params?.phone_number || 
-                                  params?.number || 
-                                  params?.to) as string;
+              // Extract user's phone number - try different possible parameter names
+              const userPhoneNumber = (params?.userPhoneNumber || 
+                                      params?.user_phone_number || 
+                                      params?.phoneNumber ||
+                                      params?.phone_number || 
+                                      params?.number) as string;
               
-              console.log('[Widget] Extracted phone number:', phoneNumber);
+              console.log('[Widget] Extracted user phone number:', userPhoneNumber);
               
-              if (!phoneNumber || typeof phoneNumber !== 'string') {
-                const error = 'Phone number is required. Please provide a valid phone number.';
+              if (!userPhoneNumber || typeof userPhoneNumber !== 'string') {
+                const error = 'User phone number is required. Please provide your phone number so I can connect you with Thomas.';
                 console.error('[Widget] ERROR:', error);
                 return {
                   success: false,
@@ -71,7 +72,7 @@ export default function ContactContent() {
                 };
               }
               
-              console.log('[Widget] Calling API with phone number:', phoneNumber);
+              console.log('[Widget] Creating conference call with user at:', userPhoneNumber);
               
               const response = await fetch('/api/call/outbound', {
                 method: 'POST',
@@ -79,7 +80,7 @@ export default function ContactContent() {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  to_number: phoneNumber,
+                  user_phone_number: userPhoneNumber,
                 }),
               });
 
@@ -87,17 +88,19 @@ export default function ContactContent() {
               console.log('[Widget] API response:', data);
 
               if (!response.ok) {
-                throw new Error(data.error || 'Failed to initiate call');
+                throw new Error(data.error || 'Failed to create conference call');
               }
 
-              console.log('[Widget] ✅ Call initiated successfully!');
+              console.log('[Widget] ✅ Conference call created successfully!');
               return {
                 success: true,
-                message: `Call initiated successfully to ${phoneNumber}`,
-                call_sid: data.call_sid,
+                message: `Conference call created! We're calling you at ${userPhoneNumber} and connecting you with Thomas. Please answer your phone.`,
+                conference_name: data.conference_name,
+                user_call_sid: data.user_call_sid,
+                thomas_call_sid: data.thomas_call_sid,
               };
             } catch (error) {
-              console.error('[Widget] ❌ Error initiating call:', error);
+              console.error('[Widget] ❌ Error creating conference call:', error);
               return {
                 success: false,
                 error: String(error),

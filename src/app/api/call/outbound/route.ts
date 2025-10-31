@@ -3,86 +3,115 @@ import { NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 /**
- * API endpoint to initiate outbound phone calls via ElevenLabs + Twilio
- * Called by the ElevenLabs widget when the agent wants to make a call
- * Uses ElevenLabs' Conversational AI API to handle the full conversation
+ * API endpoint to create a 3-way conference call
+ * Called by the ElevenLabs widget when the agent wants to connect user with Thomas
+ * 
+ * Flow:
+ * 1. Creates a Twilio conference room
+ * 2. Calls user's phone and adds to conference
+ * 3. Calls Thomas's phone and adds to conference
+ * 4. Agent can moderate from widget or join conference
  */
 export async function POST(request: Request) {
   try {
-    const { to_number } = await request.json();
+    const { user_phone_number } = await request.json();
 
     // Validate phone number
-    if (!to_number) {
+    if (!user_phone_number) {
       return NextResponse.json(
-        { error: 'Phone number is required' },
+        { error: 'User phone number is required' },
         { status: 400 }
       );
     }
 
-    // Get ElevenLabs credentials from environment variables
-    const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-    const AGENT_ID = 'jrtHx9K8suqXV9kyjlb6';
-    
-    // Get agent phone number ID - you need to add this to your env vars
-    // Find it in ElevenLabs Dashboard > Agent > Phone Numbers
-    const AGENT_PHONE_NUMBER_ID = process.env.ELEVENLABS_AGENT_PHONE_NUMBER_ID;
+    // Get Twilio credentials from environment variables
+    const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+    const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+    const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '+14785002626';
+    const THOMAS_PHONE_NUMBER = '+33749062192';
+    const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://thomas-nicoli.com';
 
-    if (!ELEVENLABS_API_KEY) {
-      console.error('Missing ElevenLabs API key in environment variables');
+    if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
+      console.error('[API] Missing Twilio credentials in environment variables');
       return NextResponse.json(
-        { error: 'Server configuration error: Missing API key' },
+        { error: 'Server configuration error: Missing Twilio credentials' },
         { status: 500 }
       );
     }
 
-    if (!AGENT_PHONE_NUMBER_ID) {
-      console.error('Missing ELEVENLABS_AGENT_PHONE_NUMBER_ID in environment variables');
+    console.log('[API] Creating conference call for user:', user_phone_number);
+
+    // Generate unique conference name
+    const conferenceName = `thomas-call-${Date.now()}`;
+    const baseUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}`;
+    const authHeader = 'Basic ' + btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`);
+
+    // Step 1: Call user's phone and add to conference
+    console.log('[API] Calling user at:', user_phone_number);
+    const userCallParams = new URLSearchParams({
+      To: user_phone_number,
+      From: TWILIO_PHONE_NUMBER,
+      Url: `${NEXT_PUBLIC_APP_URL}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=user`,
+    });
+
+    const userCallResponse = await fetch(`${baseUrl}/Calls.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': authHeader,
+      },
+      body: userCallParams.toString(),
+    });
+
+    if (!userCallResponse.ok) {
+      const errorText = await userCallResponse.text();
+      console.error('[API] Failed to call user:', errorText);
       return NextResponse.json(
-        { 
-          error: 'Server configuration error: Missing agent phone number ID',
-          details: 'Please add ELEVENLABS_AGENT_PHONE_NUMBER_ID to your environment variables'
-        },
-        { status: 500 }
+        { error: 'Failed to call user', details: errorText },
+        { status: userCallResponse.status }
       );
     }
 
-    console.log('[API] Initiating ElevenLabs call to:', to_number);
+    const userCallData = await userCallResponse.json();
+    console.log('[API] User call initiated:', userCallData.sid);
 
-    // Use ElevenLabs' Twilio outbound call API
-    // This will make the call AND connect the ElevenLabs agent to handle the conversation
-    const response = await fetch(
-      'https://api.elevenlabs.io/v1/convai/twilio/outbound-call',
-      {
-        method: 'POST',
-        headers: {
-          'xi-api-key': ELEVENLABS_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          agent_id: AGENT_ID,
-          agent_phone_number_id: AGENT_PHONE_NUMBER_ID,
-          to_number: to_number,
-        }),
-      }
-    );
+    // Step 2: Call Thomas's phone and add to conference
+    console.log('[API] Calling Thomas at:', THOMAS_PHONE_NUMBER);
+    const thomasCallParams = new URLSearchParams({
+      To: THOMAS_PHONE_NUMBER,
+      From: TWILIO_PHONE_NUMBER,
+      Url: `${NEXT_PUBLIC_APP_URL}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=thomas`,
+    });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('ElevenLabs API error:', errorData);
+    const thomasCallResponse = await fetch(`${baseUrl}/Calls.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': authHeader,
+      },
+      body: thomasCallParams.toString(),
+    });
+
+    if (!thomasCallResponse.ok) {
+      const errorText = await thomasCallResponse.text();
+      console.error('[API] Failed to call Thomas:', errorText);
       return NextResponse.json(
-        { error: 'Failed to initiate call', details: errorData },
-        { status: response.status }
+        { error: 'Failed to call Thomas', details: errorText },
+        { status: thomasCallResponse.status }
       );
     }
 
-    const callData = await response.json();
-    console.log('[API] Call initiated successfully:', callData);
+    const thomasCallData = await thomasCallResponse.json();
+    console.log('[API] Thomas call initiated:', thomasCallData.sid);
 
     return NextResponse.json({
       success: true,
-      message: callData.message || 'Call initiated successfully',
-      conversation_id: callData.conversation_id,
-      call_sid: callData.callSid,
+      message: 'Conference call created successfully',
+      conference_name: conferenceName,
+      user_call_sid: userCallData.sid,
+      thomas_call_sid: thomasCallData.sid,
+      user_phone: user_phone_number,
+      thomas_phone: THOMAS_PHONE_NUMBER,
     });
 
   } catch (error) {
