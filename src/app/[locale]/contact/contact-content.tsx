@@ -29,9 +29,17 @@ export default function ContactContent() {
 
       config.clientTools = {
         // Client tool to initiate phone call via Twilio
-        initiatePhoneCall: async ({ phoneNumber }: { phoneNumber: string }) => {
+        initiatePhoneCall: async (params: Record<string, unknown>) => {
           try {
+            // Extract phone number - try different possible parameter names
+            const phoneNumber = params?.phoneNumber || params?.phone_number || params?.number || params?.to;
+            
+            console.log('[Widget] Received params:', params);
             console.log('[Widget] Initiating phone call to:', phoneNumber);
+            
+            if (!phoneNumber || typeof phoneNumber !== 'string') {
+              throw new Error('Phone number is required. Please provide a valid phone number.');
+            }
             
             const response = await fetch('/api/call/outbound', {
               method: 'POST',
