@@ -29,7 +29,14 @@ export async function POST(request: Request) {
     const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
     const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '+14785002626';
     const THOMAS_PHONE_NUMBER = '+33749062192';
-    const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://thomas-nicoli.com';
+    
+    // Get the base URL from env or from request headers
+    let baseAppUrl = process.env.NEXT_PUBLIC_APP_URL;
+    if (!baseAppUrl) {
+      const host = request.headers.get('host');
+      baseAppUrl = host ? `https://${host}` : 'https://thomas-nicoli.com';
+    }
+    console.log('[API] Using base URL for TwiML:', baseAppUrl);
 
     if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
       console.error('[API] Missing Twilio credentials in environment variables');
@@ -51,7 +58,7 @@ export async function POST(request: Request) {
     const userCallParams = new URLSearchParams({
       To: user_phone_number,
       From: TWILIO_PHONE_NUMBER,
-      Url: `${NEXT_PUBLIC_APP_URL}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=user`,
+      Url: `${baseAppUrl}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=user`,
     });
 
     const userCallResponse = await fetch(`${baseUrl}/Calls.json`, {
@@ -80,8 +87,9 @@ export async function POST(request: Request) {
     const thomasCallParams = new URLSearchParams({
       To: THOMAS_PHONE_NUMBER,
       From: TWILIO_PHONE_NUMBER,
-      Url: `${NEXT_PUBLIC_APP_URL}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=thomas`,
+      Url: `${baseAppUrl}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=thomas`,
     });
+    console.log('[API] Thomas TwiML URL:', `${baseAppUrl}/api/call/conference?name=${encodeURIComponent(conferenceName)}&participant=thomas`);
 
     const thomasCallResponse = await fetch(`${baseUrl}/Calls.json`, {
       method: 'POST',
@@ -94,15 +102,43 @@ export async function POST(request: Request) {
 
     if (!thomasCallResponse.ok) {
       const errorText = await thomasCallResponse.text();
-      console.error('[API] Failed to call Thomas:', errorText);
+      console.error('[API] ❌ Failed to call Thomas:', errorText);
+      
+      // Try to parse error details
+      try {
+        const errorData = JSON.parse(errorText);
+        console.error('[API] Twilio error code:', errorData.code);
+        console.error('[API] Twilio error message:', errorData.message);
+        
+        // Check for common errors
+        if (errorData.code === 21216) {
+          console.error('[API] ERROR: France geo-permissions not enabled! Enable France (+33) in Twilio geo-permissions.');
+        }
+      } catch (e) {
+        // Error text wasn't JSON
+      }
+      
       return NextResponse.json(
-        { error: 'Failed to call Thomas', details: errorText },
+        { 
+          error: 'Failed to call Thomas', 
+          details: errorText,
+          user_call_sid: userCallData.sid,
+          user_connected: true,
+          thomas_connected: false,
+        },
         { status: thomasCallResponse.status }
       );
     }
 
     const thomasCallData = await thomasCallResponse.json();
     console.log('[API] Thomas call initiated:', thomasCallData.sid);
+    console.log('[API] Thomas call status:', thomasCallData.status);
+    console.log('[API] Conference name:', conferenceName);
+
+    // Return success with both call SIDs
+    console.log('[API] ✅ Both calls initiated successfully!');
+    console.log('[API] User will join conference:', conferenceName);
+    console.log('[API] Thomas will join conference:', conferenceName);
 
     return NextResponse.json({
       success: true,
@@ -112,6 +148,8 @@ export async function POST(request: Request) {
       thomas_call_sid: thomasCallData.sid,
       user_phone: user_phone_number,
       thomas_phone: THOMAS_PHONE_NUMBER,
+      user_call_status: userCallData.status,
+      thomas_call_status: thomasCallData.status,
     });
 
   } catch (error) {
