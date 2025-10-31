@@ -4,23 +4,23 @@ export const runtime = 'edge';
 
 /**
  * TwiML endpoint that provides call instructions to Twilio
- * This tells Twilio what to do when the call is answered
+ * This tells Twilio to forward the call to Thomas's phone number
  */
-export async function POST() {
-  // TwiML response that connects the call to ElevenLabs agent
-  const ELEVENLABS_AGENT_ID = 'jrtHx9K8suqXV9kyjlb6';
-  
-  // Get the host from environment or construct it
-  const host = process.env.NEXT_PUBLIC_APP_URL || 'thomas-nicoli.com';
+export async function POST(request: Request) {
+  // For outbound calls initiated from the website, we want to:
+  // 1. Say a greeting to Thomas
+  // 2. Provide information about who's calling from the website
   
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice">Connecting you to Thomas Nicoli. Please wait.</Say>
-  <Connect>
-    <Stream url="wss://${host}/api/call/media-stream">
-      <Parameter name="agent_id" value="${ELEVENLABS_AGENT_ID}" />
-    </Stream>
-  </Connect>
+  <Say voice="alice" language="fr-FR">
+    Bonjour Thomas, vous recevez un appel depuis votre site web thomas-nicoli.com. 
+    Un visiteur souhaite vous parler. Connexion en cours.
+  </Say>
+  <Pause length="1"/>
+  <Say voice="alice" language="en-US">
+    This is a call from your website. A visitor wants to speak with you.
+  </Say>
 </Response>`;
 
   return new NextResponse(twiml, {
