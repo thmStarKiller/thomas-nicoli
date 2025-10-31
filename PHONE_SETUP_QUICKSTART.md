@@ -6,6 +6,8 @@
 
 **New System**: We use ElevenLabs' API which handles BOTH the call AND the agent conversation automatically.
 
+**Status**: ✅ Environment variable `ELEVENLABS_AGENT_PHONE_NUMBER_ID` configured!
+
 ## 🚀 Next Steps (Do These Now!)
 
 ### 1. Get Your Agent Phone Number ID
