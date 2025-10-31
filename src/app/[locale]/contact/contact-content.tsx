@@ -17,78 +17,112 @@ export default function ContactContent() {
   // Load ElevenLabs widget script and configure client tools
   useEffect(() => {
     console.log('[Widget] Setting up ElevenLabs widget...');
+    
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
     script.async = true;
     script.type = 'text/javascript';
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
-    // Set up client tool handler for phone calls
-    const handleWidgetCall = (event: CustomEvent) => {
-      console.log('[Widget] elevenlabs-convai:call event received');
-      const config = event.detail?.config;
-      if (!config) {
-        console.error('[Widget] No config found in event');
+    // Wait for widget to be available in DOM
+    const setupWidget = () => {
+      const widget = document.querySelector('elevenlabs-convai');
+      
+      if (!widget) {
+        console.log('[Widget] Widget not found yet, retrying in 500ms...');
+        setTimeout(setupWidget, 500);
         return;
       }
 
-      console.log('[Widget] Registering client tools...');
-      config.clientTools = {
-        // Client tool to initiate phone call via Twilio
-        initiatePhoneCall: async (params: Record<string, unknown>) => {
-          console.log('[Widget] ⚡ initiatePhoneCall CALLED!');
-          try {
-            // Extract phone number - try different possible parameter names
-            const phoneNumber = params?.phoneNumber || params?.phone_number || params?.number || params?.to;
+      console.log('[Widget] Widget found! Setting up event listener...');
+
+      // Set up client tool handler for phone calls
+      const handleWidgetCall = (event: Event) => {
+        console.log('[Widget] ⚡ elevenlabs-convai:call event received!');
+        const customEvent = event as CustomEvent;
+        const config = customEvent.detail?.config;
+        
+        if (!config) {
+          console.error('[Widget] No config found in event');
+          return;
+        }
+
+        console.log('[Widget] Registering client tools...');
+        config.clientTools = {
+          // Client tool to initiate phone call via Twilio
+          initiatePhoneCall: async (params: Record<string, unknown>) => {
+            console.log('[Widget] 🔥 initiatePhoneCall CALLED WITH PARAMS:', params);
             
-            console.log('[Widget] Received params:', params);
-            console.log('[Widget] Initiating phone call to:', phoneNumber);
-            
-            if (!phoneNumber || typeof phoneNumber !== 'string') {
-              throw new Error('Phone number is required. Please provide a valid phone number.');
+            try {
+              // Extract phone number - try different possible parameter names
+              const phoneNumber = (params?.phoneNumber || 
+                                  params?.phone_number || 
+                                  params?.number || 
+                                  params?.to) as string;
+              
+              console.log('[Widget] Extracted phone number:', phoneNumber);
+              
+              if (!phoneNumber || typeof phoneNumber !== 'string') {
+                const error = 'Phone number is required. Please provide a valid phone number.';
+                console.error('[Widget] ERROR:', error);
+                return {
+                  success: false,
+                  error: error,
+                };
+              }
+              
+              console.log('[Widget] Calling API with phone number:', phoneNumber);
+              
+              const response = await fetch('/api/call/outbound', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to_number: phoneNumber,
+                }),
+              });
+
+              const data = await response.json();
+              console.log('[Widget] API response:', data);
+
+              if (!response.ok) {
+                throw new Error(data.error || 'Failed to initiate call');
+              }
+
+              console.log('[Widget] ✅ Call initiated successfully!');
+              return {
+                success: true,
+                message: `Call initiated successfully to ${phoneNumber}`,
+                call_sid: data.call_sid,
+              };
+            } catch (error) {
+              console.error('[Widget] ❌ Error initiating call:', error);
+              return {
+                success: false,
+                error: String(error),
+              };
             }
-            
-            const response = await fetch('/api/call/outbound', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                to_number: phoneNumber,
-              }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-              throw new Error(data.error || 'Failed to initiate call');
-            }
-
-            console.log('[Widget] Call initiated successfully:', data);
-            return {
-              success: true,
-              message: 'Call initiated successfully',
-              call_sid: data.call_sid,
-            };
-          } catch (error) {
-            console.error('[Widget] Error initiating call:', error);
-            return {
-              success: false,
-              error: String(error),
-            };
-          }
-        },
+          },
+        };
+        
+        console.log('[Widget] Client tools registered successfully!');
       };
+
+      // Attach event listener to the WIDGET element (not document)
+      widget.addEventListener('elevenlabs-convai:call', handleWidgetCall);
+      console.log('[Widget] Event listener attached to widget element');
     };
 
-    // Listen for widget call event
-    console.log('[Widget] Adding event listener for elevenlabs-convai:call');
-    document.addEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
+    // Start setup after a short delay to ensure DOM is ready
+    setTimeout(setupWidget, 100);
 
     return () => {
-      console.log('[Widget] Cleanup: removing script and event listener');
-      document.body.removeChild(script);
-      document.removeEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
+      console.log('[Widget] Cleanup: removing script');
+      const scriptElement = document.querySelector(`script[src="${script.src}"]`);
+      if (scriptElement) {
+        document.head.removeChild(scriptElement);
+      }
     };
   }, []);
 
