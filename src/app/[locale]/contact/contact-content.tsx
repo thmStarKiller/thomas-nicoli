@@ -16,6 +16,7 @@ export default function ContactContent() {
 
   // Load ElevenLabs widget script and configure client tools
   useEffect(() => {
+    console.log('[Widget] Setting up ElevenLabs widget...');
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
     script.async = true;
@@ -24,12 +25,18 @@ export default function ContactContent() {
 
     // Set up client tool handler for phone calls
     const handleWidgetCall = (event: CustomEvent) => {
+      console.log('[Widget] elevenlabs-convai:call event received');
       const config = event.detail?.config;
-      if (!config) return;
+      if (!config) {
+        console.error('[Widget] No config found in event');
+        return;
+      }
 
+      console.log('[Widget] Registering client tools...');
       config.clientTools = {
         // Client tool to initiate phone call via Twilio
         initiatePhoneCall: async (params: Record<string, unknown>) => {
+          console.log('[Widget] ⚡ initiatePhoneCall CALLED!');
           try {
             // Extract phone number - try different possible parameter names
             const phoneNumber = params?.phoneNumber || params?.phone_number || params?.number || params?.to;
@@ -75,9 +82,11 @@ export default function ContactContent() {
     };
 
     // Listen for widget call event
+    console.log('[Widget] Adding event listener for elevenlabs-convai:call');
     document.addEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
 
     return () => {
+      console.log('[Widget] Cleanup: removing script and event listener');
       document.body.removeChild(script);
       document.removeEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
     };
