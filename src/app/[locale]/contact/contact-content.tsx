@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Mail, MessageSquare, User, Building, Globe } from 'lucide-react';
 
@@ -13,6 +13,19 @@ export default function ContactContent() {
   const t = useTranslations('contact');
   const [status, setStatus] = useState<'idle' | 'ok' | 'error' | 'loading'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  // Load ElevenLabs widget script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
+    script.async = true;
+    script.type = 'text/javascript';
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,6 +82,11 @@ export default function ContactContent() {
 
   return (
     <div key={locale} className="min-h-screen bg-background text-foreground">
+      {/* ElevenLabs Voice Agent Widget */}
+      <div dangerouslySetInnerHTML={{ 
+        __html: '<elevenlabs-convai agent-id="jrtHx9K8suqXV9kyjlb6"></elevenlabs-convai>' 
+      }} />
+      
       <div className="mx-auto max-w-4xl px-4 py-12">
         <BlurFade delay={0.1}>
           <h1 className="text-4xl font-bold mb-2 text-foreground">{t('title')}</h1>
