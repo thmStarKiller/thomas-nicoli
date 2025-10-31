@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 /**
- * API endpoint to initiate outbound calls via Twilio
- * Called by ElevenLabs widget client tool
+ * API endpoint to initiate outbound phone calls via ElevenLabs + Twilio
+ * Called by the ElevenLabs widget when the agent wants to make a call
+ * Uses ElevenLabs' Conversational AI API to handle the full conversation
  */
 export async function POST(request: Request) {
   try {
@@ -18,53 +19,70 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get Twilio credentials from environment variables
-    const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
-    const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
-    const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '+14785002626';
+    // Get ElevenLabs credentials from environment variables
+    const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+    const AGENT_ID = 'jrtHx9K8suqXV9kyjlb6';
+    
+    // Get agent phone number ID - you need to add this to your env vars
+    // Find it in ElevenLabs Dashboard > Agent > Phone Numbers
+    const AGENT_PHONE_NUMBER_ID = process.env.ELEVENLABS_AGENT_PHONE_NUMBER_ID;
 
-    if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
-      console.error('Missing Twilio credentials in environment variables');
+    if (!ELEVENLABS_API_KEY) {
+      console.error('Missing ElevenLabs API key in environment variables');
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error: Missing API key' },
         { status: 500 }
       );
     }
 
-    // Create Twilio API call using fetch (Edge Runtime compatible)
-    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Calls.json`;
-    
-    const formData = new URLSearchParams({
-      To: to_number, // Use the phone number from the request (from ElevenLabs tool)
-      From: TWILIO_PHONE_NUMBER, // Twilio phone number
-      Url: `https://${request.headers.get('host')}/api/call/twiml`, // TwiML endpoint
-    });
+    if (!AGENT_PHONE_NUMBER_ID) {
+      console.error('Missing ELEVENLABS_AGENT_PHONE_NUMBER_ID in environment variables');
+      return NextResponse.json(
+        { 
+          error: 'Server configuration error: Missing agent phone number ID',
+          details: 'Please add ELEVENLABS_AGENT_PHONE_NUMBER_ID to your environment variables'
+        },
+        { status: 500 }
+      );
+    }
 
-    const response = await fetch(twilioUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`),
-      },
-      body: formData.toString(),
-    });
+    console.log('[API] Initiating ElevenLabs call to:', to_number);
+
+    // Use ElevenLabs' Twilio outbound call API
+    // This will make the call AND connect the ElevenLabs agent to handle the conversation
+    const response = await fetch(
+      'https://api.elevenlabs.io/v1/convai/twilio/outbound-call',
+      {
+        method: 'POST',
+        headers: {
+          'xi-api-key': ELEVENLABS_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          agent_id: AGENT_ID,
+          agent_phone_number_id: AGENT_PHONE_NUMBER_ID,
+          to_number: to_number,
+        }),
+      }
+    );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Twilio API error:', errorText);
+      const errorData = await response.json();
+      console.error('ElevenLabs API error:', errorData);
       return NextResponse.json(
-        { error: 'Failed to initiate call', details: errorText },
+        { error: 'Failed to initiate call', details: errorData },
         { status: response.status }
       );
     }
 
     const callData = await response.json();
+    console.log('[API] Call initiated successfully:', callData);
 
     return NextResponse.json({
       success: true,
-      message: 'Call initiated successfully',
-      call_sid: callData.sid,
-      status: callData.status,
+      message: callData.message || 'Call initiated successfully',
+      conversation_id: callData.conversation_id,
+      call_sid: callData.callSid,
     });
 
   } catch (error) {
