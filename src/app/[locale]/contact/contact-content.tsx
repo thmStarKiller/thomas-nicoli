@@ -14,7 +14,7 @@ export default function ContactContent() {
   const [status, setStatus] = useState<'idle' | 'ok' | 'error' | 'loading'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // Load ElevenLabs widget script
+  // Load ElevenLabs widget script and configure client tools
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
@@ -22,8 +22,56 @@ export default function ContactContent() {
     script.type = 'text/javascript';
     document.body.appendChild(script);
 
+    // Set up client tool handler for phone calls
+    const handleWidgetCall = (event: CustomEvent) => {
+      const config = event.detail?.config;
+      if (!config) return;
+
+      config.clientTools = {
+        // Client tool to initiate phone call via Twilio
+        initiatePhoneCall: async ({ phoneNumber }: { phoneNumber: string }) => {
+          try {
+            console.log('[Widget] Initiating phone call to:', phoneNumber);
+            
+            const response = await fetch('/api/call/outbound', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                to_number: phoneNumber,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.error || 'Failed to initiate call');
+            }
+
+            console.log('[Widget] Call initiated successfully:', data);
+            return {
+              success: true,
+              message: 'Call initiated successfully',
+              call_sid: data.call_sid,
+            };
+          } catch (error) {
+            console.error('[Widget] Error initiating call:', error);
+            return {
+              success: false,
+              error: String(error),
+            };
+          }
+        },
+      };
+    };
+
+    // Listen for widget call event
+    document.addEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
+
     return () => {
       document.body.removeChild(script);
+      document.removeEventListener('elevenlabs-convai:call', handleWidgetCall as EventListener);
     };
   }, []);
 
