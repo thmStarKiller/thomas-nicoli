@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Abstract concept cover — boutique retail">
+  <defs>
+    <linearGradient id="v-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f1ede4"/>
+      <stop offset="100%" stop-color="#e0dacc"/>
+    </linearGradient>
+    <linearGradient id="v-plinth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f8f4ec"/>
+      <stop offset="100%" stop-color="#d5cebd"/>
+    </linearGradient>
+    <linearGradient id="v-box" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a4af0"/>
+      <stop offset="100%" stop-color="#162cb0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#v-bg)"/>
+  <!-- directional light -->
+  <polygon points="0,0 300,0 140,600 0,600" fill="#ffffff" opacity="0.35"/>
+  <!-- plinths -->
+  <rect x="90" y="360" width="170" height="180" rx="4" fill="url(#v-plinth)"/>
+  <rect x="300" y="300" width="200" height="240" rx="4" fill="url(#v-plinth)"/>
+  <rect x="540" y="390" width="150" height="150" rx="4" fill="url(#v-plinth)"/>
+  <!-- product: cobalt vessel -->
+  <path d="M360 200 q0 -14 40 -14 q40 0 40 14 v60 q0 40 -40 40 q-40 0 -40 -40 z" fill="url(#v-box)"/>
+  <rect x="388" y="168" width="24" height="26" rx="4" fill="#162cb0"/>
+  <!-- product: porcelain jar -->
+  <rect x="140" y="280" width="70" height="80" rx="12" fill="#fbf8f1" stroke="#17171a" stroke-opacity="0.12"/>
+  <rect x="152" y="262" width="46" height="20" rx="6" fill="#c9c1ae"/>
+  <!-- product: small sphere -->
+  <circle cx="615" cy="352" r="30" fill="#efe9db" stroke="#17171a" stroke-opacity="0.12"/>
+  <!-- abstract label line -->
+  <rect x="360" y="248" width="80" height="3" fill="#f5f2ec" opacity="0.85"/>
+  <!-- shadows -->
+  <ellipse cx="400" cy="545" rx="330" ry="16" fill="#17171a" opacity="0.06"/>
+</svg>

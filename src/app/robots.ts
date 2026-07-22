@@ -1,26 +1,14 @@
-import type {MetadataRoute} from 'next';
+import type { MetadataRoute } from "next";
+import { absoluteUrl } from "@/lib/seo";
+
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.SITE_URL || 'https://thomas-nicoli.com';
-  
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/private/'],
-      },
-      {
-        userAgent: 'GPTBot', // OpenAI crawler
-        disallow: '/api/',
-      },
-      {
-        userAgent: 'CCBot', // Common Crawl
-        disallow: '/api/',
-      }
-    ],
-    sitemap: `${base}/sitemap.xml`,
-    host: base,
+    rules: {
+      userAgent: "*",
+      allow: "/",
+    },
+    sitemap: absoluteUrl("/sitemap.xml"),
   };
 }
-

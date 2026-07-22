@@ -1,0 +1,8 @@
+/ /es 302
+/services /es/services 302
+/work /es/work 302
+/about /es/about 302
+/contact /es/contact 302
+/privacy /es/privacy 302
+/legal /es/legal 302
+/work/* /es/work/:splat 302

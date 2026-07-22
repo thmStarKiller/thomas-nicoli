@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Abstract concept cover — wellness studio">
+  <defs>
+    <linearGradient id="a-bg" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#efe9dd"/>
+      <stop offset="100%" stop-color="#e2dac9"/>
+    </linearGradient>
+    <linearGradient id="a-stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f3ea"/>
+      <stop offset="100%" stop-color="#cfc6b2"/>
+    </linearGradient>
+    <radialGradient id="a-light" cx="30%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#a-bg)"/>
+  <rect width="800" height="600" fill="url(#a-light)"/>
+  <!-- sculptural plinths -->
+  <rect x="120" y="330" width="180" height="220" rx="8" fill="url(#a-stone)"/>
+  <rect x="340" y="270" width="150" height="280" rx="75" fill="url(#a-stone)"/>
+  <rect x="530" y="360" width="150" height="190" rx="8" fill="#d8cfbc"/>
+  <!-- botanical hint -->
+  <path d="M610 360 q-8 -110 40 -160 q6 90 -8 160 q30 -60 62 -78 q-20 74 -52 100" fill="#a8b39a" opacity="0.8"/>
+  <!-- cobalt accent -->
+  <circle cx="415" cy="200" r="7" fill="#1f3be0"/>
+  <rect x="150" y="500" width="120" height="3" fill="#1f3be0" opacity="0.7"/>
+  <!-- soft shadow -->
+  <ellipse cx="400" cy="560" rx="320" ry="18" fill="#17171a" opacity="0.06"/>
+</svg>
