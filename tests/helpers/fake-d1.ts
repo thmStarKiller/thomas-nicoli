@@ -73,6 +73,17 @@ class Statement implements D1PreparedStatement {
       row.status = this.values[0]; row.updated_at = this.values[1]; row.draft_message_id = this.values[2]; row.diagnostic = this.values[3]; row.lease_until = null;
       return { success: true, meta: { changes: 1 } };
     }
+    if (sql.startsWith("DELETE FROM project_clarity_submissions")) {
+      const cutoff = String(this.values[0]);
+      let changes = 0;
+      for (const [id, row] of this.database.submissions) {
+        if (String(row.retention_until) <= cutoff) {
+          this.database.submissions.delete(id);
+          changes += 1;
+        }
+      }
+      return { success: true, meta: { changes } };
+    }
     return { success: true, meta: { changes: 0 } };
   }
 

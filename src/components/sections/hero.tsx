@@ -9,7 +9,7 @@ import { Magnetic } from "@/components/motion/magnetic";
 export function Hero({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const h = dict.hero;
   return (
-    <section className="relative flex min-h-svh flex-col overflow-hidden bg-graphite text-porcelain">
+    <section data-testid="home-black-hero" className="relative flex min-h-svh flex-col overflow-hidden bg-graphite text-porcelain">
       {/* Cobalt glow field */}
       <div
         aria-hidden

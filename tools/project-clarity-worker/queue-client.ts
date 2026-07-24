@@ -28,3 +28,14 @@ export async function updateState(options: { baseUrl: string; workerToken: strin
   });
   if (!response.ok) throw new Error(`state_update_failed_${response.status}`);
 }
+
+export async function purgeExpiredQueue(options: { baseUrl: string; workerToken: string; confirmed: boolean; fetcher?: typeof fetch }) {
+  if (!options.confirmed) throw new Error("explicit_confirmation_required");
+  const response = await (options.fetcher ?? fetch)(endpoint(options.baseUrl, "/api/project-clarity/purge"), {
+    method: "POST",
+    headers: { authorization: `Bearer ${options.workerToken}`, "content-type": "application/json" },
+    body: JSON.stringify({ confirm: true }),
+  });
+  if (!response.ok) throw new Error(`queue_purge_failed_${response.status}`);
+  return response.json() as Promise<{ ok: true; purged: number; cutoff: string }>;
+}

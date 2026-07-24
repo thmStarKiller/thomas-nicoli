@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { Locale } from "@/i18n/config";
 import { getProjectClarityCopy } from "@/i18n/project-clarity";
 import {
@@ -37,6 +38,18 @@ type Confirmation = {
 const buyerValues: BuyerType[] = ["independent", "digital-team", "unsure"];
 const languageValues: ProjectLanguage[] = ["es", "en", "fr"];
 
+const panelVariants = {
+  enter: (direction: number) => ({ opacity: 0, x: direction * 52, filter: "blur(9px)" }),
+  center: { opacity: 1, x: 0, filter: "blur(0px)" },
+  exit: (direction: number) => ({ opacity: 0, x: direction * -34, filter: "blur(6px)" }),
+};
+
+const staticPanelVariants = {
+  enter: { opacity: 1, x: 0, filter: "none" },
+  center: { opacity: 1, x: 0, filter: "none" },
+  exit: { opacity: 1, x: 0, filter: "none" },
+};
+
 function validHttpUrl(value: string) {
   if (!value) return true;
   try {
@@ -58,8 +71,10 @@ export function ProjectClarityForm({
   consentVersion: string;
 }) {
   const copy = getProjectClarityCopy(lang).clarity;
+  const reduceMotion = useReducedMotion();
   const [step, setStep] = useState(0);
   const [details, setDetails] = useState(false);
+  const [direction, setDirection] = useState(1);
   const [form, setForm] = useState<FormData>({
     buyerType: initialRoute,
     stuck: "",
@@ -101,12 +116,14 @@ export function ProjectClarityForm({
 
   const goNext = () => {
     if (!validateCurrent()) return;
+    setDirection(1);
     if (step < 5) setStep((value) => value + 1);
     else setDetails(true);
   };
 
   const goBack = () => {
     setError("");
+    setDirection(-1);
     if (details) setDetails(false);
     else setStep((value) => Math.max(0, value - 1));
   };
@@ -151,14 +168,33 @@ export function ProjectClarityForm({
 
   if (confirmation) {
     return (
-      <section aria-labelledby="clarity-confirmation" className="rounded-[2rem] border border-cobalt/20 bg-white p-6 shadow-sm sm:p-10">
-        <div className="flex size-12 items-center justify-center rounded-full bg-cobalt text-porcelain"><Check className="size-6" /></div>
-        <h2 id="clarity-confirmation" className="mt-6 font-display text-4xl font-semibold">{copy.confirmationTitle}</h2>
-        <p className="mt-4 max-w-2xl leading-relaxed text-graphite/65">{copy.confirmationText}</p>
-        <p className="mt-6 font-mono text-sm text-cobalt"><strong>{copy.reference}:</strong> {confirmation.referenceId}</p>
-        {confirmation.duplicate && <p className="mt-3 text-sm text-graphite/65">{copy.duplicate}</p>}
-        <h3 className="mt-8 font-display text-2xl">{copy.summaryTitle}</h3>
-        <dl className="mt-4 grid gap-4">
+      <motion.section
+        aria-labelledby="clarity-confirmation"
+        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden rounded-[2rem] border border-cobalt/20 bg-white p-6 shadow-[0_28px_80px_rgba(18,18,21,0.08)] sm:p-10"
+      >
+        <motion.div
+          aria-hidden
+          className="absolute -right-16 -top-16 size-48 rounded-full bg-cobalt/10 blur-3xl"
+          animate={reduceMotion ? undefined : { scale: [0.9, 1.12, 0.9], opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="relative flex size-12 items-center justify-center rounded-full bg-cobalt text-porcelain"
+          initial={reduceMotion ? false : { scale: 0.6, rotate: -12 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: reduceMotion ? 0 : 0.12, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Check className="size-6" />
+        </motion.div>
+        <h2 id="clarity-confirmation" className="relative mt-6 font-display text-4xl font-semibold">{copy.confirmationTitle}</h2>
+        <p className="relative mt-4 max-w-2xl leading-relaxed text-graphite/65">{copy.confirmationText}</p>
+        <p className="relative mt-6 font-mono text-sm text-cobalt"><strong>{copy.reference}:</strong> {confirmation.referenceId}</p>
+        {confirmation.duplicate && <p className="relative mt-3 text-sm text-graphite/65">{copy.duplicate}</p>}
+        <h3 className="relative mt-8 font-display text-2xl">{copy.summaryTitle}</h3>
+        <dl className="relative mt-4 grid gap-4">
           {Object.entries(confirmation.summary).map(([key, value]) => (
             <div key={key} className="border-t border-graphite/10 pt-3">
               <dt className="font-mono text-[10px] uppercase tracking-widest text-graphite/45">{key}</dt>
@@ -166,7 +202,7 @@ export function ProjectClarityForm({
             </div>
           ))}
         </dl>
-      </section>
+      </motion.section>
     );
   }
 
@@ -174,7 +210,37 @@ export function ProjectClarityForm({
   const inputClass = "mt-4 w-full rounded-2xl border border-graphite/15 bg-white px-4 py-3.5 text-base text-graphite outline-none transition focus:border-cobalt focus:ring-2 focus:ring-cobalt/15";
 
   return (
-    <form onSubmit={submit} noValidate className="rounded-[2rem] border border-graphite/10 bg-porcelain-deep/45 p-5 sm:p-8 lg:p-10">
+    <form onSubmit={submit} noValidate className="overflow-hidden rounded-[2rem] border border-graphite/10 bg-porcelain-deep/45 p-5 shadow-[0_30px_90px_rgba(18,18,21,0.06)] sm:p-8 lg:p-10">
+      <div aria-hidden className="mb-8 grid grid-cols-6 gap-2">
+        {copy.questions.map((question, index) => {
+          const active = details || index <= step;
+          return (
+            <span key={question.title} className="h-1 overflow-hidden rounded-full bg-graphite/10">
+              <motion.span
+                className="block h-full origin-left rounded-full bg-cobalt"
+                initial={false}
+                animate={{ scaleX: active ? 1 : 0, opacity: active ? 1 : 0.25 }}
+                transition={{
+                  duration: reduceMotion ? 0 : 0.45,
+                  delay: reduceMotion ? 0 : index * 0.025,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              />
+            </span>
+          );
+        })}
+      </div>
+      <AnimatePresence initial={false} mode="wait" custom={direction}>
+        <motion.div
+          data-testid="clarity-step-panel"
+          key={details ? "details" : `question-${step}`}
+          custom={direction}
+          variants={reduceMotion ? staticPanelVariants : panelVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}
+        >
       {!details ? (
         <fieldset aria-describedby={`clarity-hint-${step} clarity-error`}>
           <legend className="sr-only">{title}</legend>
@@ -257,6 +323,8 @@ export function ProjectClarityForm({
           {serverError && <p role="alert" className="mt-4 text-sm text-red-700">{serverError}</p>}
         </fieldset>
       )}
+        </motion.div>
+      </AnimatePresence>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         <button type="button" onClick={goBack} disabled={!details && step === 0} className="inline-flex items-center gap-2 rounded-full border border-graphite/20 px-5 py-3 text-sm disabled:opacity-35"><ArrowLeft className="size-4" />{copy.back}</button>

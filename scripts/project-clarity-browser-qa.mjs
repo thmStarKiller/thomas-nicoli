@@ -4,6 +4,7 @@ import { join, relative, resolve } from "node:path";
 import assert from "node:assert/strict";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:8793";
+const intakeEnabled = process.env.QA_INTAKE_ENABLED === "true";
 const outputDir = resolve(process.env.QA_OUTPUT_DIR || "docs/evidence/project-clarity/screenshots/local");
 const executablePath = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 await mkdir(outputDir, { recursive: true });
@@ -67,8 +68,8 @@ try {
       await page.keyboard.type("QA Example");
       await page.locator('input[name="email"]').focus();
       await page.keyboard.type("qa@example.com");
-      assert.equal(await page.locator('input[name="clarityConsent"]').isDisabled(), true);
-      assert.equal(await page.locator('button[type="submit"]').isDisabled(), true);
+      assert.equal(await page.locator('input[name="clarityConsent"]').isDisabled(), !intakeEnabled);
+      assert.equal(await page.locator('button[type="submit"]').isDisabled(), !intakeEnabled);
       assert.equal(await page.locator('a[href$="/privacy"]').count() > 0, true);
       assert.equal(await page.locator('a[href$="/contact"]').count() > 0, true);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);

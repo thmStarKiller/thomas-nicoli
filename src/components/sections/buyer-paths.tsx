@@ -6,7 +6,7 @@ import { getProjectClarityCopy } from "@/i18n/project-clarity";
 export function BuyerPaths({ lang }: { lang: Locale }) {
   const paths = getProjectClarityCopy(lang).buyerPaths;
   return (
-    <section aria-label={getProjectClarityCopy(lang).nav} className="border-b border-graphite/10 bg-porcelain">
+    <section data-testid="home-buyer-paths" aria-label={getProjectClarityCopy(lang).nav} className="border-b border-graphite/10 bg-porcelain">
       <div className="mx-auto grid max-w-[1440px] gap-px bg-graphite/10 sm:grid-cols-2">
         {paths.map((path) => (
           <Link

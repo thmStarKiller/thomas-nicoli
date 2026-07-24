@@ -7,7 +7,7 @@ Private, one-at-a-time lead analysis. It calls only `http://127.0.0.1:11434`, va
 - Never point `PROJECT_CLARITY_LEAD_VAULT` at the owner's personal Studio vault. The worker refuses equal or nested paths.
 - Never expose Ollama or Studio through a tunnel.
 - The queue bearer token stays in the local process environment and a Cloudflare secret; it is never committed.
-- `PROJECT_CLARITY_SUBMISSIONS_ENABLED` and `PROJECT_CLARITY_LEGAL_APPROVED` stay false until legal approval.
+- Production intake is owner-activated with both server gates set to `true`; local development defaults remain fail-closed.
 - The worker creates drafts only. No SMTP or Gmail send operation exists in this code.
 
 ## Commands
@@ -18,6 +18,7 @@ npm run clarity:worker -- once
 npm run clarity:retention
 npm run clarity:worker -- retention-trash
 npm run clarity:worker -- retention-delete --confirm-permanent-delete
+npm run clarity:queue-purge
 ```
 
-`retention-preview` is the default retention command and never moves or deletes files. `retention-trash` moves approved candidates to a recoverable `.trash/YYYY-MM-DD` folder. Permanent deletion requires the exact confirmation flag.
+`retention-preview` is the default retention command and never moves or deletes files. `retention-trash` moves approved candidates to a recoverable `.trash/YYYY-MM-DD` folder. Permanent deletion requires the exact confirmation flag. `clarity:queue-purge` removes only D1 rows whose `retention_until` is expired; it uses the private worker token and an explicit confirmation flag.

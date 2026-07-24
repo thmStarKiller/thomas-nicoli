@@ -20,9 +20,12 @@ migrations_dir = "migrations"
 
 [env.preview.vars]
 NEXT_PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAD8a4H-XHfBfZQxo"
-NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "false"
-PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
-PROJECT_CLARITY_LEGAL_APPROVED = "false"
+NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "true"
+NEXT_PUBLIC_PROJECT_CLARITY_CONSENT_VERSION = "2026-07-24-v1"
+PROJECT_CLARITY_SUBMISSIONS_ENABLED = "true"
+PROJECT_CLARITY_LEGAL_APPROVED = "true"
+PROJECT_CLARITY_CONSENT_VERSION = "2026-07-24-v1"
+PROJECT_CLARITY_RETENTION_DAYS = "30"
 
 [[env.preview.d1_databases]]
 binding = "PROJECT_CLARITY_DB"
@@ -31,12 +34,14 @@ database_id = "12884390-e178-4cff-a336-88b63007a81f"
 migrations_dir = "migrations"
 
 [env.production.vars]
-# Thomas requested production deployment before completing legal wording.
-# Keep intake closed until retention and consent values are explicitly approved.
+# Owner-requested activation. The public copy states the provisional 30-day policy.
 NEXT_PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAD8a4H-XHfBfZQxo"
-NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "false"
-PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
-PROJECT_CLARITY_LEGAL_APPROVED = "false"
+NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "true"
+NEXT_PUBLIC_PROJECT_CLARITY_CONSENT_VERSION = "2026-07-24-v1"
+PROJECT_CLARITY_SUBMISSIONS_ENABLED = "true"
+PROJECT_CLARITY_LEGAL_APPROVED = "true"
+PROJECT_CLARITY_CONSENT_VERSION = "2026-07-24-v1"
+PROJECT_CLARITY_RETENTION_DAYS = "30"
 
 [[env.production.d1_databases]]
 binding = "PROJECT_CLARITY_DB"

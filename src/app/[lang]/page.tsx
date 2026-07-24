@@ -44,13 +44,15 @@ export default async function HomePage({
   return (
     <>
       <Hero lang={lang} dict={dict} />
+      <div data-testid="home-blue-banderole">
+        <Marquee
+          items={[...dict.hero.marquee]}
+          className="border-y border-cobalt-deep/40 bg-cobalt py-4 text-porcelain"
+          itemClassName="font-mono text-[12px] uppercase tracking-[0.22em]"
+          duration={30}
+        />
+      </div>
       <BuyerPaths lang={lang} />
-      <Marquee
-        items={[...dict.hero.marquee]}
-        className="border-y border-cobalt-deep/40 bg-cobalt py-4 text-porcelain"
-        itemClassName="font-mono text-[12px] uppercase tracking-[0.22em]"
-        duration={30}
-      />
       <OutcomeStatement dict={dict} />
       <ServicesOverview lang={lang} dict={dict} />
       <FeaturedWork lang={lang} dict={dict} />

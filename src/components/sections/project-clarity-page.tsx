@@ -3,6 +3,7 @@ import type { Locale } from "@/i18n/config";
 import { getProjectClarityCopy } from "@/i18n/project-clarity";
 import type { ClarityRouteId } from "@/lib/project-clarity/contracts";
 import { ProjectClarityForm } from "@/components/forms/project-clarity-form";
+import { ClaritySignalBand } from "@/components/motion/clarity-signal-band";
 
 export function ProjectClarityPage({ lang, route }: { lang: Locale; route: ClarityRouteId }) {
   const copy = getProjectClarityCopy(lang).clarity;
@@ -18,6 +19,7 @@ export function ProjectClarityPage({ lang, route }: { lang: Locale; route: Clari
           <p className="mt-5 max-w-3xl text-sm leading-relaxed text-porcelain/55">{copy.asyncNote}</p>
         </div>
       </section>
+      <ClaritySignalBand stages={copy.signalStages} />
       <section className="px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
         <div className="mx-auto max-w-[1100px]">
           <ProjectClarityForm lang={lang} initialRoute={route} legalReady={legalReady} consentVersion={consentVersion} />

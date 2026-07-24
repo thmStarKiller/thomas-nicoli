@@ -2,7 +2,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { analyzeLead, InvalidModelOutputError } from "./analysis";
-import { claimSubmission, updateState } from "./queue-client";
+import { claimSubmission, purgeExpiredQueue, updateState } from "./queue-client";
 import { createAndVerifyDraft } from "./draft";
 import { assertVaultIsolation, type QueueSubmission, writeLeadNote } from "./vault";
 import { moveCandidatesToTrash, permanentDeleteTrash, retentionPreview } from "./retention";
@@ -71,6 +71,20 @@ async function run() {
   if (command === "retention-delete") {
     const confirmed = argument === "--confirm-permanent-delete" || confirmation === "--confirm-permanent-delete";
     console.log(JSON.stringify({ mode: "permanent", deleted: await permanentDeleteTrash(settings.leadVault, confirmed) }, null, 2));
+    return;
+  }
+
+  if (command === "queue-purge") {
+    if (!settings.queueUrl || !settings.workerToken) throw new Error("queue_url_and_worker_token_required");
+    const confirmed = argument === "--confirm-expired" || confirmation === "--confirm-expired";
+    console.log(JSON.stringify({
+      mode: "queue-purge",
+      ...(await purgeExpiredQueue({
+        baseUrl: settings.queueUrl,
+        workerToken: settings.workerToken,
+        confirmed,
+      })),
+    }, null, 2));
     return;
   }
 

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { handleContact } from "../../functions/api/contact";
 import { handleProjectClaritySubmission } from "../../functions/api/project-clarity";
+import { handlePurge } from "../../functions/api/project-clarity/purge";
 import { FakeD1 } from "../helpers/fake-d1";
 
 const origin = "https://preview.test";
@@ -59,6 +60,7 @@ function env(database = new FakeD1()) {
     PROJECT_CLARITY_LEGAL_APPROVED: "true",
     PROJECT_CLARITY_CONSENT_VERSION: "qa-2026-07-24",
     PROJECT_CLARITY_RETENTION_DAYS: "30",
+    PROJECT_CLARITY_WORKER_TOKEN: "test-worker-token",
   };
 }
 
@@ -197,5 +199,39 @@ describe("Project Clarity queue", () => {
     const resend = network.calls.find((call) => call.url.includes("api.resend.com"));
     expect(resend?.body).toContain("&lt;script&gt;");
     expect(database.submissions.size).toBe(1);
+  });
+});
+
+describe("Project Clarity retention purge", () => {
+  it("requires worker authentication and explicit confirmation", async () => {
+    const database = new FakeD1();
+    const unauthorized = await handlePurge({
+      request: request("/api/project-clarity/purge", { confirm: true }),
+      env: env(database),
+    });
+    expect(unauthorized.status).toBe(401);
+
+    const unconfirmed = await handlePurge({
+      request: request("/api/project-clarity/purge", { confirm: false }, origin, { authorization: "Bearer test-worker-token" }),
+      env: env(database),
+    });
+    expect(unconfirmed.status).toBe(400);
+  });
+
+  it("deletes only rows whose retention date has expired", async () => {
+    const database = new FakeD1();
+    database.submissions.set("expired", { retention_until: "2026-07-01T00:00:00.000Z" });
+    database.submissions.set("active", { retention_until: "2026-09-01T00:00:00.000Z" });
+    const response = await handlePurge(
+      {
+        request: request("/api/project-clarity/purge", { confirm: true }, origin, { authorization: "Bearer test-worker-token" }),
+        env: env(database),
+      },
+      { now: new Date("2026-07-24T12:00:00.000Z") },
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ ok: true, purged: 1 });
+    expect(database.submissions.has("expired")).toBe(false);
+    expect(database.submissions.has("active")).toBe(true);
   });
 });

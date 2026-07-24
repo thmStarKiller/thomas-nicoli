@@ -1,0 +1,68 @@
+{
+  "baseUrl": "http://127.0.0.1:8793",
+  "order": {
+    "home": [
+      {
+        "id": "home-black-hero",
+        "top": 0,
+        "bottom": 1000
+      },
+      {
+        "id": "home-blue-banderole",
+        "top": 1000,
+        "bottom": 1052
+      },
+      {
+        "id": "home-buyer-paths",
+        "top": 1052,
+        "bottom": 1305
+      }
+    ],
+    "clarity": [
+      {
+        "tag": "SECTION",
+        "top": 0,
+        "bottom": 682.03125
+      },
+      {
+        "tag": "DIV",
+        "top": 682.03125,
+        "bottom": 780.03125
+      },
+      {
+        "tag": "SECTION",
+        "top": 780.03125,
+        "bottom": 1561.28125
+      }
+    ]
+  },
+  "motion": {
+    "firstHeading": "¿Eres un negocio independiente, un equipo digital o aún no lo sabes?",
+    "secondHeading": "¿Qué se está atascando ahora?",
+    "movingPanels": [
+      {
+        "opacity": "0.598903",
+        "transform": "matrix(1, 0, 0, 1, -14.3644, 0)",
+        "filter": "blur(2.40658px)"
+      }
+    ],
+    "consoleErrors": []
+  },
+  "reducedMotion": {
+    "panels": [
+      {
+        "opacity": "1",
+        "transform": "none",
+        "filter": "none"
+      }
+    ]
+  },
+  "noJavaScript": {
+    "status": 200,
+    "firstQuestionVisible": true
+  },
+  "mobile": {
+    "width": 375,
+    "overflow": false
+  }
+}
