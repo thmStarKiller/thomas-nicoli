@@ -16,6 +16,17 @@ class Statement implements D1PreparedStatement {
       const row = [...this.database.submissions.values()].find((item) => item.idempotency_key === this.values[0]);
       return (row as T) ?? null;
     }
+    if (sql.includes("FROM site_chat_sessions") && sql.includes("WHERE token_hash")) {
+      const row = [...this.database.chatSessions.values()].find((item) => item.token_hash === this.values[0]);
+      return (row as T) ?? null;
+    }
+    if (sql.includes("FROM site_chat_interactions") && sql.includes("WHERE interaction_id")) {
+      return (this.database.chatInteractions.get(String(this.values[0])) as T) ?? null;
+    }
+    if (sql.includes("FROM site_chat_interactions") && sql.includes("WHERE session_id") && sql.includes("turn_index")) {
+      const row = [...this.database.chatInteractions.values()].find((item) => item.session_id === this.values[0] && item.turn_index === this.values[1]);
+      return (row as T) ?? null;
+    }
     if (sql.startsWith("UPDATE project_clarity_submissions") && sql.includes("RETURNING")) {
       const now = String(this.values[0]);
       const lease = String(this.values[1]);
@@ -62,6 +73,38 @@ class Statement implements D1PreparedStatement {
       });
       return { success: true, meta: { changes: 1 } };
     }
+    if (sql.startsWith("INSERT INTO site_chat_sessions")) {
+      const [sessionId, tokenHash, ipHash, locale, createdAt, expiresAt] = this.values;
+      this.database.chatSessions.set(String(sessionId), {
+        session_id: sessionId, token_hash: tokenHash, ip_hash: ipHash, locale,
+        created_at: createdAt, expires_at: expiresAt, turn_count: 0,
+      });
+      return { success: true, meta: { changes: 1 } };
+    }
+    if (sql.startsWith("INSERT OR IGNORE INTO site_chat_interactions")) {
+      const [interactionId, sessionId, turnIndex, createdAt, language, pagePath, visitorMessage, assistantReply, ownerSummary, intent, urgency, suggestions, retention] = this.values;
+      const duplicate = this.database.chatInteractions.has(String(interactionId))
+        || [...this.database.chatInteractions.values()].some((item) => item.session_id === sessionId && item.turn_index === turnIndex);
+      if (duplicate) return { success: true, meta: { changes: 0 } };
+      this.database.chatInteractions.set(String(interactionId), {
+        interaction_id: interactionId, session_id: sessionId, turn_index: turnIndex,
+        created_at: createdAt, language, page_path: pagePath, visitor_message: visitorMessage,
+        assistant_reply: assistantReply, owner_summary: ownerSummary, intent, urgency,
+        suggestions_json: suggestions, email_status: "pending", retention_until: retention,
+      });
+      return { success: true, meta: { changes: 1 } };
+    }
+    if (sql.startsWith("UPDATE site_chat_sessions SET turn_count")) {
+      const row = this.database.chatSessions.get(String(this.values[1]));
+      if (!row || row.turn_count !== this.values[2]) return { success: true, meta: { changes: 0 } };
+      row.turn_count = this.values[0];
+      return { success: true, meta: { changes: 1 } };
+    }
+    if (sql.startsWith("UPDATE site_chat_interactions SET email_status")) {
+      const row = this.database.chatInteractions.get(String(this.values[1]));
+      if (row) row.email_status = this.values[0];
+      return { success: true, meta: { changes: row ? 1 : 0 } };
+    }
     if (sql.includes("SET notification_status")) {
       const row = this.database.submissions.get(String(this.values[2]));
       if (row) { row.notification_status = this.values[0]; row.updated_at = this.values[1]; }
@@ -84,6 +127,22 @@ class Statement implements D1PreparedStatement {
       }
       return { success: true, meta: { changes } };
     }
+    if (sql.startsWith("DELETE FROM site_chat_interactions")) {
+      const cutoff = String(this.values[0]);
+      let changes = 0;
+      for (const [id, row] of this.database.chatInteractions) {
+        if (String(row.retention_until) <= cutoff) { this.database.chatInteractions.delete(id); changes += 1; }
+      }
+      return { success: true, meta: { changes } };
+    }
+    if (sql.startsWith("DELETE FROM site_chat_sessions")) {
+      const cutoff = String(this.values[0]);
+      let changes = 0;
+      for (const [id, row] of this.database.chatSessions) {
+        if (String(row.expires_at) <= cutoff) { this.database.chatSessions.delete(id); changes += 1; }
+      }
+      return { success: true, meta: { changes } };
+    }
     return { success: true, meta: { changes: 0 } };
   }
 
@@ -94,6 +153,8 @@ class Statement implements D1PreparedStatement {
 
 export class FakeD1 implements D1DatabaseLike {
   readonly submissions = new Map<string, Submission>();
+  readonly chatSessions = new Map<string, Submission>();
+  readonly chatInteractions = new Map<string, Submission>();
   readonly rateLimits = new Map<string, { request_count: number; window_started_at: number }>();
   prepare(query: string): D1PreparedStatement { return new Statement(this, query); }
   async batch(statements: D1PreparedStatement[]): Promise<unknown[]> {

@@ -18,7 +18,8 @@
     "clarity:worker": "tsx tools/project-clarity-worker/cli.ts",
     "clarity:retention": "tsx tools/project-clarity-worker/cli.ts retention-preview",
     "clarity:queue-purge": "tsx tools/project-clarity-worker/cli.ts queue-purge --confirm-expired",
-    "clarity:qa-motion": "node scripts/project-clarity-motion-qa.mjs"
+    "clarity:qa-motion": "node scripts/project-clarity-motion-qa.mjs",
+    "chat:qa-browser": "node scripts/site-chat-browser-qa.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

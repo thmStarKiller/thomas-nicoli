@@ -23,15 +23,28 @@ export async function handlePurge(
     if (body.confirm !== true) throw new HttpError(400, "explicit_confirmation_required");
 
     const now = options.now ?? new Date();
-    const result = await context.env.PROJECT_CLARITY_DB
-      .prepare("DELETE FROM project_clarity_submissions WHERE retention_until <= ?1")
-      .bind(now.toISOString())
-      .run();
+    const cutoff = now.toISOString();
+    const [clarity, chat, sessions] = await Promise.all([
+      context.env.PROJECT_CLARITY_DB
+        .prepare("DELETE FROM project_clarity_submissions WHERE retention_until <= ?1")
+        .bind(cutoff)
+        .run(),
+      context.env.PROJECT_CLARITY_DB
+        .prepare("DELETE FROM site_chat_interactions WHERE retention_until <= ?1")
+        .bind(cutoff)
+        .run(),
+      context.env.PROJECT_CLARITY_DB
+        .prepare("DELETE FROM site_chat_sessions WHERE expires_at <= ?1")
+        .bind(cutoff)
+        .run(),
+    ]);
 
     return jsonResponse({
       ok: true,
-      purged: result.meta?.changes ?? 0,
-      cutoff: now.toISOString(),
+      purged: clarity.meta?.changes ?? 0,
+      chatPurged: chat.meta?.changes ?? 0,
+      sessionsPurged: sessions.meta?.changes ?? 0,
+      cutoff,
     });
   } catch (error) {
     if (error instanceof HttpError) return jsonResponse({ ok: false, error: error.code }, error.status);

@@ -222,6 +222,10 @@ describe("Project Clarity retention purge", () => {
     const database = new FakeD1();
     database.submissions.set("expired", { retention_until: "2026-07-01T00:00:00.000Z" });
     database.submissions.set("active", { retention_until: "2026-09-01T00:00:00.000Z" });
+    database.chatInteractions.set("chat-expired", { retention_until: "2026-07-01T00:00:00.000Z" });
+    database.chatInteractions.set("chat-active", { retention_until: "2026-09-01T00:00:00.000Z" });
+    database.chatSessions.set("session-expired", { expires_at: "2026-07-01T00:00:00.000Z" });
+    database.chatSessions.set("session-active", { expires_at: "2026-09-01T00:00:00.000Z" });
     const response = await handlePurge(
       {
         request: request("/api/project-clarity/purge", { confirm: true }, origin, { authorization: "Bearer test-worker-token" }),
@@ -230,8 +234,12 @@ describe("Project Clarity retention purge", () => {
       { now: new Date("2026-07-24T12:00:00.000Z") },
     );
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ ok: true, purged: 1 });
+    expect(await response.json()).toMatchObject({ ok: true, purged: 1, chatPurged: 1, sessionsPurged: 1 });
     expect(database.submissions.has("expired")).toBe(false);
     expect(database.submissions.has("active")).toBe(true);
+    expect(database.chatInteractions.has("chat-expired")).toBe(false);
+    expect(database.chatInteractions.has("chat-active")).toBe(true);
+    expect(database.chatSessions.has("session-expired")).toBe(false);
+    expect(database.chatSessions.has("session-active")).toBe(true);
   });
 });

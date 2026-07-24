@@ -19,6 +19,10 @@ export interface ExecutionContextLike {
   waitUntil(promise: Promise<unknown>): void;
 }
 
+export interface WorkersAiLike {
+  run(model: string, input: Record<string, unknown>): Promise<unknown>;
+}
+
 export interface BaseEnv {
   RESEND_API_KEY?: string;
   RESEND_TO?: string;
@@ -26,4 +30,5 @@ export interface BaseEnv {
   RESEND_FROM_EMAIL?: string;
   TURNSTILE_SECRET_KEY?: string;
   PROJECT_CLARITY_DB?: D1DatabaseLike;
+  AI?: WorkersAiLike;
 }

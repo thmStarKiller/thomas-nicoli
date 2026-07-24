@@ -10,6 +10,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Cursor } from "@/components/motion/cursor";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { ChatAssistant } from "@/components/chat/chat-assistant";
 import "../globals.css";
 
 const fraunces = Fraunces({
@@ -82,6 +83,7 @@ export default async function LocaleLayout({
         <Header lang={lang} dict={dict} />
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict} />
+        <ChatAssistant lang={lang} enabled={process.env.NEXT_PUBLIC_CHATBOT_ENABLED === "true"} />
         <div aria-hidden className="grain-overlay" />
       </body>
     </html>

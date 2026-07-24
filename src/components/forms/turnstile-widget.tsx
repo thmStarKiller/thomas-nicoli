@@ -18,14 +18,21 @@ export function TurnstileWidget({
   onToken,
   onError,
 }: {
-  action: "contact" | "project_clarity";
+  action: "contact" | "project_clarity" | "site_chat";
   onToken: (token: string) => void;
   onError?: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
+  const onTokenRef = useRef(onToken);
+  const onErrorRef = useRef(onError);
   const [ready, setReady] = useState(false);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+  useEffect(() => {
+    onTokenRef.current = onToken;
+    onErrorRef.current = onError;
+  }, [onError, onToken]);
 
   useEffect(() => {
     if (!ready || !siteKey || !container.current || !window.turnstile || widgetId.current) return;
@@ -34,15 +41,15 @@ export function TurnstileWidget({
       action,
       theme: "light",
       size: "flexible",
-      callback: (token: string) => onToken(token),
-      "expired-callback": () => { onToken(""); onError?.(); },
-      "error-callback": () => { onToken(""); onError?.(); },
+      callback: (token: string) => onTokenRef.current(token),
+      "expired-callback": () => { onTokenRef.current(""); onErrorRef.current?.(); },
+      "error-callback": () => { onTokenRef.current(""); onErrorRef.current?.(); },
     });
     return () => {
       if (widgetId.current && window.turnstile) window.turnstile.remove(widgetId.current);
       widgetId.current = null;
     };
-  }, [action, onError, onToken, ready, siteKey]);
+  }, [action, ready, siteKey]);
 
   if (!siteKey) {
     return <p role="status" className="text-sm text-graphite/60">Turnstile is not configured.</p>;
