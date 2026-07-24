@@ -5,7 +5,7 @@
 - UI: `src/components/chat/chat-assistant.tsx`, rendered in every locale layout.
 - Session endpoint: `POST /api/chat/session`.
 - Message endpoint: `POST /api/chat`.
-- Model: Cloudflare Workers AI, `@cf/meta/llama-3.1-8b-instruct`.
+- Model: Cloudflare Workers AI, `@cf/mistralai/mistral-small-3.1-24b-instruct`.
 - Store/outbox: the environment-specific `PROJECT_CLARITY_DB` D1 binding.
 - Owner summary delivery: Resend, synchronously attempted after every accepted turn.
 

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { handleChat } from "../../functions/api/chat";
 import { handleChatSession } from "../../functions/api/chat/session";
+import { CHAT_MODEL } from "../../functions/_lib/chat";
 import { FakeD1 } from "../helpers/fake-d1";
 
 const origin = "https://preview.test";
@@ -109,7 +110,10 @@ describe("site AI chat", () => {
     const database = new FakeD1();
     const transport = network();
     await openSession(database, transport.fetcher);
-    const aiRunner = vi.fn(async (model: string, input: Record<string, unknown>) => ({ response: JSON.stringify(aiPayload), inspected: Boolean(model && input) }));
+    const aiRunner = vi.fn(async (model: string, input: Record<string, unknown>) => ({
+      choices: [{ message: { content: JSON.stringify({ ...aiPayload, harmlessExtraField: true }) } }],
+      inspected: Boolean(model && input),
+    }));
     const response = await handleChat(
       { request: request("/api/chat", chatBody()), env: env(database) },
       { fetcher: transport.fetcher, aiRunner, now },
@@ -117,7 +121,8 @@ describe("site AI chat", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ ok: true, emailed: true, reply: aiPayload.reply });
     expect(aiRunner).toHaveBeenCalledTimes(1);
-    expect(String(aiRunner.mock.calls[0][0])).toContain("llama-3.1-8b-instruct");
+    expect(String(aiRunner.mock.calls[0][0])).toBe(CHAT_MODEL);
+    expect(aiRunner.mock.calls[0][1]).toMatchObject({ response_format: { type: "json_object" } });
     expect(database.chatInteractions.get(interactionId)).toMatchObject({ email_status: "delivered", owner_summary: aiPayload.summary });
     expect(database.chatSessions.get(sessionId)?.turn_count).toBe(1);
     const resend = transport.calls.find((call) => call.url.includes("api.resend.com"));
