@@ -16,6 +16,10 @@ try {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(`${baseUrl}/es`, { waitUntil: "domcontentloaded" });
+  const homeOrder = await page.locator("main > *").evaluateAll((elements) =>
+    elements.slice(0, 3).map((element) => element.getAttribute("data-testid")),
+  );
+  assert.deepEqual(homeOrder, ["home-black-hero", "home-blue-banderole", "home-buyer-paths"]);
   const launcher = page.getByTestId("site-chat-launcher");
   await launcher.waitFor({ state: "visible" });
   const orbit = page.getByTestId("site-chat-orbit");
@@ -31,6 +35,7 @@ try {
   const panel = page.getByTestId("site-chat-panel");
   await panel.waitFor({ state: "visible" });
   assert.equal(await panel.getAttribute("role"), "dialog");
+  assert.equal(await panel.getByText("IA local · humano al final").isVisible(), true);
   assert.equal(await page.getByTestId("site-chat-loop").isVisible(), true);
   assert.equal(await panel.getByText(/Cada mensaje se resume/).isVisible(), true);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
@@ -38,7 +43,7 @@ try {
   await page.keyboard.press("Escape");
   await panel.waitFor({ state: "hidden" });
   assert.equal(await launcher.evaluate((element) => document.activeElement === element), true);
-  results.desktop = { orbitMoves: true, dialog: true, escapeFocus: true, errors };
+  results.desktop = { orbitMoves: true, dialog: true, escapeFocus: true, homeOrder, errors };
   await desktop.close();
 
   const mobile = await browser.newContext({ viewport: { width: 375, height: 812 } });

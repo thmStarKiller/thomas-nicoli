@@ -12,8 +12,6 @@ PROJECT_CLARITY_LEGAL_APPROVED = "false"
 NEXT_PUBLIC_CHATBOT_ENABLED = "false"
 CHATBOT_ENABLED = "false"
 
-[ai]
-binding = "AI"
 
 # Local development persists this binding locally unless --remote is used.
 [[d1_databases]]
@@ -34,8 +32,6 @@ PROJECT_CLARITY_RETENTION_DAYS = "30"
 NEXT_PUBLIC_CHATBOT_ENABLED = "true"
 CHATBOT_ENABLED = "true"
 
-[env.preview.ai]
-binding = "AI"
 
 [[env.preview.d1_databases]]
 binding = "PROJECT_CLARITY_DB"
@@ -55,8 +51,6 @@ PROJECT_CLARITY_RETENTION_DAYS = "30"
 NEXT_PUBLIC_CHATBOT_ENABLED = "true"
 CHATBOT_ENABLED = "true"
 
-[env.production.ai]
-binding = "AI"
 
 [[env.production.d1_databases]]
 binding = "PROJECT_CLARITY_DB"

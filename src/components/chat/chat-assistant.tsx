@@ -18,6 +18,9 @@ interface Message {
 interface ChatResponse {
   ok?: boolean;
   error?: string;
+  queued?: boolean;
+  status?: "queued" | "processing" | "completed" | "failed";
+  interactionId?: string;
   sessionToken?: string;
   reply?: string;
   suggestions?: string[];
@@ -61,6 +64,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [emailed, setEmailed] = useState(false);
+  const [activity, setActivity] = useState<string>(copy.sending);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -77,6 +81,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     setSuggestions([...copy.quickPrompts]);
     setError("");
     setEmailed(false);
+    setActivity(copy.sending);
   };
 
   useEffect(() => {
@@ -130,6 +135,23 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     return payload.sessionToken;
   };
 
+  const waitForLocalReply = async (token: string, interactionId: string): Promise<ChatResponse> => {
+    setActivity(copy.waiting);
+    for (let attempt = 0; attempt < 45; attempt += 1) {
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
+      const response = await fetch("/api/chat/status", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ sessionId, sessionToken: token, interactionId }),
+      });
+      const payload = (await response.json()) as ChatResponse;
+      if (response.ok && payload.status === "completed" && payload.reply) return payload;
+      if (response.status === 202 && payload.queued) continue;
+      throw new Error(payload.error || "chat_status_failed");
+    }
+    throw new Error("local_ai_timeout");
+  };
+
   const sendMessage = async (proposed?: string) => {
     const message = (proposed ?? input).trim().slice(0, CHAT_LIMITS.message);
     if (sendingRef.current || busy || message.length < 2 || turn >= CHAT_LIMITS.sessionTurns) return;
@@ -146,42 +168,48 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     setSuggestions([]);
     setError("");
     setEmailed(false);
+    setActivity(copy.sending);
     setBusy(true);
     sendingRef.current = true;
+    let accepted = false;
 
     try {
       const token = await createSession();
       const interactionId = crypto.randomUUID();
-      const requestPayload = {
-        sessionId,
-        sessionToken: token,
-        interactionId,
-        turnIndex: nextTurn,
-        locale: lang,
-        pagePath: pathname,
-        message,
-        history: prior.map(({ role, content }) => ({ role, content })),
-        company: "",
-      };
-      const postInteraction = () => fetch("/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(requestPayload),
+        body: JSON.stringify({
+          sessionId,
+          sessionToken: token,
+          interactionId,
+          turnIndex: nextTurn,
+          locale: lang,
+          pagePath: pathname,
+          message,
+          history: prior.map(({ role, content }) => ({ role, content })),
+          company: "",
+        }),
       });
-      const response = await postInteraction();
       let payload = (await response.json()) as ChatResponse;
-      if (!response.ok || !payload.reply) throw new Error(payload.error || "chat_failed");
-      if (!payload.emailed) {
-        const emailRetry = await postInteraction();
-        if (emailRetry.ok) payload = (await emailRetry.json()) as ChatResponse;
-      }
-      setMessages((current) => [...current, { id: interactionId, role: "assistant", content: payload.reply! }]);
+      if (!response.ok) throw new Error(payload.error || "chat_failed");
+      accepted = true;
+      const queuedInteractionId = payload.interactionId ?? interactionId;
+      if (!payload.reply) payload = await waitForLocalReply(token, queuedInteractionId);
+      if (!payload.reply) throw new Error("local_ai_empty_reply");
+      setMessages((current) => [...current, { id: queuedInteractionId, role: "assistant", content: payload.reply! }]);
       setTurn(nextTurn);
       setSuggestions((payload.suggestions ?? []).slice(0, CHAT_LIMITS.suggestions));
       setEmailed(Boolean(payload.emailed));
     } catch (cause) {
       const code = cause instanceof Error ? cause.message : "chat_failed";
-      if (code.includes("turnstile") || code.includes("verification")) {
+      if (accepted && code === "local_ai_timeout") {
+        setTurn(nextTurn);
+        setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: copy.queued }]);
+      } else if (accepted) {
+        setTurn(nextTurn);
+        setError(copy.error);
+      } else if (code.includes("turnstile") || code.includes("verification")) {
         setSessionToken("");
         setTurnstileToken("");
         setTurnstileCycle((value) => value + 1);
@@ -248,7 +276,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               ))}
               {busy && (
                 <div className="mr-16 flex items-center gap-2 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-xs text-porcelain/55">
-                  <Sparkles className="size-3.5 text-cobalt-bright" />{copy.sending}
+                  <Sparkles className="size-3.5 text-cobalt-bright" />{activity}
                   <span className="flex gap-1">{[0, 1, 2].map((item) => <motion.span key={item} className="size-1 rounded-full bg-cobalt-bright" animate={reduced ? undefined : { opacity: [0.25, 1, 0.25] }} transition={{ duration: 1.1, repeat: Infinity, delay: item * 0.16 }} />)}</span>
                 </div>
               )}

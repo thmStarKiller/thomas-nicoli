@@ -224,7 +224,10 @@ describe("Project Clarity retention purge", () => {
     database.submissions.set("active", { retention_until: "2026-09-01T00:00:00.000Z" });
     database.chatInteractions.set("chat-expired", { retention_until: "2026-07-01T00:00:00.000Z" });
     database.chatInteractions.set("chat-active", { retention_until: "2026-09-01T00:00:00.000Z" });
+    database.chatJobs.set("job-expired", { session_id: "job-session", retention_until: "2026-07-01T00:00:00.000Z" });
+    database.chatJobs.set("job-active", { session_id: "session-retained", retention_until: "2026-09-01T00:00:00.000Z" });
     database.chatSessions.set("session-expired", { expires_at: "2026-07-01T00:00:00.000Z" });
+    database.chatSessions.set("session-retained", { session_id: "session-retained", expires_at: "2026-07-01T00:00:00.000Z" });
     database.chatSessions.set("session-active", { expires_at: "2026-09-01T00:00:00.000Z" });
     const response = await handlePurge(
       {
@@ -234,12 +237,15 @@ describe("Project Clarity retention purge", () => {
       { now: new Date("2026-07-24T12:00:00.000Z") },
     );
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ ok: true, purged: 1, chatPurged: 1, sessionsPurged: 1 });
+    expect(await response.json()).toMatchObject({ ok: true, purged: 1, chatPurged: 1, chatJobsPurged: 1, sessionsPurged: 1 });
     expect(database.submissions.has("expired")).toBe(false);
     expect(database.submissions.has("active")).toBe(true);
     expect(database.chatInteractions.has("chat-expired")).toBe(false);
     expect(database.chatInteractions.has("chat-active")).toBe(true);
+    expect(database.chatJobs.has("job-expired")).toBe(false);
+    expect(database.chatJobs.has("job-active")).toBe(true);
     expect(database.chatSessions.has("session-expired")).toBe(false);
+    expect(database.chatSessions.has("session-retained")).toBe(true);
     expect(database.chatSessions.has("session-active")).toBe(true);
   });
 });

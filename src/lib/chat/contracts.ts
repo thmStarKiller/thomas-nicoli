@@ -39,6 +39,8 @@ export const chatRequestSchema = z.object({
   company: z.string().max(100).default(""),
 }).strict();
 
+export const chatJobPayloadSchema = chatRequestSchema.omit({ sessionToken: true, company: true });
+
 export const chatAiOutputSchema = z.object({
   reply: z.string().trim().min(1).max(CHAT_LIMITS.reply),
   summary: z.string().trim().min(1).max(CHAT_LIMITS.summary),
@@ -50,4 +52,5 @@ export const chatAiOutputSchema = z.object({
 export type ChatLocale = z.infer<typeof chatLocaleSchema>;
 export type ChatSessionRequest = z.infer<typeof chatSessionRequestSchema>;
 export type ChatRequest = z.infer<typeof chatRequestSchema>;
+export type ChatJobPayload = z.infer<typeof chatJobPayloadSchema>;
 export type ChatAiOutput = z.infer<typeof chatAiOutputSchema>;

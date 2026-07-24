@@ -24,7 +24,7 @@ export async function handlePurge(
 
     const now = options.now ?? new Date();
     const cutoff = now.toISOString();
-    const [clarity, chat, sessions] = await Promise.all([
+    const [clarity, chat, jobs] = await Promise.all([
       context.env.PROJECT_CLARITY_DB
         .prepare("DELETE FROM project_clarity_submissions WHERE retention_until <= ?1")
         .bind(cutoff)
@@ -34,15 +34,25 @@ export async function handlePurge(
         .bind(cutoff)
         .run(),
       context.env.PROJECT_CLARITY_DB
-        .prepare("DELETE FROM site_chat_sessions WHERE expires_at <= ?1")
+        .prepare("DELETE FROM site_chat_jobs WHERE retention_until <= ?1")
         .bind(cutoff)
         .run(),
     ]);
+    const sessions = await context.env.PROJECT_CLARITY_DB
+      .prepare(
+        `DELETE FROM site_chat_sessions
+         WHERE expires_at <= ?1
+           AND NOT EXISTS (SELECT 1 FROM site_chat_interactions WHERE site_chat_interactions.session_id = site_chat_sessions.session_id)
+           AND NOT EXISTS (SELECT 1 FROM site_chat_jobs WHERE site_chat_jobs.session_id = site_chat_sessions.session_id)`,
+      )
+      .bind(cutoff)
+      .run();
 
     return jsonResponse({
       ok: true,
       purged: clarity.meta?.changes ?? 0,
       chatPurged: chat.meta?.changes ?? 0,
+      chatJobsPurged: jobs.meta?.changes ?? 0,
       sessionsPurged: sessions.meta?.changes ?? 0,
       cutoff,
     });

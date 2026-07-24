@@ -1,5 +1,5 @@
-import { CHAT_LIMITS, chatRequestSchema, type ChatAiOutput, type ChatLocale, type ChatRequest } from "../../../src/lib/chat/contracts";
-import { buildChatModelInput, buildChatOwnerEmail, CHAT_MODEL, parseChatAiOutput, retentionUntil } from "../../_lib/chat";
+import { CHAT_LIMITS, chatRequestSchema } from "../../../src/lib/chat/contracts";
+import { retentionUntil } from "../../_lib/chat";
 import { HttpError, assertSameOrigin, jsonResponse, readBoundedBody, requestIp, sha256 } from "../../_lib/http";
 import { enforceRateLimit } from "../../_lib/rate-limit";
 import type { BaseEnv, D1DatabaseLike } from "../../_lib/types";
@@ -16,127 +16,67 @@ type SessionRow = {
   expires_at: string;
   turn_count: number;
 };
-type InteractionRow = {
+type JobRow = {
   interaction_id: string;
   session_id: string;
   turn_index: number;
-  language: ChatLocale;
-  page_path: string;
-  visitor_message: string;
-  assistant_reply: string;
-  owner_summary: string;
-  intent: string;
-  urgency: "low" | "medium" | "high";
-  suggestions_json: string;
-  email_status: string;
+  status: "queued" | "processing" | "completed" | "failed";
+  assistant_reply: string | null;
+  suggestions_json: string | null;
+  email_status: "pending" | "delivered" | "failed";
 };
 
-async function findInteraction(database: D1DatabaseLike, interactionId: string): Promise<InteractionRow | null> {
+async function findJob(database: D1DatabaseLike, interactionId: string): Promise<JobRow | null> {
   return database
-    .prepare("SELECT interaction_id, session_id, turn_index, language, page_path, visitor_message, assistant_reply, owner_summary, intent, urgency, suggestions_json, email_status FROM site_chat_interactions WHERE interaction_id = ?1")
+    .prepare("SELECT interaction_id, session_id, turn_index, status, assistant_reply, suggestions_json, email_status FROM site_chat_jobs WHERE interaction_id = ?1")
     .bind(interactionId)
-    .first<InteractionRow>();
+    .first<JobRow>();
 }
 
-async function findTurn(database: D1DatabaseLike, sessionId: string, turnIndex: number): Promise<InteractionRow | null> {
+async function findTurn(database: D1DatabaseLike, sessionId: string, turnIndex: number): Promise<JobRow | null> {
   return database
-    .prepare("SELECT interaction_id, session_id, turn_index, language, page_path, visitor_message, assistant_reply, owner_summary, intent, urgency, suggestions_json, email_status FROM site_chat_interactions WHERE session_id = ?1 AND turn_index = ?2")
+    .prepare("SELECT interaction_id, session_id, turn_index, status, assistant_reply, suggestions_json, email_status FROM site_chat_jobs WHERE session_id = ?1 AND turn_index = ?2")
     .bind(sessionId, turnIndex)
-    .first<InteractionRow>();
+    .first<JobRow>();
 }
 
-function duplicateResponse(row: InteractionRow): Response {
-  let suggestions: string[] = [];
-  try {
-    const parsed = JSON.parse(row.suggestions_json);
-    if (Array.isArray(parsed)) suggestions = parsed.filter((item): item is string => typeof item === "string");
-  } catch {
-    suggestions = [];
+function jobResponse(row: JobRow): Response {
+  if (row.status === "completed" && row.assistant_reply) {
+    let suggestions: string[] = [];
+    try {
+      const parsed = JSON.parse(row.suggestions_json ?? "[]");
+      if (Array.isArray(parsed)) suggestions = parsed.filter((item): item is string => typeof item === "string");
+    } catch {
+      suggestions = [];
+    }
+    return jsonResponse({
+      ok: true,
+      queued: false,
+      status: "completed",
+      interactionId: row.interaction_id,
+      reply: row.assistant_reply,
+      suggestions,
+      emailed: row.email_status === "delivered",
+      turnIndex: row.turn_index,
+      maxTurns: CHAT_LIMITS.sessionTurns,
+    });
+  }
+  if (row.status === "failed") {
+    return jsonResponse({ ok: false, status: "failed", interactionId: row.interaction_id, error: "local_ai_failed" }, 502);
   }
   return jsonResponse({
     ok: true,
-    duplicate: true,
+    queued: true,
+    status: row.status,
     interactionId: row.interaction_id,
-    reply: row.assistant_reply,
-    suggestions,
-    emailed: row.email_status === "delivered",
-  });
-}
-
-async function sendOwnerSummary(
-  env: Env,
-  request: Pick<ChatRequest, "turnIndex" | "pagePath" | "locale" | "message">,
-  output: ChatAiOutput,
-  interactionId: string,
-  fetcher: typeof fetch,
-): Promise<boolean> {
-  if (!env.RESEND_API_KEY || !env.RESEND_TO) return false;
-  const email = buildChatOwnerEmail({ interactionId, request, output });
-  const from = env.RESEND_FROM_EMAIL?.trim()
-    || (env.MAIL_DOMAIN?.trim()
-      ? `Thomas Nicoli Consulting <bonjour@${env.MAIL_DOMAIN.trim()}>`
-      : "Thomas Nicoli Consulting <onboarding@resend.dev>");
-  const payload = JSON.stringify({
-    from,
-    to: [env.RESEND_TO],
-    subject: email.subject,
-    html: email.html,
-    text: email.text,
-  });
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await fetcher("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        authorization: "Bearer " + env.RESEND_API_KEY,
-        "content-type": "application/json",
-      },
-      body: payload,
-    });
-    if (response.ok) return true;
-  }
-  return false;
-}
-
-async function retryFailedOwnerSummary(
-  env: Env,
-  database: D1DatabaseLike,
-  row: InteractionRow,
-  fetcher: typeof fetch,
-): Promise<InteractionRow> {
-  if (row.email_status !== "failed") return row;
-  const emailed = await sendOwnerSummary(
-    env,
-    {
-      turnIndex: row.turn_index,
-      pagePath: row.page_path,
-      locale: row.language,
-      message: row.visitor_message,
-    },
-    {
-      reply: row.assistant_reply,
-      summary: row.owner_summary,
-      intent: row.intent,
-      urgency: row.urgency,
-      suggestions: [],
-    },
-    row.interaction_id,
-    fetcher,
-  ).catch(() => false);
-  if (!emailed) return row;
-  await database
-    .prepare("UPDATE site_chat_interactions SET email_status = ?1 WHERE interaction_id = ?2")
-    .bind("delivered", row.interaction_id)
-    .run();
-  return { ...row, email_status: "delivered" };
+    turnIndex: row.turn_index,
+    maxTurns: CHAT_LIMITS.sessionTurns,
+  }, 202);
 }
 
 export async function handleChat(
   context: Context,
-  dependencies: {
-    fetcher?: typeof fetch;
-    aiRunner?: (model: string, input: Record<string, unknown>) => Promise<unknown>;
-    now?: Date;
-  } = {},
+  dependencies: { now?: Date } = {},
 ): Promise<Response> {
   try {
     assertSameOrigin(context.request);
@@ -148,7 +88,7 @@ export async function handleChat(
     const parsed = chatRequestSchema.safeParse(body);
     if (!parsed.success) return jsonResponse({ ok: false, error: "invalid_fields" }, 400);
     const input = parsed.data;
-    if (input.company) return jsonResponse({ ok: true, reply: "", suggestions: [], emailed: true });
+    if (input.company) return jsonResponse({ ok: true, queued: true, status: "queued", interactionId: input.interactionId }, 202);
 
     const now = dependencies.now ?? new Date();
     const tokenHash = await sha256(`site-chat-token:${input.sessionToken}`);
@@ -171,23 +111,16 @@ export async function handleChat(
       now: Math.floor(now.getTime() / 1_000),
     });
 
-    const existing = await findInteraction(database, input.interactionId);
+    const existing = await findJob(database, input.interactionId);
     if (existing) {
-      const retried = await retryFailedOwnerSummary(
-        context.env,
-        database,
-        existing,
-        dependencies.fetcher ?? fetch,
-      );
-      return duplicateResponse(retried);
+      if (existing.session_id !== input.sessionId) throw new HttpError(401, "chat_session_invalid");
+      return jobResponse(existing);
     }
     if (input.turnIndex !== session.turn_count + 1 || input.turnIndex > CHAT_LIMITS.sessionTurns) {
+      const sameTurn = await findTurn(database, input.sessionId, input.turnIndex);
+      if (sameTurn) return jobResponse(sameTurn);
       throw new HttpError(409, "chat_turn_conflict");
     }
-
-    const aiRunner = dependencies.aiRunner
-      ?? (context.env.AI ? ((model, modelInput) => context.env.AI!.run(model, modelInput)) : undefined);
-    if (!aiRunner) throw new HttpError(503, "ai_not_configured");
 
     const turnLock = await database
       .prepare("UPDATE site_chat_sessions SET turn_count = ?1 WHERE session_id = ?2 AND turn_count = ?3")
@@ -195,7 +128,7 @@ export async function handleChat(
       .run();
     if ((turnLock.meta?.changes ?? 0) === 0) {
       const concurrent = await findTurn(database, input.sessionId, input.turnIndex);
-      if (concurrent) return duplicateResponse(concurrent);
+      if (concurrent) return jobResponse(concurrent);
       throw new HttpError(409, "chat_turn_in_progress");
     }
     const rollbackTurn = () => database
@@ -203,41 +136,33 @@ export async function handleChat(
       .bind(input.turnIndex - 1, input.sessionId, input.turnIndex)
       .run();
 
-    let aiRaw: unknown;
-    try {
-      aiRaw = await aiRunner(CHAT_MODEL, buildChatModelInput(input));
-    } catch (error) {
-      console.error("site_chat_ai_error", error instanceof Error ? error.message.slice(0, 300) : "unknown_provider_error");
-      await rollbackTurn().catch(() => undefined);
-      throw new HttpError(502, "ai_unavailable");
-    }
-    const output = parseChatAiOutput(aiRaw, input);
     const createdAt = now.toISOString();
-    const suggestionsJson = JSON.stringify(output.suggestions);
-
-    const insertResult = await database
+    const payload = {
+      sessionId: input.sessionId,
+      interactionId: input.interactionId,
+      turnIndex: input.turnIndex,
+      locale: input.locale,
+      pagePath: input.pagePath,
+      message: input.message,
+      history: input.history,
+    };
+    const insert = await database
       .prepare(
-          `INSERT OR IGNORE INTO site_chat_interactions
-            (interaction_id, session_id, turn_index, created_at, language, page_path,
-             visitor_message, assistant_reply, owner_summary, intent, urgency,
-             suggestions_json, email_status, retention_until)
-           VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, 'pending', ?13)`,
-        )
-        .bind(
-          input.interactionId,
-          input.sessionId,
-          input.turnIndex,
-          createdAt,
-          input.locale,
-          input.pagePath,
-          input.message,
-          output.reply,
-          output.summary,
-          output.intent,
-          output.urgency,
-          suggestionsJson,
-          retentionUntil(now),
-        )
+        `INSERT OR IGNORE INTO site_chat_jobs
+          (interaction_id, session_id, turn_index, created_at, updated_at, status, language,
+           page_path, payload_json, retention_until)
+         VALUES (?1, ?2, ?3, ?4, ?4, 'queued', ?5, ?6, ?7, ?8)`,
+      )
+      .bind(
+        input.interactionId,
+        input.sessionId,
+        input.turnIndex,
+        createdAt,
+        input.locale,
+        input.pagePath,
+        JSON.stringify(payload),
+        retentionUntil(now),
+      )
       .run()
       .catch(async () => {
         await rollbackTurn().catch(() => undefined);
@@ -245,8 +170,8 @@ export async function handleChat(
       });
 
     const stored = await findTurn(database, input.sessionId, input.turnIndex);
-    if ((insertResult.meta?.changes ?? 0) === 0) {
-      if (stored) return duplicateResponse(stored);
+    if ((insert.meta?.changes ?? 0) === 0) {
+      if (stored) return jobResponse(stored);
       await rollbackTurn().catch(() => undefined);
       throw new HttpError(503, "chat_store_conflict");
     }
@@ -254,29 +179,7 @@ export async function handleChat(
       await rollbackTurn().catch(() => undefined);
       throw new HttpError(503, "chat_store_conflict");
     }
-    if (stored.interaction_id !== input.interactionId) return duplicateResponse(stored);
-
-    const emailed = await sendOwnerSummary(
-      context.env,
-      input,
-      output,
-      input.interactionId,
-      dependencies.fetcher ?? fetch,
-    ).catch(() => false);
-    await database
-      .prepare("UPDATE site_chat_interactions SET email_status = ?1 WHERE interaction_id = ?2")
-      .bind(emailed ? "delivered" : "failed", input.interactionId)
-      .run();
-
-    return jsonResponse({
-      ok: true,
-      interactionId: input.interactionId,
-      reply: output.reply,
-      suggestions: output.suggestions,
-      emailed,
-      turnIndex: input.turnIndex,
-      maxTurns: CHAT_LIMITS.sessionTurns,
-    });
+    return jobResponse(stored);
   } catch (error) {
     if (error instanceof HttpError) return jsonResponse({ ok: false, error: error.code }, error.status);
     return jsonResponse({ ok: false, error: "server_error" }, 500);

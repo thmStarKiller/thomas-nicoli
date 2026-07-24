@@ -32,8 +32,9 @@ export async function verifyTurnstile(options: {
   if (!response.ok) throw new HttpError(502, "turnstile_unavailable");
 
   const result = (await response.json()) as TurnstileResult;
-  const hostnameMatches = !result.hostname || result.hostname === options.expectedHostname;
-  const actionMatches = !result.action || result.action === options.expectedAction;
+  const officialAlwaysPassTestSecret = options.secret === "1x0000000000000000000000000000000AA";
+  const hostnameMatches = officialAlwaysPassTestSecret || !result.hostname || result.hostname === options.expectedHostname;
+  const actionMatches = officialAlwaysPassTestSecret || !result.action || result.action === options.expectedAction;
   if (!result.success || !hostnameMatches || !actionMatches) {
     throw new HttpError(400, "turnstile_invalid");
   }
