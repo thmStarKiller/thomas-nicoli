@@ -4,14 +4,42 @@ compatibility_date = "2026-07-22"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-# Intentionally closed until Thomas approves the missing legal identity and retention data.
+# Local defaults fail closed. Preview and production overrides are explicit below.
+NEXT_PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAD8a4H-XHfBfZQxo"
+NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "false"
 PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
 PROJECT_CLARITY_LEGAL_APPROVED = "false"
 
-# Preview-only database. Production requires a separate binding after the legal checkpoint.
+# Local development persists this binding locally unless --remote is used.
 [[d1_databases]]
 binding = "PROJECT_CLARITY_DB"
 database_name = "project-clarity-preview"
 database_id = "12884390-e178-4cff-a336-88b63007a81f"
 preview_database_id = "12884390-e178-4cff-a336-88b63007a81f"
+migrations_dir = "migrations"
+
+[env.preview.vars]
+NEXT_PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAD8a4H-XHfBfZQxo"
+NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "false"
+PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
+PROJECT_CLARITY_LEGAL_APPROVED = "false"
+
+[[env.preview.d1_databases]]
+binding = "PROJECT_CLARITY_DB"
+database_name = "project-clarity-preview"
+database_id = "12884390-e178-4cff-a336-88b63007a81f"
+migrations_dir = "migrations"
+
+[env.production.vars]
+# Thomas requested production deployment before completing legal wording.
+# Keep intake closed until retention and consent values are explicitly approved.
+NEXT_PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAD8a4H-XHfBfZQxo"
+NEXT_PUBLIC_PROJECT_CLARITY_LEGAL_READY = "false"
+PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
+PROJECT_CLARITY_LEGAL_APPROVED = "false"
+
+[[env.production.d1_databases]]
+binding = "PROJECT_CLARITY_DB"
+database_name = "project-clarity-production"
+database_id = "cefa7a29-ec29-4a12-b6eb-5e94b5ba55c5"
 migrations_dir = "migrations"
