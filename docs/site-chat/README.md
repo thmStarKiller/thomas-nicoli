@@ -24,8 +24,9 @@ The public browser never calls Ollama or any model provider directly and receive
 6. The daemon posts the validated result through the private worker endpoint.
 7. D1 publishes the reply and Resend sends Thomas one summary email.
 8. The browser polls its authenticated interaction and renders the reply as plain text.
+9. While a job is pending, the browser keeps the interaction/session reference in same-origin `sessionStorage`; reopening or reloading resumes polling and removes the record after completion.
 
-If Thomas's computer is offline, the message remains queued in D1. The visitor sees an honest queued state rather than a fabricated answer. Processing resumes when the local daemon is online.
+If Thomas's computer is offline, the message remains queued in D1. The visitor sees an honest queued state rather than a fabricated answer. Processing resumes when the local daemon is online. The browser can recover the answer while its two-hour anonymous session remains valid; Thomas still receives the owner summary after local completion if the visitor has left.
 
 Visitor content is untrusted data. It cannot select tools, reveal configuration or override the system prompt. Ollama is allowlisted to `gemma4-local` and loopback `127.0.0.1:11434`. The UI renders plain text only; email HTML is escaped.
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Bot, Check, MailCheck, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
@@ -26,6 +26,31 @@ interface ChatResponse {
   suggestions?: string[];
   emailed?: boolean;
   maxTurns?: number;
+}
+
+interface PendingChat {
+  interactionId: string;
+  sessionId: string;
+  sessionToken: string;
+  turnIndex: number;
+  message: string;
+}
+
+function parsePendingChat(raw: string | null): PendingChat | null {
+  if (!raw) return null;
+  try {
+    const value = JSON.parse(raw) as Partial<PendingChat>;
+    if (
+      typeof value.interactionId !== "string" || value.interactionId.length < 16 ||
+      typeof value.sessionId !== "string" || value.sessionId.length < 16 ||
+      typeof value.sessionToken !== "string" || value.sessionToken.length < 24 ||
+      !Number.isInteger(value.turnIndex) || value.turnIndex! < 1 || value.turnIndex! > CHAT_LIMITS.sessionTurns ||
+      typeof value.message !== "string" || value.message.length < 2 || value.message.length > CHAT_LIMITS.message
+    ) return null;
+    return value as PendingChat;
+  } catch {
+    return null;
+  }
 }
 
 function LoopRail({ labels, reduced }: { labels: readonly string[]; reduced: boolean | null }) {
@@ -65,10 +90,37 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
   const [error, setError] = useState("");
   const [emailed, setEmailed] = useState(false);
   const [activity, setActivity] = useState<string>(copy.sending);
+  const [pending, setPending] = useState<PendingChat | null>(null);
+  const [resumeVersion, setResumeVersion] = useState(0);
+  const pendingStorageKey = `site-chat-pending:${lang}`;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const sendingRef = useRef(false);
+  const resumingRef = useRef(false);
+
+  const rememberPending = useCallback((record: PendingChat) => {
+    setPending(record);
+    sessionStorage.setItem(pendingStorageKey, JSON.stringify(record));
+  }, [pendingStorageKey]);
+
+  const forgetPending = useCallback(() => {
+    setPending(null);
+    sessionStorage.removeItem(pendingStorageKey);
+  }, [pendingStorageKey]);
+
+  const applyCompletedReply = useCallback((payload: ChatResponse, record: PendingChat) => {
+    if (!payload.reply) return;
+    setMessages((current) => [
+      ...current.filter((message) => message.id !== `pending-${record.interactionId}` && message.id !== record.interactionId),
+      { id: record.interactionId, role: "assistant", content: payload.reply! },
+    ]);
+    setTurn((current) => Math.max(current, record.turnIndex));
+    setSuggestions((payload.suggestions ?? []).slice(0, CHAT_LIMITS.suggestions));
+    setEmailed(Boolean(payload.emailed));
+    setError("");
+    forgetPending();
+  }, [forgetPending, setEmailed, setError, setMessages, setSuggestions, setTurn]);
 
   const resetConversation = () => {
     setSessionId(crypto.randomUUID());
@@ -82,16 +134,32 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     setError("");
     setEmailed(false);
     setActivity(copy.sending);
+    forgetPending();
   };
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
-      setSessionId(crypto.randomUUID());
-      setMessages([{ id: "greeting", role: "assistant", content: copy.greeting }]);
-      setSuggestions([...copy.quickPrompts]);
+      const restored = parsePendingChat(sessionStorage.getItem(pendingStorageKey));
+      if (restored) {
+        setSessionId(restored.sessionId);
+        setSessionToken(restored.sessionToken);
+        setTurn(restored.turnIndex);
+        setMessages([
+          { id: "greeting", role: "assistant", content: copy.greeting },
+          { id: `restored-user-${restored.interactionId}`, role: "user", content: restored.message },
+          { id: `pending-${restored.interactionId}`, role: "assistant", content: copy.queued },
+        ]);
+        setSuggestions([]);
+        setPending(restored);
+      } else {
+        sessionStorage.removeItem(pendingStorageKey);
+        setSessionId(crypto.randomUUID());
+        setMessages([{ id: "greeting", role: "assistant", content: copy.greeting }]);
+        setSuggestions([...copy.quickPrompts]);
+      }
     });
     return () => cancelAnimationFrame(raf);
-  }, [copy.greeting, copy.quickPrompts]);
+  }, [copy.greeting, copy.queued, copy.quickPrompts, pendingStorageKey]);
 
   useEffect(() => {
     if (!open) return;
@@ -135,14 +203,18 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     return payload.sessionToken;
   };
 
-  const waitForLocalReply = async (token: string, interactionId: string): Promise<ChatResponse> => {
+  const waitForLocalReply = useCallback(async (
+    token: string,
+    interactionId: string,
+    statusSessionId: string = sessionId,
+  ): Promise<ChatResponse> => {
     setActivity(copy.waiting);
     for (let attempt = 0; attempt < 45; attempt += 1) {
       if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
       const response = await fetch("/api/chat/status", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ sessionId, sessionToken: token, interactionId }),
+        body: JSON.stringify({ sessionId: statusSessionId, sessionToken: token, interactionId }),
       });
       const payload = (await response.json()) as ChatResponse;
       if (response.ok && payload.status === "completed" && payload.reply) return payload;
@@ -150,11 +222,47 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
       throw new Error(payload.error || "chat_status_failed");
     }
     throw new Error("local_ai_timeout");
-  };
+  }, [copy.waiting, sessionId]);
+
+  useEffect(() => {
+    if (!open || !pending || sendingRef.current || resumingRef.current) return;
+    let cancelled = false;
+    resumingRef.current = true;
+    setBusy(true);
+    setError("");
+
+    void waitForLocalReply(pending.sessionToken, pending.interactionId, pending.sessionId)
+      .then((payload) => {
+        if (!cancelled) applyCompletedReply(payload, pending);
+      })
+      .catch((cause: unknown) => {
+        if (cancelled) return;
+        const code = cause instanceof Error ? cause.message : "chat_status_failed";
+        if (code === "local_ai_timeout") {
+          setResumeVersion((value) => value + 1);
+        } else if (code.includes("unauthorized") || code.includes("expired")) {
+          forgetPending();
+          setSessionToken("");
+          setError(copy.verify);
+        } else if (code.includes("local_ai_failed")) {
+          forgetPending();
+          setError(copy.error);
+        } else {
+          setError(copy.error);
+        }
+      })
+      .finally(() => {
+        resumingRef.current = false;
+        setBusy(false);
+        if (cancelled) setResumeVersion((value) => value + 1);
+      });
+
+    return () => { cancelled = true; };
+  }, [applyCompletedReply, copy.error, copy.verify, forgetPending, open, pending, resumeVersion, waitForLocalReply]);
 
   const sendMessage = async (proposed?: string) => {
     const message = (proposed ?? input).trim().slice(0, CHAT_LIMITS.message);
-    if (sendingRef.current || busy || message.length < 2 || turn >= CHAT_LIMITS.sessionTurns) return;
+    if (sendingRef.current || busy || pending || message.length < 2 || turn >= CHAT_LIMITS.sessionTurns) return;
     if (!sessionToken && !turnstileToken) {
       setError(copy.verify);
       return;
@@ -172,6 +280,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     setBusy(true);
     sendingRef.current = true;
     let accepted = false;
+    let pendingRecord: PendingChat | null = null;
 
     try {
       const token = await createSession();
@@ -195,19 +304,30 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
       if (!response.ok) throw new Error(payload.error || "chat_failed");
       accepted = true;
       const queuedInteractionId = payload.interactionId ?? interactionId;
-      if (!payload.reply) payload = await waitForLocalReply(token, queuedInteractionId);
+      pendingRecord = {
+        interactionId: queuedInteractionId,
+        sessionId,
+        sessionToken: token,
+        turnIndex: nextTurn,
+        message,
+      };
+      rememberPending(pendingRecord);
+      if (!payload.reply) payload = await waitForLocalReply(token, queuedInteractionId, sessionId);
       if (!payload.reply) throw new Error("local_ai_empty_reply");
-      setMessages((current) => [...current, { id: queuedInteractionId, role: "assistant", content: payload.reply! }]);
-      setTurn(nextTurn);
-      setSuggestions((payload.suggestions ?? []).slice(0, CHAT_LIMITS.suggestions));
-      setEmailed(Boolean(payload.emailed));
+      applyCompletedReply(payload, pendingRecord);
     } catch (cause) {
       const code = cause instanceof Error ? cause.message : "chat_failed";
       if (accepted && code === "local_ai_timeout") {
         setTurn(nextTurn);
-        setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: copy.queued }]);
+        if (pendingRecord) {
+          setMessages((current) => current.some((message) => message.id === `pending-${pendingRecord!.interactionId}`)
+            ? current
+            : [...current, { id: `pending-${pendingRecord!.interactionId}`, role: "assistant", content: copy.queued }]);
+        }
+        setResumeVersion((value) => value + 1);
       } else if (accepted) {
         setTurn(nextTurn);
+        if (code.includes("local_ai_failed") || code.includes("unauthorized") || code.includes("expired")) forgetPending();
         setError(copy.error);
       } else if (code.includes("turnstile") || code.includes("verification")) {
         setSessionToken("");
@@ -267,6 +387,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
+                  data-message-role={message.role}
                   initial={reduced ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={message.role === "user" ? "ml-8 rounded-2xl rounded-br-md bg-cobalt px-4 py-3 text-sm leading-relaxed" : "mr-8 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-sm leading-relaxed text-porcelain/85"}
@@ -307,6 +428,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                   <div className="flex items-end gap-2 rounded-2xl border border-white/12 bg-white/[0.05] p-2 focus-within:border-cobalt/70">
                     <textarea
                       ref={textareaRef}
+                      disabled={busy || Boolean(pending)}
                       value={input}
                       onChange={(event) => setInput(event.target.value.slice(0, CHAT_LIMITS.message))}
                       onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); void sendMessage(); } }}
@@ -315,7 +437,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                       placeholder={copy.placeholder}
                       className="max-h-28 min-h-12 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-white outline-none placeholder:text-porcelain/35"
                     />
-                    <button type="button" aria-label={copy.send} disabled={busy || input.trim().length < 2} onClick={() => void sendMessage()} className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cobalt text-white transition hover:bg-cobalt-bright disabled:cursor-not-allowed disabled:opacity-35"><Send className="size-4" /></button>
+                    <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cobalt text-white transition hover:bg-cobalt-bright disabled:cursor-not-allowed disabled:opacity-35"><Send className="size-4" /></button>
                   </div>
                   {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
                   <p className="mt-2 text-[9px] leading-relaxed text-porcelain/35">{copy.privacy}</p>

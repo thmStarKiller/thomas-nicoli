@@ -72,6 +72,40 @@ try {
   results.reducedMotion = style;
   await reducedContext.close();
 
+  const pendingContext = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const pendingRecord = {
+    interactionId: "33333333-3333-4333-8333-333333333333",
+    sessionId: "11111111-1111-4111-8111-111111111111",
+    sessionToken: "pending-test-token-that-is-long-enough-for-validation",
+    turnIndex: 1,
+    message: "Necesito ordenar un proyecto digital",
+  };
+  await pendingContext.addInitScript(({ record }) => {
+    sessionStorage.setItem("site-chat-pending:es", JSON.stringify(record));
+  }, { record: pendingRecord });
+  await pendingContext.route("**/api/chat/status", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        status: "completed",
+        reply: "Respuesta local recuperada después de recargar.",
+        suggestions: ["Siguiente paso"],
+        emailed: true,
+      }),
+    });
+  });
+  const pendingPage = await pendingContext.newPage();
+  await pendingPage.goto(`${baseUrl}/es`, { waitUntil: "domcontentloaded" });
+  await pendingPage.getByTestId("site-chat-launcher").click();
+  await pendingPage.getByText("Respuesta local recuperada después de recargar.").waitFor({ state: "visible" });
+  assert.equal(await pendingPage.getByText("Necesito ordenar un proyecto digital").isVisible(), true);
+  assert.equal(await pendingPage.evaluate(() => sessionStorage.getItem("site-chat-pending:es")), null);
+  assert.equal(await pendingPage.locator('[data-message-role="assistant"]').filter({ hasText: "Respuesta local recuperada" }).count(), 1);
+  results.pendingResume = { restored: true, storageCleared: true, duplicateReplies: false };
+  await pendingContext.close();
+
   const noJsContext = await browser.newContext({ viewport: { width: 375, height: 812 }, javaScriptEnabled: false });
   const noJsPage = await noJsContext.newPage();
   const noJsResponse = await noJsPage.goto(`${baseUrl}/es`, { waitUntil: "load" });
