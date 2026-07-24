@@ -14,8 +14,8 @@ export const siteConfig = {
   },
 
   contact: {
-    // Hidden from the UI while empty — set a dedicated business email to enable.
-    email: "",
+    // Dedicated public business email used by the simple non-JavaScript fallback.
+    email: "bonjour@thomas-nicoli.com",
     phone: "",
     whatsappUrl: process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "",
     calendarUrl: process.env.NEXT_PUBLIC_CALENDAR_URL ?? "",

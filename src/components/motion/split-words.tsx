@@ -61,7 +61,7 @@ export function SplitWords({
                 "inline-block will-change-transform",
                 isAccent && "font-display italic text-accent",
               )}
-              initial={{ y: "110%", rotate: 3 }}
+              initial={false}
               whileInView={{ y: "0%", rotate: 0 }}
               viewport={{ once: true, margin: "-8% 0px" }}
               transition={{

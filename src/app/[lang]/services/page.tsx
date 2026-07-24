@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight, Check } from "lucide-react";
 import { getDictionary } from "@/i18n";
 import { hasLocale, localePath } from "@/i18n/config";
+import { getServiceLabCopy } from "@/i18n/service-additions";
 import { pageMetadata } from "@/lib/seo";
 import { TextReveal } from "@/components/motion/text-reveal";
 import { Reveal } from "@/components/ui/reveal";
@@ -34,6 +35,9 @@ export default async function ServicesPage({
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
   const sp = dict.servicesPage;
+  const primaryServices = dict.services.filter((service) => service.slug !== "interactive-3d");
+  const labService = dict.services.find((service) => service.slug === "interactive-3d");
+  const labCopy = getServiceLabCopy(lang);
 
   return (
     <>
@@ -57,7 +61,7 @@ export default async function ServicesPage({
 
       <section className="bg-porcelain py-24 sm:py-32">
         <div className="mx-auto max-w-[1440px] space-y-24 px-5 sm:px-8 lg:px-12">
-          {dict.services.map((service, i) => (
+          {primaryServices.map((service, i) => (
             <Reveal key={service.slug}>
               <article
                 id={service.slug}
@@ -122,7 +126,7 @@ export default async function ServicesPage({
                     </p>
                   </div>
                   <Link
-                    href={`${localePath(lang, "/contact")}?service=${encodeURIComponent(service.title)}`}
+                    href={`${localePath(lang, "/contact")}?service=${encodeURIComponent(service.slug)}`}
                     className="group inline-flex items-center gap-2 rounded-full bg-graphite px-6 py-3 text-[14px] font-medium text-porcelain transition-colors duration-300 hover:bg-cobalt"
                   >
                     {dict.common.getQuote}
@@ -132,6 +136,35 @@ export default async function ServicesPage({
               </article>
             </Reveal>
           ))}
+
+          {labService && (
+            <Reveal>
+              <aside
+                id="studio-lab"
+                className="scroll-mt-28 rounded-2xl border border-cobalt/20 bg-cobalt/5 p-8 sm:p-10"
+              >
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cobalt">
+                  Studio Lab
+                </p>
+                <h2 className="mt-4 font-display text-[clamp(1.8rem,3vw,2.8rem)] font-semibold">
+                  {labCopy.title}
+                </h2>
+                <p className="mt-5 max-w-3xl text-[15px] leading-relaxed text-graphite/65">
+                  {labCopy.note}
+                </p>
+                <p className="mt-5 max-w-3xl text-sm leading-relaxed text-graphite/60">
+                  {labService.summary}
+                </p>
+                <Link
+                  href={`${localePath(lang, "/contact")}?service=interactive-3d`}
+                  className="mt-7 inline-flex items-center gap-2 rounded-full border border-cobalt px-6 py-3 text-sm font-medium text-cobalt transition-colors hover:bg-cobalt hover:text-porcelain"
+                >
+                  {labCopy.cta}
+                  <ArrowUpRight className="size-4" />
+                </Link>
+              </aside>
+            </Reveal>
+          )}
 
           <Reveal>
             <div className="rounded-2xl bg-graphite p-10 text-porcelain sm:p-14">

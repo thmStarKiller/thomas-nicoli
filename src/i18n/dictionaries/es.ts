@@ -10,7 +10,7 @@ export const dictionary = {
     services: {
       title: "Servicios — Webs, visibilidad, automatización IA, 3D",
       description:
-        "Webs signature, visibilidad local, sistemas de marca y contenido, automatización con IA práctica y experiencias 3D interactivas para negocios independientes.",
+        "Webs a medida, visibilidad local, sistemas de marca y contenido, automatización con IA práctica y experiencias 3D opcionales para negocios independientes.",
     },
     work: {
       title: "Proyectos y estudios de concepto — Thomas Nicoli",
@@ -79,7 +79,7 @@ export const dictionary = {
     secondaryCta: "Ver proyectos",
     trustLine: "En Madrid · Trabajo en español, inglés y francés",
     marquee: [
-      "Webs signature",
+      "Webs a medida",
       "Visibilidad local",
       "Automatización IA",
       "3D interactivo",
@@ -114,11 +114,11 @@ export const dictionary = {
       },
       {
         title: "Complejidad traducida",
-        text: "Convierto restricciones técnicas, necesidades de contenido y objetivos de negocio en decisiones que equipos, agencias y stakeholders pueden entender y ejecutar juntos.",
+        text: "Convierto restricciones técnicas, necesidades de contenido y objetivos de negocio en decisiones que equipos, agencias y responsables pueden entender y ejecutar juntos.",
       },
       {
         title: "Criterio sin teatro",
-        text: "Explico los trade-offs, reduzco el alcance cuando conviene y documento lo que queda. La solución debe ser útil después de la presentación y también después del lanzamiento.",
+        text: "Explico las decisiones y los compromisos, reduzco el alcance cuando conviene y documento lo que queda. La solución debe ser útil después de la presentación y también después del lanzamiento.",
       },
     ],
   },
@@ -169,7 +169,7 @@ export const dictionary = {
         audience: "Para un negocio que necesita una casa online creíble y enfocada.",
         features: [
           "Llamada de estrategia",
-          "Web one-page o compacta",
+          "Web de una página o compacta",
           "Optimización móvil",
           "Integración de contacto o reservas",
           "Fundamentos de SEO",
@@ -224,12 +224,12 @@ export const dictionary = {
       {
         question: "¿Cuánto cuesta un proyecto?",
         answer:
-          "Cada proyecto se presupuesta individualmente tras una breve llamada, porque el alcance varía muchísimo. Como guía: Presencia encaja con una one-page enfocada, Crecimiento con una web multipágina completa y Signature con una experiencia diferenciada con 3D o automatización. Antes de empezar tendrás una propuesta con alcance, condiciones y supuestos claros.",
+          "Cada proyecto se presupuesta individualmente tras una breve llamada, porque el alcance varía muchísimo. Como guía: Presencia encaja con una web de una página enfocada, Crecimiento con una web multipágina completa y Signature con una experiencia diferenciada con 3D o automatización. Antes de empezar tendrás una propuesta con alcance, condiciones y supuestos claros.",
       },
       {
         question: "¿Cuánto tarda una web típica?",
         answer:
-          "Como referencia, una web compacta suele requerir de dos a tres semanas y una multipágina, de cuatro a seis. El calendario final depende del alcance y de la disponibilidad de contenidos y feedback; reservo la capacidad necesaria y trabajamos con checkpoints semanales para detectar bloqueos pronto.",
+          "Como referencia, una web compacta suele requerir de dos a tres semanas y una multipágina, de cuatro a seis. El calendario final depende del alcance y de la disponibilidad de contenidos y feedback; reservo la capacidad necesaria y trabajamos con puntos de revisión semanales para detectar bloqueos pronto.",
       },
       {
         question: "Ya tengo web. ¿Puedes mejorarla en vez de rehacerla?",
@@ -265,17 +265,17 @@ export const dictionary = {
   services: [
     {
       slug: "signature-websites",
-      title: "Webs signature",
+      title: "Webs a medida",
       shortTitle: "Webs",
       tagline: "Una web que responde antes de la primera conversación.",
       summary:
-        "Diseño y desarrollo de webs rápidas y orientadas a conversión para negocios independientes — desde one-pages compactas hasta sitios multipágina completos.",
+        "Diseño y desarrollo de webs rápidas y orientadas a conversión para negocios independientes — desde webs compactas de una página hasta sitios multipágina completos.",
       whoFor:
         "Negocios independientes cuya web actual les queda pequeña — o que no tienen ninguna a la que mandar a la gente.",
       problem:
         "La mayoría de webs de negocios locales son lentas, genéricas y están organizadas según el organigrama del dueño en vez de las preguntas del cliente. Las visitas se van sin convencer, y los contactos se los lleva el competidor que parecía más sólido.",
       deliverables: [
-        "Diseño y desarrollo responsive",
+        "Diseño y desarrollo adaptado a móvil",
         "Estructura de textos orientada a conversión",
         "Integración de reservas o contacto",
         "Fundamentos de SEO técnico",
@@ -283,7 +283,7 @@ export const dictionary = {
         "Traspaso post-lanzamiento y documentación",
       ],
       engagement:
-        "Normalmente de dos a cinco semanas según el alcance, con un checkpoint claro por semana.",
+        "Normalmente de dos a cinco semanas según el alcance, con un punto de revisión claro por semana.",
     },
     {
       slug: "local-visibility",
@@ -412,7 +412,7 @@ export const dictionary = {
       outcome:
         "Es una propuesta conceptual, no un proyecto lanzado: no existen reservas, conversiones ni resultados comerciales que atribuirle. El valor del caso está en hacer visible un sistema de decisiones que después podría validarse con usuarios y datos reales.",
       deliverables: [
-        "Web responsive multipágina",
+        "Web multipágina adaptada a móvil",
         "Estructura de catálogo de tratamientos",
         "Flujo de reserva planteado",
         "Fundamentos de SEO local",
@@ -488,7 +488,7 @@ export const dictionary = {
       outcome:
         "Al tratarse de un concepto, no existen ventas, consultas ni uso editorial reales. El resultado es un sistema de catálogo definido con suficiente detalle para prototipar, probar con una propietaria real y medir después su autonomía y la calidad de las consultas.",
       deliverables: [
-        "Web responsive tipo catálogo",
+        "Web tipo catálogo adaptada a móvil",
         "Sistema editorial de fichas de producto",
         "Pieza destacada interactiva",
         "Componentes de contenido reutilizables",
@@ -544,7 +544,7 @@ export const dictionary = {
       name: "SFCC Inspector",
       type: "Herramienta propia",
       description:
-        "Una herramienta asistida por IA que explica código de Salesforce Commerce Cloud a no desarrolladores — uniendo equipos técnicos y stakeholders de negocio.",
+        "Una herramienta asistida por IA que explica código de Salesforce Commerce Cloud a no desarrolladores — uniendo equipos técnicos y responsables de negocio.",
       contribution:
         "Definición del problema, experiencia para perfiles no técnicos e implementación del flujo de explicación asistida por IA.",
       tags: ["IA", "Salesforce Commerce Cloud", "Herramientas dev"],

@@ -1,0 +1,17 @@
+{
+  "baseUrl": "http://127.0.0.1:8793",
+  "results": [
+    { "locale": "es", "width": 375, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/es-375.png" },
+    { "locale": "es", "width": 768, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/es-768.png" },
+    { "locale": "es", "width": 1280, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/es-1280.png" },
+    { "locale": "en", "width": 375, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/en-375.png" },
+    { "locale": "en", "width": 768, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/en-768.png" },
+    { "locale": "en", "width": 1280, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/en-1280.png" },
+    { "locale": "fr", "width": 375, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/fr-375.png" },
+    { "locale": "fr", "width": 768, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/fr-768.png" },
+    { "locale": "fr", "width": 1280, "status": 200, "overflow": false, "consoleErrors": [], "missingResources": [], "screenshot": "docs/evidence/project-clarity/screenshots/local/fr-1280.png" },
+    { "locale": "es", "width": 375, "noJavaScript": true, "screenshot": "docs/evidence/project-clarity/screenshots/local/es-375-no-js.png" },
+    { "locale": "en", "width": 375, "noJavaScript": true, "screenshot": "docs/evidence/project-clarity/screenshots/local/en-375-no-js.png" },
+    { "locale": "fr", "width": 375, "noJavaScript": true, "screenshot": "docs/evidence/project-clarity/screenshots/local/fr-375-no-js.png" }
+  ]
+}

@@ -4,6 +4,7 @@ import { getDictionary } from "@/i18n";
 import { hasLocale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
 import { Hero } from "@/components/sections/hero";
+import { BuyerPaths } from "@/components/sections/buyer-paths";
 import { Marquee } from "@/components/motion/marquee";
 import { OutcomeStatement } from "@/components/sections/outcome-statement";
 import { ServicesOverview } from "@/components/sections/services-overview";
@@ -43,6 +44,7 @@ export default async function HomePage({
   return (
     <>
       <Hero lang={lang} dict={dict} />
+      <BuyerPaths lang={lang} />
       <Marquee
         items={[...dict.hero.marquee]}
         className="border-y border-cobalt-deep/40 bg-cobalt py-4 text-porcelain"

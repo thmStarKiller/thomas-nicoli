@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, Calendar, MessageCircle, Phone } from "lucide-react";
+import { ArrowUpRight, Calendar, Mail, MessageCircle, Phone } from "lucide-react";
 import { siteConfig } from "@/content/site-config";
 import { getDictionary } from "@/i18n";
 import { hasLocale } from "@/i18n/config";
+import { getProjectClarityCopy } from "@/i18n/project-clarity";
 import { pageMetadata } from "@/lib/seo";
 import { TextReveal } from "@/components/motion/text-reveal";
 import { Reveal } from "@/components/ui/reveal";
@@ -34,6 +35,7 @@ export default async function ContactPage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const contactCopy = getProjectClarityCopy(lang).contact;
   const { contact } = siteConfig;
   // Widen `as const` literals so empty-string channels stay type-safe when filled in later.
   const phone: string = contact.phone;
@@ -42,6 +44,7 @@ export default async function ContactPage({
   const linkedinUrl: string = contact.socials.linkedin;
 
   const channels = [
+    contact.email && { icon: Mail, label: contact.email, href: `mailto:${contact.email}` },
     calendarUrl && { icon: Calendar, label: dict.contact.channelsTitle, href: calendarUrl },
     whatsappUrl && { icon: MessageCircle, label: "WhatsApp", href: whatsappUrl },
     phone && { icon: Phone, label: phone, href: `tel:${phone.replace(/\s/g, "")}` },
@@ -71,7 +74,19 @@ export default async function ContactPage({
       <section className="bg-porcelain py-24 sm:py-32">
         <div className="mx-auto grid max-w-[1440px] gap-16 px-5 sm:px-8 lg:grid-cols-[1.3fr_0.7fr] lg:gap-24 lg:px-12">
           <Reveal>
-            <Suspense>
+            <Suspense
+              fallback={
+                <div className="rounded-[2rem] border border-graphite/10 bg-porcelain-deep/45 p-6 sm:p-10">
+                  <h2 className="font-display text-3xl font-semibold">{contactCopy.noJs}</h2>
+                  <a
+                    href={`mailto:${contact.email}`}
+                    className="mt-6 inline-flex rounded-full bg-cobalt px-6 py-3 text-sm font-medium text-porcelain"
+                  >
+                    {contact.email}
+                  </a>
+                </div>
+              }
+            >
               <ContactForm lang={lang} dict={dict} />
             </Suspense>
           </Reveal>

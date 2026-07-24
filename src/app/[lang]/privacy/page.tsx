@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { hasLocale } from "@/i18n/config";
+import { getProjectClarityPrivacy } from "@/i18n/privacy-additions";
 import { pageMetadata } from "@/lib/seo";
 import { TextReveal } from "@/components/motion/text-reveal";
 import { Reveal } from "@/components/ui/reveal";
@@ -31,6 +32,7 @@ export default async function PrivacyPage({
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
   const p = dict.privacy;
+  const claritySections = getProjectClarityPrivacy(lang);
 
   return (
     <section className="bg-porcelain pb-28 pt-40 sm:pt-48">
@@ -56,6 +58,19 @@ export default async function PrivacyPage({
                 <p className="mt-4 text-[14.5px] leading-relaxed text-graphite/65">
                   {section.body}
                 </p>
+              </div>
+            </Reveal>
+          ))}
+          {claritySections.map((section, index) => (
+            <Reveal key={section.heading} delay={(p.sections.length + index) * 0.04}>
+              <div className="border-t border-graphite/12 pt-8">
+                <h2 className="font-display text-[1.5rem] font-semibold">
+                  <span className="mr-4 font-mono text-[12px] tracking-[0.2em] text-cobalt">
+                    0{p.sections.length + index + 1}
+                  </span>
+                  {section.heading}
+                </h2>
+                <p className="mt-4 text-[14.5px] leading-relaxed text-graphite/65">{section.body}</p>
               </div>
             </Reveal>
           ))}

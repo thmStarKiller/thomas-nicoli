@@ -141,9 +141,10 @@ function Blob() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { pointer } = useThree();
 
-  useFrame((state, delta) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.uTime.value += delta;
+  useFrame((_, delta) => {
+    const material = materialRef.current;
+    if (material) {
+      material.uniforms.uTime.value += delta;
     }
     if (group.current) {
       group.current.rotation.y += delta * 0.1;
@@ -152,7 +153,7 @@ function Blob() {
       const targetZ = pointer.x * 0.14;
       group.current.rotation.x += (targetX - group.current.rotation.x) * 0.045;
       group.current.rotation.z += (targetZ - group.current.rotation.z) * 0.045;
-      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.07;
+      group.current.position.y = Math.sin((material?.uniforms.uTime.value ?? 0) * 0.5) * 0.07;
     }
   });
 

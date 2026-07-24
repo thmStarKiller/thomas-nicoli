@@ -1,0 +1,119 @@
+Project Clarity exact-source gates UTC: 2026-07-24T03:16:03Z
+
+$ npm run lint
+
+> thomas-website@0.1.0 lint
+> eslint
+
+
+$ npm run typecheck
+
+> thomas-website@0.1.0 typecheck
+> tsc --noEmit
+
+
+$ npm test
+
+> thomas-website@0.1.0 test
+> vitest run
+
+[33mThe plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the [1mresolve.tsconfigPaths[22m option. You can remove the plugin and set [1mresolve.tsconfigPaths: true[22m in your Vite config instead.[39m
+
+ RUN  v4.1.10 [REPOSITORY]
+
+ [32m✓[39m tests/functions/security.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+ [32m✓[39m tests/worker/security.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 05:16:36
+[2m   Duration [22m 4.71s[2m (transform 619ms, setup 1.60s, import 917ms, tests 188ms, environment 5.72s)[22m
+
+
+$ npm run pages:build
+
+> thomas-website@0.1.0 pages:build
+> node scripts/build-cloudflare.mjs
+
+▲ Next.js 16.2.11 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.8s
+  Running TypeScript ...
+  Finished TypeScript in 16.5s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/52) ...
+  Generating static pages using 15 workers (13/52)
+  Generating static pages using 15 workers (26/52)
+  Generating static pages using 15 workers (39/52)
+✓ Generating static pages using 15 workers (52/52) in 3.0s
+  Finalizing page optimization ...
+⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
+This command is meant for static-only hosts, and is not necessary to make your application static.
+Pages in your application without server-side data dependencies will be automatically statically exported by `next build`, including pages powered by `getStaticProps`.
+Learn more: https://nextjs.org/docs/messages/api-routes-static-export
+
+Route (app)
+┌ ○ /_not-found
+├ ● /[lang]
+│ ├ /es
+│ ├ /en
+│ └ /fr
+├ ● /[lang]/about
+│ ├ /es/about
+│ ├ /en/about
+│ └ /fr/about
+├ ● /[lang]/contact
+│ ├ /es/contact
+│ ├ /en/contact
+│ └ /fr/contact
+├ ● /[lang]/legal
+│ ├ /es/legal
+│ ├ /en/legal
+│ └ /fr/legal
+├ ● /-/opengraph-image
+│ ├ /es/opengraph-image
+│ ├ /en/opengraph-image
+│ └ /fr/opengraph-image
+├ ● /[lang]/privacy
+│ ├ /es/privacy
+│ ├ /en/privacy
+│ └ /fr/privacy
+├ ● /[lang]/project-clarity
+│ ├ /es/project-clarity
+│ ├ /en/project-clarity
+│ └ /fr/project-clarity
+├ ● /[lang]/project-clarity/[route]
+│ ├ /es/project-clarity/independent
+│ ├ /es/project-clarity/digital-team
+│ ├ /es/project-clarity/unsure
+│ └ [+6 more paths]
+├ ● /[lang]/services
+│ ├ /es/services
+│ ├ /en/services
+│ └ /fr/services
+├ ● /[lang]/work
+│ ├ /es/work
+│ ├ /en/work
+│ └ /fr/work
+├ ● /[lang]/work/[slug]
+│ ├ /es/work/aurea-studio
+│ ├ /es/work/casa-nomada
+│ ├ /es/work/atelier-vela
+│ └ [+6 more paths]
+├ ○ /apple-icon.png
+├ ○ /icon.svg
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+Created 100 flattened Next.js RSC aliases
+Cloudflare Pages output prepared at [REPOSITORY]/.vercel/output/static
+
+$ npm audit --audit-level=moderate
+found 0 vulnerabilities

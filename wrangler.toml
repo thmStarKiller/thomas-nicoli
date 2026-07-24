@@ -2,3 +2,16 @@ name = "thomas-nicoli"
 pages_build_output_dir = ".vercel/output/static"
 compatibility_date = "2026-07-22"
 compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Intentionally closed until Thomas approves the missing legal identity and retention data.
+PROJECT_CLARITY_SUBMISSIONS_ENABLED = "false"
+PROJECT_CLARITY_LEGAL_APPROVED = "false"
+
+# Preview-only database. Production requires a separate binding after the legal checkpoint.
+[[d1_databases]]
+binding = "PROJECT_CLARITY_DB"
+database_name = "project-clarity-preview"
+database_id = "12884390-e178-4cff-a336-88b63007a81f"
+preview_database_id = "12884390-e178-4cff-a336-88b63007a81f"
+migrations_dir = "migrations"

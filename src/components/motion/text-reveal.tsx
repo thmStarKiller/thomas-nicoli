@@ -44,7 +44,7 @@ export function TextReveal({
   return (
     <MotionTag
       className={cn("inline-block", className)}
-      initial="hidden"
+      initial={false}
       whileInView="visible"
       viewport={{ once: true, margin: "-8% 0px" }}
       transition={{ staggerChildren: stagger, delayChildren: delay }}

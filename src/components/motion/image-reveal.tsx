@@ -19,7 +19,7 @@ export function ImageReveal({
   return (
     <motion.div
       className={cn("overflow-hidden", className)}
-      initial={{ clipPath: "inset(100% 0% 0% 0%)", scale: 1.06 }}
+      initial={false}
       whileInView={{ clipPath: "inset(0% 0% 0% 0%)", scale: 1 }}
       viewport={{ once: true, margin: "-12% 0px" }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay }}

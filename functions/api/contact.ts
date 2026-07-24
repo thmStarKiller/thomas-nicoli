@@ -1,157 +1,200 @@
-interface Env {
-  RESEND_API_KEY?: string;
-  RESEND_TO?: string;
-  MAIL_DOMAIN?: string;
-  RESEND_FROM_EMAIL?: string;
-}
+import {
+  CONTACT_BUDGET_IDS,
+  CONTACT_LIMITS,
+  CONTACT_PACKAGE_IDS,
+  CONTACT_SERVICE_IDS,
+  CONTACT_TIMING_IDS,
+  SUPPORTED_LANGUAGES,
+  isAllowedValue,
+} from "../../src/lib/project-clarity/contracts";
+import {
+  HttpError,
+  assertSameOrigin,
+  cleanMultiline,
+  cleanSingleLine,
+  escapeHtml,
+  isEmail,
+  isHttpUrl,
+  jsonResponse,
+  neutralizeMarkup,
+  readBoundedBody,
+  requestIp,
+} from "../_lib/http";
+import { enforceRateLimit } from "../_lib/rate-limit";
+import { verifyTurnstile } from "../_lib/turnstile";
+import type { BaseEnv } from "../_lib/types";
 
-interface ContactPayload {
-  name?: unknown;
-  businessName?: unknown;
-  email?: unknown;
-  service?: unknown;
-  budget?: unknown;
-  message?: unknown;
-  consent?: unknown;
-  company?: unknown;
-  formStartedAt?: unknown;
-  lang?: unknown;
-}
+type Env = BaseEnv;
 
-interface PagesContext {
-  request: Request;
-  env: Env;
-}
+type HandlerContext = { request: Request; env: Env };
 
-const responseHeaders = {
-  "content-type": "application/json; charset=utf-8",
-  "cache-control": "no-store",
+type ContactInput = {
+  name: string;
+  businessName: string;
+  email: string;
+  website: string;
+  timing: string;
+  location: string;
+  service: string;
+  budget: string;
+  package: string;
+  message: string;
+  locale: string;
+  consent: boolean;
+  company: string;
+  startedAt: number;
+  turnstileToken: string;
 };
 
-function json(body: object, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: responseHeaders });
+const cleanInput = (body: Record<string, unknown>): ContactInput => ({
+  name: cleanSingleLine(body.name, CONTACT_LIMITS.name),
+  businessName: cleanSingleLine(body.businessName, CONTACT_LIMITS.businessName),
+  email: cleanSingleLine(body.email, CONTACT_LIMITS.email).toLowerCase(),
+  website: cleanSingleLine(body.website, CONTACT_LIMITS.website),
+  timing: cleanSingleLine(body.timing, CONTACT_LIMITS.timing),
+  location: cleanSingleLine(body.location, CONTACT_LIMITS.location),
+  service: cleanSingleLine(body.service, CONTACT_LIMITS.service),
+  budget: cleanSingleLine(body.budget, CONTACT_LIMITS.budget),
+  package: cleanSingleLine(body.package, CONTACT_LIMITS.budget),
+  message: cleanMultiline(body.message, CONTACT_LIMITS.message),
+  locale: cleanSingleLine(body.locale, 2),
+  consent: body.consent === true || body.consent === "true" || body.consent === "on",
+  company: cleanSingleLine(body.company, 100),
+  startedAt: Number(body.startedAt ?? 0),
+  turnstileToken: cleanSingleLine(
+    body.turnstileToken ?? body["cf-turnstile-response"],
+    2_048,
+  ),
+});
+
+function validationErrors(input: ContactInput): string[] {
+  const errors: string[] = [];
+  if (input.name.length < 2) errors.push("name");
+  if (!isEmail(input.email)) errors.push("email");
+  if (!isHttpUrl(input.website)) errors.push("website");
+  if (!isAllowedValue(SUPPORTED_LANGUAGES, input.locale)) errors.push("locale");
+  if (!isAllowedValue(CONTACT_SERVICE_IDS, input.service)) errors.push("service");
+  if (!isAllowedValue(CONTACT_BUDGET_IDS, input.budget)) errors.push("budget");
+  if (!isAllowedValue(CONTACT_PACKAGE_IDS, input.package)) errors.push("package");
+  if (!isAllowedValue(CONTACT_TIMING_IDS, input.timing)) errors.push("timing");
+  if (input.message.length < 20) errors.push("message");
+  if (!input.consent) errors.push("consent");
+  return errors;
 }
 
-function text(value: unknown, maxLength: number): string {
-  return typeof value === "string" ? value.trim().slice(0, maxLength + 1) : "";
+function textLine(label: string, value: string): string {
+  return `${label}: ${neutralizeMarkup(value) || "—"}`;
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-export async function onRequestPost({ request, env }: PagesContext): Promise<Response> {
-  let payload: ContactPayload;
+export async function handleContact(
+  context: HandlerContext,
+  dependencies: { fetcher?: typeof fetch; now?: number } = {},
+): Promise<Response> {
   try {
-    const input = await request.json();
-    if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("Invalid body");
-    payload = input as ContactPayload;
-  } catch {
-    return json({ ok: false, error: "invalid_json" }, 400);
-  }
+    assertSameOrigin(context.request);
+    const body = await readBoundedBody(context.request, CONTACT_LIMITS.bodyBytes);
+    const input = cleanInput(body);
 
-  const name = text(payload.name, 120);
-  const businessName = text(payload.businessName, 160);
-  const email = text(payload.email, 200);
-  const service = text(payload.service, 120);
-  const budget = text(payload.budget, 60);
-  const message = text(payload.message, 5000);
-  const company = text(payload.company, 200);
-  const lang = ["es", "en", "fr"].includes(String(payload.lang)) ? String(payload.lang) : "es";
-  const fields: string[] = [];
+    if (input.company) return jsonResponse({ ok: true });
 
-  if (name.length < 2 || name.length > 120) fields.push("name");
-  if (email.length > 200 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) fields.push("email");
-  if (message.length < 20 || message.length > 5000) fields.push("message");
-  if (payload.consent !== true) fields.push("consent");
-  if (businessName.length > 160) fields.push("businessName");
-  if (service.length > 120) fields.push("service");
-  if (budget.length > 60) fields.push("budget");
+    const now = dependencies.now ?? Date.now();
+    if (input.startedAt && now - input.startedAt < 1_200) {
+      return jsonResponse({ ok: false, error: "too_fast" }, 400);
+    }
 
-  if (fields.length) return json({ ok: false, error: "validation", fields }, 400);
+    const errors = validationErrors(input);
+    if (errors.length) return jsonResponse({ ok: false, error: "invalid_fields", fields: errors }, 400);
 
-  // Honeypot and timing trap: accept silently so automated submitters get no signal.
-  const startedAt = Number(payload.formStartedAt ?? 0);
-  if (company || (startedAt > 0 && Date.now() - startedAt < 1500)) {
-    return json({ ok: true, delivered: false });
-  }
+    const url = new URL(context.request.url);
+    await verifyTurnstile({
+      secret: context.env.TURNSTILE_SECRET_KEY,
+      token: input.turnstileToken,
+      remoteIp: requestIp(context.request),
+      expectedHostname: url.hostname,
+      expectedAction: "contact",
+      fetcher: dependencies.fetcher,
+    });
 
-  const apiKey = env.RESEND_API_KEY?.trim();
-  const recipient = env.RESEND_TO?.trim();
-  const domain = env.MAIL_DOMAIN?.trim();
-  const from =
-    env.RESEND_FROM_EMAIL?.trim() ||
-    (domain ? `Leads <noreply@${domain}>` : "Thomas Nicoli Consulting <onboarding@resend.dev>");
+    await enforceRateLimit({
+      database: context.env.PROJECT_CLARITY_DB,
+      scope: "contact",
+      identity: requestIp(context.request),
+      limit: 5,
+      windowSeconds: 3_600,
+      now: Math.floor(now / 1_000),
+    });
 
-  if (!apiKey || !recipient) {
-    console.error("[contact] RESEND_API_KEY or RESEND_TO is missing.");
-    return json({ ok: false, error: "email_not_configured" }, 503);
-  }
+    if (!context.env.RESEND_API_KEY || !context.env.RESEND_TO) {
+      throw new HttpError(503, "email_not_configured");
+    }
 
-  const subjectName = name.replace(/[\r\n]+/g, " ");
-  const rows = [
-    ["Name", name],
-    ["Business", businessName],
-    ["Email", email],
-    ["Service", service],
-    ["Budget", budget],
-    ["Language", lang.toUpperCase()],
-  ].filter(([, value]) => value);
-  const plainText = [
-    `New website enquiry (${lang})`,
-    "",
-    ...rows.map(([label, value]) => `${label}: ${value}`),
-    "",
-    "Message:",
-    message,
-  ].join("\n");
-  const html = `
-    <div style="background:#f4f1ea;padding:32px;color:#121215;font-family:Arial,sans-serif">
-      <div style="max-width:640px;margin:auto;background:#fff;padding:32px;border-top:6px solid #1f3be0">
-        <p style="margin:0 0 8px;color:#1f3be0;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">Thomas Nicoli Consulting</p>
-        <h1 style="margin:0 0 28px;font-size:28px">New website enquiry</h1>
-        <table role="presentation" style="border-collapse:collapse;font-size:14px">
-          ${rows
-            .map(
-              ([label, value]) =>
-                `<tr><td style="padding:5px 20px 5px 0;color:#666">${label}</td><td style="padding:5px 0">${escapeHtml(value)}</td></tr>`,
-            )
-            .join("")}
-        </table>
-        <div style="margin-top:28px;padding:20px;background:#f4f1ea;white-space:pre-wrap;font-size:15px;line-height:1.6">${escapeHtml(message)}</div>
-      </div>
-    </div>`;
+    const from = context.env.RESEND_FROM_EMAIL?.trim()
+      || (context.env.MAIL_DOMAIN?.trim()
+        ? `Thomas Nicoli Consulting <bonjour@${context.env.MAIL_DOMAIN.trim()}>`
+        : "Thomas Nicoli Consulting <onboarding@resend.dev>");
 
-  try {
-    const resendResponse = await fetch("https://api.resend.com/emails", {
+    const subject = `Website enquiry — ${input.name}`;
+    const safeMessage = escapeHtml(input.message).replace(/\n/g, "<br />");
+    const html = `
+      <div style="font-family:Inter,Arial,sans-serif;color:#121215;line-height:1.55">
+        <h1 style="font-size:22px">New website enquiry</h1>
+        <p><strong>Name:</strong> ${escapeHtml(input.name)}</p>
+        <p><strong>Business:</strong> ${escapeHtml(input.businessName || "—")}</p>
+        <p><strong>Email:</strong> ${escapeHtml(input.email)}</p>
+        <p><strong>Website:</strong> ${escapeHtml(input.website || "—")}</p>
+        <p><strong>Timing:</strong> ${escapeHtml(input.timing || "—")}</p>
+        <p><strong>City / country:</strong> ${escapeHtml(input.location || "—")}</p>
+        <p><strong>Service:</strong> ${escapeHtml(input.service)}</p>
+        <p><strong>Budget:</strong> ${escapeHtml(input.budget || "—")}</p>
+        <p><strong>Package:</strong> ${escapeHtml(input.package || "—")}</p>
+        <p><strong>Language:</strong> ${escapeHtml(input.locale)}</p>
+        <hr style="border:0;border-top:1px solid #ddd" />
+        <p>${safeMessage}</p>
+      </div>`;
+    const text = [
+      "New website enquiry",
+      textLine("Name", input.name),
+      textLine("Business", input.businessName),
+      textLine("Email", input.email),
+      textLine("Website", input.website),
+      textLine("Timing", input.timing),
+      textLine("City / country", input.location),
+      textLine("Service", input.service),
+      textLine("Budget", input.budget),
+      textLine("Package", input.package),
+      textLine("Language", input.locale),
+      "",
+      neutralizeMarkup(input.message),
+    ].join("\n");
+
+    const response = await (dependencies.fetcher ?? fetch)("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        authorization: `Bearer ${apiKey}`,
+        authorization: `Bearer ${context.env.RESEND_API_KEY}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({
         from,
-        to: [recipient],
-        reply_to: email,
-        subject: `Website enquiry — ${subjectName}${businessName ? ` (${businessName})` : ""}`,
-        text: plainText,
+        to: [context.env.RESEND_TO],
+        reply_to: input.email,
+        subject,
         html,
+        text,
       }),
     });
+    if (!response.ok) throw new HttpError(502, "email_delivery_failed");
 
-    if (!resendResponse.ok) {
-      console.error(`[contact] Resend returned HTTP ${resendResponse.status}.`);
-      return json({ ok: false, error: "email_delivery_failed" }, 502);
+    return jsonResponse({ ok: true, delivered: true });
+  } catch (error) {
+    if (error instanceof HttpError) {
+      return jsonResponse({ ok: false, error: error.code }, error.status);
     }
-
-    return json({ ok: true, delivered: true });
-  } catch {
-    console.error("[contact] Resend request failed.");
-    return json({ ok: false, error: "email_delivery_failed" }, 502);
+    return jsonResponse({ ok: false, error: "server_error" }, 500);
   }
 }
+
+export const onRequestPost = (context: { request: Request; env: Env }) =>
+  handleContact(context);
+
+export const onRequestOptions = () =>
+  new Response(null, { status: 405, headers: { allow: "POST" } });

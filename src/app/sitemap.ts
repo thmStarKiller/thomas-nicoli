@@ -4,7 +4,16 @@ import { absoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-const STATIC_PATHS = ["/", "/services", "/work", "/about", "/contact", "/privacy", "/legal"];
+const STATIC_PATHS = [
+  "/",
+  "/services",
+  "/work",
+  "/about",
+  "/contact",
+  "/project-clarity",
+  "/privacy",
+  "/legal",
+];
 const STUDY_SLUGS = ["aurea-studio", "casa-nomada", "atelier-vela"];
 
 export default function sitemap(): MetadataRoute.Sitemap {

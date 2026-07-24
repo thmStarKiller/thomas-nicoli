@@ -8,6 +8,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { siteConfig } from "@/content/site-config";
 import { localePath, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
+import { getProjectClarityCopy } from "@/i18n/project-clarity";
 import { cn } from "@/lib/cn";
 import { LanguageSwitcher } from "./language-switcher";
 
@@ -22,6 +23,7 @@ export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
     { label: dict.nav.services, href: localePath(lang, "/services") },
     { label: dict.nav.work, href: localePath(lang, "/work") },
     { label: dict.nav.about, href: localePath(lang, "/about") },
+    { label: getProjectClarityCopy(lang).nav, href: localePath(lang, "/project-clarity") },
     { label: dict.nav.contact, href: localePath(lang, "/contact") },
   ];
 

@@ -1,0 +1,11 @@
+import type { Locale } from "./config";
+
+const copy = {
+  es: { verifiedEyebrow: "Build verificado", verifiedTitle: "En producción y revisable", verifiedNote: "Un build público con estado, alcance y enlace comprobables; sin atribuir resultados comerciales.", verifiedStatus: "Live · ES/EN/FR", toolsEyebrow: "Herramientas profesionales", toolsTitle: "Builds privados, descritos sin datos sensibles", toolsNote: "Se muestra el problema, el papel y la salida. Código, datos y contextos de cliente permanecen privados.", toolStatus: "Descripción saneada · sin enlace público", archiveTitle: "Studio Lab / archivo opcional", archiveNote: "Exploraciones visuales y 3D solo cuando aclaran una decisión y siempre con un fallback equivalente.", archiveCta: "Ver Studio Lab" },
+  en: { verifiedEyebrow: "Verified build", verifiedTitle: "Live and reviewable", verifiedNote: "A public build with a checkable status, scope and link; no commercial outcome is implied.", verifiedStatus: "Live · ES/EN/FR", toolsEyebrow: "Professional tools", toolsTitle: "Private builds, described without sensitive data", toolsNote: "The problem, role and output are visible. Code, data and client context remain private.", toolStatus: "Sanitised description · no public link", archiveTitle: "Optional Studio Lab / archive", archiveNote: "Visual and 3D explorations only when they clarify a decision, always with an equivalent fallback.", archiveCta: "View Studio Lab" },
+  fr: { verifiedEyebrow: "Build vérifié", verifiedTitle: "En ligne et vérifiable", verifiedNote: "Un build public dont le statut, le périmètre et le lien sont vérifiables, sans sous-entendre de résultat commercial.", verifiedStatus: "En ligne · ES/EN/FR", toolsEyebrow: "Outils professionnels", toolsTitle: "Builds privés, décrits sans données sensibles", toolsNote: "Le problème, le rôle et la sortie sont visibles. Le code, les données et le contexte client restent privés.", toolStatus: "Description assainie · aucun lien public", archiveTitle: "Studio Lab / archive optionnelle", archiveNote: "Explorations visuelles et 3D uniquement lorsqu’elles clarifient une décision, toujours avec un fallback équivalent.", archiveCta: "Voir Studio Lab" },
+} as const;
+
+export function getWorkHierarchyCopy(lang: Locale) {
+  return copy[lang];
+}

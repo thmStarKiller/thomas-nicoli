@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { getDictionary } from "@/i18n";
 import { hasLocale, localePath } from "@/i18n/config";
+import { getWorkHierarchyCopy } from "@/i18n/work-additions";
 import { pageMetadata } from "@/lib/seo";
 import { TextReveal } from "@/components/motion/text-reveal";
 import { Reveal } from "@/components/ui/reveal";
@@ -15,6 +16,56 @@ const COVERS: Record<string, string> = {
   "casa-nomada": "/visuals/concept-casa.svg",
   "atelier-vela": "/visuals/concept-atelier.svg",
 };
+
+type WorkProject = {
+  readonly name: string;
+  readonly type: string;
+  readonly description: string;
+  readonly contribution: string;
+  readonly tags: readonly string[];
+  readonly url?: string;
+};
+
+function WorkProjectCard({
+  project,
+  contributionLabel,
+  evidence,
+  index,
+}: {
+  project: WorkProject;
+  contributionLabel: string;
+  evidence: string;
+  index: number;
+}) {
+  return (
+    <Reveal delay={index * 0.06}>
+      <article className="group border-t border-porcelain/15 pt-7 transition-colors duration-500 hover:border-cobalt-bright">
+        <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-cobalt-bright/75">
+          {project.type}
+        </p>
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-display text-2xl font-semibold">{project.name}</h3>
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={project.name} className="flex size-10 shrink-0 items-center justify-center rounded-full border border-porcelain/20 transition-all duration-300 hover:border-cobalt-bright hover:bg-cobalt">
+              <ArrowUpRight className="size-4" />
+            </a>
+          )}
+        </div>
+        <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-porcelain/40">{evidence}</p>
+        <p className="mt-4 max-w-md text-[14.5px] leading-relaxed text-porcelain/55">{project.description}</p>
+        <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-porcelain/65">
+          <span className="font-medium text-porcelain/85">{contributionLabel}: </span>
+          {project.contribution}
+        </p>
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <li key={tag} className="rounded-full border border-porcelain/15 px-3.5 py-1 font-mono text-[10.5px] uppercase tracking-[0.14em] text-porcelain/50">{tag}</li>
+          ))}
+        </ul>
+      </article>
+    </Reveal>
+  );
+}
 
 export async function generateMetadata({
   params,
@@ -40,6 +91,11 @@ export default async function WorkPage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const hierarchy = getWorkHierarchyCopy(lang);
+  const verifiedBuilds = dict.labProjects.filter(
+    (project) => "url" in project && Boolean(project.url),
+  );
+  const professionalTools = dict.labProjects.filter((project) => !("url" in project));
 
   return (
     <>
@@ -66,57 +122,47 @@ export default async function WorkPage({
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="mb-14">
             <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.24em] text-porcelain/50">
-              {dict.workSection.labTitle}
+              {hierarchy.verifiedEyebrow}
             </p>
             <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
-              {dict.common.realWork}
+              {hierarchy.verifiedTitle}
             </h2>
             <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-porcelain/55">
-              {dict.workSection.labNote}
+              {hierarchy.verifiedNote}
             </p>
           </div>
           <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2">
-            {dict.labProjects.map((project, i) => (
-              <Reveal key={project.name} delay={i * 0.06}>
-                <div className="group border-t border-porcelain/15 pt-7 transition-colors duration-500 hover:border-cobalt-bright">
-                  <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-cobalt-bright/75">
-                    {project.type}
-                  </p>
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-2xl font-semibold">{project.name}</h3>
-                    {"url" in project && project.url && (
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={project.name}
-                        className="flex size-10 shrink-0 items-center justify-center rounded-full border border-porcelain/20 transition-all duration-300 hover:border-cobalt-bright hover:bg-cobalt"
-                      >
-                        <ArrowUpRight className="size-4" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-porcelain/55">
-                    {project.description}
-                  </p>
-                  <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-porcelain/65">
-                    <span className="font-medium text-porcelain/85">
-                      {dict.workPage.contributionLabel}:{" "}
-                    </span>
-                    {project.contribution}
-                  </p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="rounded-full border border-porcelain/15 px-3.5 py-1 font-mono text-[10.5px] uppercase tracking-[0.14em] text-porcelain/50"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
+            {verifiedBuilds.map((project, index) => (
+              <WorkProjectCard
+                key={project.name}
+                project={project}
+                contributionLabel={dict.workPage.contributionLabel}
+                evidence={hierarchy.verifiedStatus}
+                index={index}
+              />
+            ))}
+          </div>
+
+          <div className="mb-14 mt-24 border-t border-porcelain/10 pt-16">
+            <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.24em] text-porcelain/50">
+              {hierarchy.toolsEyebrow}
+            </p>
+            <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+              {hierarchy.toolsTitle}
+            </h2>
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-porcelain/55">
+              {hierarchy.toolsNote}
+            </p>
+          </div>
+          <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2">
+            {professionalTools.map((project, index) => (
+              <WorkProjectCard
+                key={project.name}
+                project={project}
+                contributionLabel={dict.workPage.contributionLabel}
+                evidence={hierarchy.toolStatus}
+                index={index}
+              />
             ))}
           </div>
         </div>
@@ -174,6 +220,17 @@ export default async function WorkPage({
               </Link>
             </Reveal>
           ))}
+
+          <Reveal>
+            <aside className="rounded-2xl border border-graphite/12 bg-porcelain-deep/55 p-8 sm:p-10">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cobalt">04 · Studio Lab</p>
+              <h2 className="mt-4 font-display text-3xl font-semibold">{hierarchy.archiveTitle}</h2>
+              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-graphite/65">{hierarchy.archiveNote}</p>
+              <Link href={`${localePath(lang, "/services")}#studio-lab`} className="mt-7 inline-flex items-center gap-2 font-medium text-cobalt">
+                {hierarchy.archiveCta}<ArrowUpRight className="size-4" />
+              </Link>
+            </aside>
+          </Reveal>
         </div>
       </section>
     </>

@@ -1,0 +1,256 @@
+Project Clarity final local matrix UTC: 2026-07-24T02:33:15Z
+
+LOCK_BEFORE 18faadb02b6d00fe35df3183aa520c74f67ecc6caf70b1a50e7ee79f6bb3be03
+
+$ npm ci
+npm warn deprecated tsconfck@3.1.6: unmaintained
+
+added 540 packages, and audited 541 packages in 2m
+
+173 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+LOCK_AFTER 18faadb02b6d00fe35df3183aa520c74f67ecc6caf70b1a50e7ee79f6bb3be03
+
+$ npm run lint
+
+> thomas-website@0.1.0 lint
+> eslint
+
+
+$ npm run typecheck
+
+> thomas-website@0.1.0 typecheck
+> tsc --noEmit
+
+
+$ npm test
+
+> thomas-website@0.1.0 test
+> vitest run
+
+[33mThe plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the [1mresolve.tsconfigPaths[22m option. You can remove the plugin and set [1mresolve.tsconfigPaths: true[22m in your Vite config instead.[39m
+
+ RUN  v4.1.10 [REPOSITORY]
+
+ [32m✓[39m tests/functions/security.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m tests/worker/security.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 04:36:10
+[2m   Duration [22m 12.77s[2m (transform 787ms, setup 3.87s, import 1.90s, tests 286ms, environment 17.36s)[22m
+
+
+$ npm run build
+
+> thomas-website@0.1.0 build
+> next build
+
+▲ Next.js 16.2.11 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 15.4s
+  Running TypeScript ...
+  Finished TypeScript in 16.9s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/52) ...
+  Generating static pages using 15 workers (13/52)
+  Generating static pages using 15 workers (26/52)
+  Generating static pages using 15 workers (39/52)
+✓ Generating static pages using 15 workers (52/52) in 3.3s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /_not-found
+├ ● /[lang]
+│ ├ /es
+│ ├ /en
+│ └ /fr
+├ ● /[lang]/about
+│ ├ /es/about
+│ ├ /en/about
+│ └ /fr/about
+├ ● /[lang]/contact
+│ ├ /es/contact
+│ ├ /en/contact
+│ └ /fr/contact
+├ ● /[lang]/legal
+│ ├ /es/legal
+│ ├ /en/legal
+│ └ /fr/legal
+├ ● /-/opengraph-image
+│ ├ /es/opengraph-image
+│ ├ /en/opengraph-image
+│ └ /fr/opengraph-image
+├ ● /[lang]/privacy
+│ ├ /es/privacy
+│ ├ /en/privacy
+│ └ /fr/privacy
+├ ● /[lang]/project-clarity
+│ ├ /es/project-clarity
+│ ├ /en/project-clarity
+│ └ /fr/project-clarity
+├ ● /[lang]/project-clarity/[route]
+│ ├ /es/project-clarity/independent
+│ ├ /es/project-clarity/digital-team
+│ ├ /es/project-clarity/unsure
+│ └ [+6 more paths]
+├ ● /[lang]/services
+│ ├ /es/services
+│ ├ /en/services
+│ └ /fr/services
+├ ● /[lang]/work
+│ ├ /es/work
+│ ├ /en/work
+│ └ /fr/work
+├ ● /[lang]/work/[slug]
+│ ├ /es/work/aurea-studio
+│ ├ /es/work/casa-nomada
+│ ├ /es/work/atelier-vela
+│ └ [+6 more paths]
+├ ○ /apple-icon.png
+├ ○ /icon.svg
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+
+$ npm run pages:build
+
+> thomas-website@0.1.0 pages:build
+> node scripts/build-cloudflare.mjs
+
+▲ Next.js 16.2.11 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 10.5s
+  Running TypeScript ...
+  Finished TypeScript in 14.9s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/52) ...
+  Generating static pages using 15 workers (13/52)
+  Generating static pages using 15 workers (26/52)
+  Generating static pages using 15 workers (39/52)
+✓ Generating static pages using 15 workers (52/52) in 3.0s
+  Finalizing page optimization ...
+⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
+This command is meant for static-only hosts, and is not necessary to make your application static.
+Pages in your application without server-side data dependencies will be automatically statically exported by `next build`, including pages powered by `getStaticProps`.
+Learn more: https://nextjs.org/docs/messages/api-routes-static-export
+
+Route (app)
+┌ ○ /_not-found
+├ ● /[lang]
+│ ├ /es
+│ ├ /en
+│ └ /fr
+├ ● /[lang]/about
+│ ├ /es/about
+│ ├ /en/about
+│ └ /fr/about
+├ ● /[lang]/contact
+│ ├ /es/contact
+│ ├ /en/contact
+│ └ /fr/contact
+├ ● /[lang]/legal
+│ ├ /es/legal
+│ ├ /en/legal
+│ └ /fr/legal
+├ ● /-/opengraph-image
+│ ├ /es/opengraph-image
+│ ├ /en/opengraph-image
+│ └ /fr/opengraph-image
+├ ● /[lang]/privacy
+│ ├ /es/privacy
+│ ├ /en/privacy
+│ └ /fr/privacy
+├ ● /[lang]/project-clarity
+│ ├ /es/project-clarity
+│ ├ /en/project-clarity
+│ └ /fr/project-clarity
+├ ● /[lang]/project-clarity/[route]
+│ ├ /es/project-clarity/independent
+│ ├ /es/project-clarity/digital-team
+│ ├ /es/project-clarity/unsure
+│ └ [+6 more paths]
+├ ● /[lang]/services
+│ ├ /es/services
+│ ├ /en/services
+│ └ /fr/services
+├ ● /[lang]/work
+│ ├ /es/work
+│ ├ /en/work
+│ └ /fr/work
+├ ● /[lang]/work/[slug]
+│ ├ /es/work/aurea-studio
+│ ├ /es/work/casa-nomada
+│ ├ /es/work/atelier-vela
+│ └ [+6 more paths]
+├ ○ /apple-icon.png
+├ ○ /icon.svg
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+Created 100 flattened Next.js RSC aliases
+Cloudflare Pages output prepared at [REPOSITORY]/.vercel/output/static
+
+$ npm audit --audit-level=moderate
+found 0 vulnerabilities
+
+$ git status --short --branch
+## feature/project-clarity
+ M .env.example
+ M functions/api/contact.ts
+ M package-lock.json
+ M package.json
+ M scripts/build-cloudflare.mjs
+ M src/app/[lang]/contact/page.tsx
+ M src/app/[lang]/page.tsx
+ M src/app/[lang]/privacy/page.tsx
+ M src/app/[lang]/services/page.tsx
+ M src/app/[lang]/work/page.tsx
+ M src/app/sitemap.ts
+ M src/components/forms/contact-form.tsx
+ M src/components/layout/header.tsx
+ M src/components/motion/image-reveal.tsx
+ M src/components/motion/split-words.tsx
+ M src/components/motion/text-reveal.tsx
+ M src/components/three/hero-scene.tsx
+ M src/components/ui/reveal.tsx
+ M src/content/site-config.ts
+ M src/i18n/dictionaries/es.ts
+ M wrangler.toml
+?? docs/evidence/
+?? docs/plans/
+?? docs/project-clarity/
+?? functions/_lib/
+?? functions/api/project-clarity/
+?? migrations/
+?? public/_headers
+?? scripts/project-clarity-browser-qa.mjs
+?? src/app/[lang]/project-clarity/
+?? src/components/forms/project-clarity-form.tsx
+?? src/components/forms/turnstile-widget.tsx
+?? src/components/sections/buyer-paths.tsx
+?? src/components/sections/project-clarity-page.tsx
+?? src/i18n/privacy-additions.ts
+?? src/i18n/project-clarity.ts
+?? src/i18n/service-additions.ts
+?? src/i18n/work-additions.ts
+?? src/lib/project-clarity/
+?? tests/
+?? tools/
+?? vitest.config.mts
