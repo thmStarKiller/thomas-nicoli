@@ -16,9 +16,11 @@ declare global {
 export function TurnstileWidget({
   action,
   onToken,
+  onError,
 }: {
   action: "contact" | "project_clarity";
   onToken: (token: string) => void;
+  onError?: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
@@ -33,14 +35,14 @@ export function TurnstileWidget({
       theme: "light",
       size: "flexible",
       callback: (token: string) => onToken(token),
-      "expired-callback": () => onToken(""),
-      "error-callback": () => onToken(""),
+      "expired-callback": () => { onToken(""); onError?.(); },
+      "error-callback": () => { onToken(""); onError?.(); },
     });
     return () => {
       if (widgetId.current && window.turnstile) window.turnstile.remove(widgetId.current);
       widgetId.current = null;
     };
-  }, [action, onToken, ready, siteKey]);
+  }, [action, onError, onToken, ready, siteKey]);
 
   if (!siteKey) {
     return <p role="status" className="text-sm text-graphite/60">Turnstile is not configured.</p>;

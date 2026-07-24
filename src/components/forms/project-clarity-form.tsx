@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { Locale } from "@/i18n/config";
@@ -95,6 +95,12 @@ export function ProjectClarityForm({
   const [confirmation, setConfirmation] = useState<Confirmation>();
   const headingRef = useRef<HTMLLegendElement>(null);
   const idempotencyKey = useRef<string | null>(null);
+
+  const handleTurnstileToken = useCallback((token: string) => {
+    setTurnstileToken(token);
+    if (token) setError("");
+  }, []);
+  const handleTurnstileError = useCallback(() => setError("turnstile"), []);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -313,7 +319,16 @@ export function ProjectClarityForm({
               <span>{copy.consentPending} <Link className="underline" href={`/${lang}/privacy`}>{copy.privacyLink}</Link></span>
             </label>
           </div>
-          {legalReady && <div className="mt-6"><TurnstileWidget action="project_clarity" onToken={setTurnstileToken} /></div>}
+          {legalReady && (
+            <div className="mt-6">
+              <TurnstileWidget
+                action="project_clarity"
+                onToken={handleTurnstileToken}
+                onError={handleTurnstileError}
+              />
+              {error === "turnstile" && <p role="alert" className="mt-2 text-sm text-red-700">{copy.turnstileError}</p>}
+            </div>
+          )}
           {!legalReady && (
             <div role="status" className="mt-6 rounded-2xl border border-cobalt/25 bg-cobalt/5 p-5">
               <h3 className="font-semibold text-cobalt">{copy.checkpointTitle}</h3>
