@@ -52,6 +52,7 @@ export function TurnstileWidget({
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
         strategy="afterInteractive"
         onLoad={() => setReady(true)}
+        onReady={() => setReady(true)}
       />
       <div ref={container} className="min-h-[65px]" />
     </>
