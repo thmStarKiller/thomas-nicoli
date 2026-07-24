@@ -186,8 +186,39 @@ Evidence:
 ## Cloudflare preview resources prepared
 
 - D1 `project-clarity-preview`, region WEUR, ID `12884390-e178-4cff-a336-88b63007a81f`; three migration queries applied successfully.
-- Turnstile widget `Project Clarity thomas-nicoli`, managed mode, one Pages hostname, no pre-clearance.
+- Turnstile widget `Project Clarity thomas-nicoli`, managed mode, two Pages hostnames (project root and stable Preview alias), no pre-clearance.
 - Preview variables contain only the public site key, three false release flags and encrypted `TURNSTILE_SECRET_KEY`.
 - Preview binding `PROJECT_CLARITY_DB` points to `project-clarity-preview`.
 - Legacy Preview variables `DEFAULT_LOCALE`, `GEMINI_MODEL`, plain-text `GOOGLE_API_KEY` and `SITE_URL` were removed without reading their hidden values.
 - Production received only the encrypted Turnstile secret; no production deployment occurred and the live custom domain remains on `24e5b68`.
+
+## 2026-07-24T04:02Z — Cloudflare Preview verification
+
+Deployment:
+
+- branch alias: `https://feature-project-clarity.thomas-nicoli.pages.dev`;
+- verified source commit: `1216ec0`;
+- deployment ID: `410fd2b6-c892-49ab-a2c3-8f6b83b92da3`;
+- immutable deployment URL: `https://410fd2b6.thomas-nicoli.pages.dev`;
+- Pages Functions compiled and uploaded successfully with `nodejs_compat` from `wrangler.toml`.
+
+Results:
+
+- 24/24 ES/EN/FR routes returned HTTP 200;
+- wrong-origin Project Clarity write returned 403 `origin_rejected`;
+- same-origin Project Clarity write returned 503 `legal_checkpoint`;
+- contact without Turnstile returned 400 `turnstile_required`;
+- deliberately invalid Turnstile returned 400 `turnstile_invalid`;
+- private write responses contained no CORS allow-origin header;
+- browser matrix passed 12/12 Preview pages with no overflow, app error or missing RSC resource;
+- managed Turnstile mounted on all three contact routes; no submission was attempted;
+- Preview headers include tested CSP, HSTS, Permissions Policy, frame protection, strict referrer policy, nosniff, COOP and CORP.
+
+The first Preview browser run found Cloudflare Web Analytics blocked by CSP. Commit `8eefd9b` added only the exercised Cloudflare Analytics script/connect origins. The next run had no application or CSP errors. Commit `1216ec0` added the `next/script` `onReady` lifecycle needed when Turnstile loads before React hydration.
+
+Production checkpoint evidence:
+
+- `origin/main` remains `24e5b68f23512526e0f2f8ccdb1d3ee9c7707796`;
+- `https://thomas-nicoli.com/es/project-clarity` returns 404;
+- the custom domain still lacks the new security-header set, as documented in `PRODUCTION_HEADER_REPORT.md`;
+- no custom-domain promotion occurred.

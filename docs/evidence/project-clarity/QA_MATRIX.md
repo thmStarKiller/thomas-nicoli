@@ -9,24 +9,25 @@ Evidence captured 2026-07-24 UTC. Secret values are omitted.
 | Static checks | `npm run lint`; `npm run typecheck` | 03:18 | Exit 0 | Pass | `final-exact-source-gates.txt`; terminal verification |
 | Production build | `npm run pages:build` | 03:16 | Exit 0; static output + Functions source | Pass; 52 static pages, 100 RSC aliases | `final-exact-source-gates.txt` |
 | Unit/integration | `npm test` | 03:18 | All pass | 15/15 pass | Vitest output; `tests/functions/security.test.ts`; `tests/worker/security.test.ts` |
-| Wrong origin | Handler test + Wrangler POST with `Origin: https://example.com` | local QA | 403 before other work | 403 `origin_rejected`; network spy 0 calls | Vitest test; implementation log |
-| Missing/invalid control token | Contact handler with missing token and Siteverify failure stub | local QA | Rejected, no queue/email | 400; no Resend/queue work | `tests/functions/security.test.ts` |
+| Wrong origin | Handler test + Preview POST with `Origin: https://example.com` | local + 03:43 Preview | 403 before other work | 403 `origin_rejected`; network spy 0 calls; no CORS header | Vitest; `PREVIEW_REPORT.md` |
+| Missing/invalid control token | Handler test + Preview contact POST missing token then deliberately invalid token | local + 03:43 Preview | Rejected, no queue/email | 400 `turnstile_required`; 400 `turnstile_invalid`; no Resend/queue work | tests; `PREVIEW_REPORT.md` |
 | Body/value bounds | Malformed JSON, `Content-Length: 20000`, unknown locale/service/package | local QA | 400/413, no email/queue | Pass | `tests/functions/security.test.ts` |
 | Injection/escaping | `<script>` + `ignore previous instructions` in contact and diagnostic | local QA + actual Gemma run | Escaped/neutralised; prompt unchanged | Pass; `[script removed]` in note, no script in report | tests; lead note SHA-256 `70359e…`; `final-exact-source-gates.txt` |
 | Duplicate | Same idempotency key twice against in-memory D1 | local QA | One lead, one notification | Pass; one D1 row, one Resend call | `tests/functions/security.test.ts` |
 | Cross-lead isolation | Two unique lead canaries, two analyses | local QA | No cross-canary | Pass | `tests/worker/security.test.ts` |
 | Persona isolation | Adult/persona canary in synthetic personal-vault fixture | local QA | Canary absent; equal path refused | Pass | `tests/worker/security.test.ts` |
 | Invalid model output | Ollama stub: malformed then schema-invalid JSON | local QA | One retry max, no partial draft | Pass; 2 calls then `InvalidModelOutputError` | `tests/worker/security.test.ts` |
-| Worker offline | Queue handler with no local worker process | local QA | 202 + stable reference | Pass; `PC-20260724-AABBCCDD` | `tests/functions/security.test.ts` |
+| Worker offline | Queue handler with no local worker process; public Preview feature flag off | local QA + Preview | Enabled test environment returns 202 + stable reference; public Preview must remain legally blocked | Pass locally with `PC-20260724-AABBCCDD`; Preview returns 503 `legal_checkpoint` before queueing | tests; `PREVIEW_REPORT.md` |
 | Email safety | Actual `gemma4-local` fixture through worker | 02:21 | Draft reopened/verified; nothing sent | Six checks true; `X-Unsent: 1`; `.invalid` recipient | EML SHA-256 `f86496…`; lead vault paths in implementation log |
 | Retention | `npm run clarity:retention` | local QA | Candidate list only, no mutation | `destructive:false`, `candidates:[]`; unit fixture also proves existing file remains | terminal output; `tests/worker/security.test.ts` |
-| Browser matrix | `node scripts/project-clarity-browser-qa.mjs` | local QA | ES/EN/FR × 375/768/1280; no overflow/errors | Pass; 9 responsive + 3 no-JS captures | `screenshots/local/browser-results.json` SHA-256 `f02976…` |
+| Browser matrix | `node scripts/project-clarity-browser-qa.mjs` against local and branch alias | local + real Preview | ES/EN/FR × 375/768/1280; no overflow/errors | Pass twice; real Preview 9 responsive + 3 no-JS captures | `screenshots/preview/browser-results.json`; `PREVIEW_REPORT.md` |
 | Keyboard/reduced motion | Playwright: focus + keyboard typing/Enter, `reducedMotion:'reduce'` | local QA | Complete six questions without mouse | Pass | browser harness + result JSON |
 | No-JS/slow JS | Playwright `javaScriptEnabled:false`; delayed hydration detection | local QA | Services visible; email fallback visible | Pass; server Suspense fallback fixed and visually reviewed | `screenshots/local/*-375-no-js.png` |
-| Headers | Wrangler local response headers | local QA | CSP, HSTS, Permissions Policy, frame/referrer protection | Pass | implementation log |
-| Public boundary | `netstat -ano` + exact public-output string scan | local QA | 11434/11435 loopback only; no private paths/ports in assets | Pass locally; repeat against preview source after deploy | implementation log; final scan output |
-| Preview routes | ES/EN/FR homepage, services, work, contact, privacy, legal, Project Clarity | pending deployment | 200; correct locale; zero new console errors | Pending commit/deployment | To be appended after preview |
-| Preview headers | `curl -I https://<preview>/es` + Playwright console | pending deployment | All required headers, no CSP violations | Pending commit/deployment | To be appended after preview |
+| Headers | `curl.exe --ssl-no-revoke -I https://feature-project-clarity.thomas-nicoli.pages.dev/es` + Playwright | 04:01 Preview | CSP, HSTS, Permissions Policy, frame/referrer protection | Pass; no application/CSP console errors | `PREVIEW_REPORT.md` |
+| Turnstile path | `node scripts/project-clarity-turnstile-qa.mjs` on ES/EN/FR contact | real Preview | Managed widget mounted; no overflow/app error; no submit | Pass 3/3; headless-only Cloudflare diagnostic counted separately | `screenshots/preview/turnstile-results.json` |
+| Public boundary | `netstat -ano` + exact built-output string scan | local + exact Preview artifact | 11434/11435 loopback only; no private paths/ports/secrets in public assets | Pass; all exact-string hit arrays empty; no tunnel introduced | implementation log; `PREVIEW_REPORT.md` |
+| Preview routes | 24 ES/EN/FR homepage, services, work, contact, privacy, legal, Project Clarity and preselection URLs | 03:42 Preview | 200; correct locale; zero new app/CSP console errors | Pass 24/24; branch alias and immutable URL recorded | `PREVIEW_REPORT.md` |
+| Preview headers | `curl -I` branch alias + Playwright console | 04:01 Preview | All required headers, no CSP violations | Pass after commit `8eefd9b`; first run caught and fixed Web Analytics CSP | `PREVIEW_REPORT.md` |
 | Production promotion | Custom domain smoke check after legal approval only | checkpoint | Exact preview commit promoted | **Blocked intentionally**; production remains `24e5b68` | `docs/project-clarity/LEGAL_CHECKPOINT.md` |
 
 ## Screenshot index
@@ -35,3 +36,6 @@ Evidence captured 2026-07-24 UTC. Secret values are omitted.
 - `screenshots/local/en-375.png`, `en-768.png`, `en-1280.png`
 - `screenshots/local/fr-375.png`, `fr-768.png`, `fr-1280.png`
 - `screenshots/local/es-375-no-js.png`, `en-375-no-js.png`, `fr-375-no-js.png`
+- `screenshots/preview/es-{375,768,1280}.png` and EN/FR equivalents
+- `screenshots/preview/{es,en,fr}-375-no-js.png`
+- `screenshots/preview/{es,en,fr}-contact-turnstile-1280.png`

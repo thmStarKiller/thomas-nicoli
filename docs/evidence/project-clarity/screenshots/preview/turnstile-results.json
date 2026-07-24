@@ -1,0 +1,33 @@
+{
+  "baseUrl": "https://feature-project-clarity.thomas-nicoli.pages.dev",
+  "note": "Cloudflare Turnstile emits an invisible console probe under headless automation; only that exact third-party diagnostic is counted separately.",
+  "results": [
+    {
+      "locale": "es",
+      "status": 200,
+      "widgetId": "cf-chl-widget-[redacted]_response",
+      "overflow": false,
+      "consoleErrors": [],
+      "thirdPartyDiagnosticCount": 2,
+      "screenshot": "docs/evidence/project-clarity/screenshots/preview/es-contact-turnstile-1280.png"
+    },
+    {
+      "locale": "en",
+      "status": 200,
+      "widgetId": "cf-chl-widget-[redacted]_response",
+      "overflow": false,
+      "consoleErrors": [],
+      "thirdPartyDiagnosticCount": 2,
+      "screenshot": "docs/evidence/project-clarity/screenshots/preview/en-contact-turnstile-1280.png"
+    },
+    {
+      "locale": "fr",
+      "status": 200,
+      "widgetId": "cf-chl-widget-[redacted]_response",
+      "overflow": false,
+      "consoleErrors": [],
+      "thirdPartyDiagnosticCount": 0,
+      "screenshot": "docs/evidence/project-clarity/screenshots/preview/fr-contact-turnstile-1280.png"
+    }
+  ]
+}

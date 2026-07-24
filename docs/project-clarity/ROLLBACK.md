@@ -22,4 +22,10 @@
 
 ## Dry-run verification
 
-Before preview release, the feature commit is checked with `git show --binary --format= | git apply --reverse --check` in a temporary worktree. This proves the code patch is mechanically reversible without altering the working checkout. Cloudflare deployment listing is also executed to prove the previous deployment remains available.
+Before final evidence commit, the complete committed diff from `main` (`24e5b68`) to Preview HEAD (`1216ec0`) was checked in a clean temporary worktree with:
+
+```bash
+git diff --binary main...HEAD | git -C <temporary-worktree> apply --reverse --check
+```
+
+Actual result: `ROLLBACK_MAIN_TO_HEAD_DRY_RUN_OK`. The temporary worktree was removed. `npx wrangler pages deployment list --project-name thomas-nicoli` also confirmed that production deployment `11d15775…` and all Preview deployment IDs remain available.
