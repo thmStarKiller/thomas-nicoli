@@ -19,6 +19,10 @@ try {
   const launcher = page.getByTestId("site-chat-launcher");
   await launcher.waitFor({ state: "visible" });
   const orbit = page.getByTestId("site-chat-orbit");
+  await page.waitForFunction(() => {
+    const element = document.querySelector('[data-testid="site-chat-orbit"]');
+    return element && getComputedStyle(element).transform !== "none";
+  });
   const transformA = await orbit.evaluate((element) => getComputedStyle(element).transform);
   await page.waitForTimeout(320);
   const transformB = await orbit.evaluate((element) => getComputedStyle(element).transform);

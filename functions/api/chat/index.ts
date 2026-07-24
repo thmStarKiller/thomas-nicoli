@@ -186,7 +186,7 @@ export async function handleChat(
     }
 
     const aiRunner = dependencies.aiRunner
-      ?? (context.env.AI ? context.env.AI.run.bind(context.env.AI) : undefined);
+      ?? (context.env.AI ? ((model, modelInput) => context.env.AI!.run(model, modelInput)) : undefined);
     if (!aiRunner) throw new HttpError(503, "ai_not_configured");
 
     const turnLock = await database
@@ -206,7 +206,8 @@ export async function handleChat(
     let aiRaw: unknown;
     try {
       aiRaw = await aiRunner(CHAT_MODEL, buildChatModelInput(input));
-    } catch {
+    } catch (error) {
+      console.error("site_chat_ai_error", error instanceof Error ? error.message.slice(0, 300) : "unknown_provider_error");
       await rollbackTurn().catch(() => undefined);
       throw new HttpError(502, "ai_unavailable");
     }
