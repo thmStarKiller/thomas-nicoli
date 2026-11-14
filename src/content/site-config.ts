@@ -40,8 +40,8 @@ export const siteConfig = {
     showPrices: true,
     showEmployerReference: false,
     // Shows dashed "Draft" blocks where content still needs confirming (prices,
-    // client quotes). Set to false before the redesign goes live.
-    showDraftPlaceholders: true,
+    // client quotes). Off on the live site; turn on locally to see what is missing.
+    showDraftPlaceholders: false,
     enableAnalytics: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true",
     experimentalWebGPU: process.env.NEXT_PUBLIC_EXPERIMENTAL_WEBGPU === "true",
   },
