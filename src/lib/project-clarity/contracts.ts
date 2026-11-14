@@ -8,6 +8,14 @@ export const CLARITY_ROUTE_IDS = ["independent", "digital-team", "unsure"] as co
 export type ClarityRouteId = (typeof CLARITY_ROUTE_IDS)[number];
 
 export const CONTACT_SERVICE_IDS = [
+  "ai-opportunity-audit",
+  "ai-lead-response-sprint",
+  "administrative-automation-sprint",
+  "multilingual-ai-website-assistant",
+  "ai-reporting-content-system",
+  "monthly-support",
+  "ai-training",
+  "agency-content",
   "signature-websites",
   "local-visibility",
   "brand-content-systems",

@@ -52,7 +52,7 @@ export function TurnstileWidget({
   }, [action, ready, siteKey]);
 
   if (!siteKey) {
-    return <p role="status" className="text-sm text-graphite/60">Turnstile is not configured.</p>;
+    return <p role="status" className="text-sm text-night/60">Turnstile is not configured.</p>;
   }
 
   return (

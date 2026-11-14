@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
-import { getDictionary } from "@/i18n";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { hasLocale, localePath, locales } from "@/i18n/config";
+import { getSite } from "@/i18n/site";
 import { pageMetadata } from "@/lib/seo";
-import { TextReveal } from "@/components/motion/text-reveal";
-import { Reveal } from "@/components/ui/reveal";
-import { Badge } from "@/components/ui/badge";
-
-const COVERS: Record<string, string> = {
-  "aurea-studio": "/visuals/concept-aurea.svg",
-  "casa-nomada": "/visuals/concept-casa.svg",
-  "atelier-vela": "/visuals/concept-atelier.svg",
-};
+import { FinalCta } from "@/components/sections/final-cta";
+import { Headline, Rule } from "@/components/ui/headline";
+import { Rise } from "@/components/ui/rise";
 
 export function generateStaticParams() {
-  // Slugs are shared across locales (fictional brand names).
-  return locales.flatMap((lang) =>
-    ["aurea-studio", "casa-nomada", "atelier-vela"].map((slug) => ({ lang, slug })),
-  );
+  // Slugs are shared across locales.
+  const slugs = getSite("en").work.cases.map((item) => item.slug);
+  return locales.flatMap((lang) => slugs.map((slug) => ({ lang, slug })));
 }
 
 export async function generateMetadata({
@@ -30,172 +22,153 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang, slug } = await params;
   if (!hasLocale(lang)) return {};
-  const dict = await getDictionary(lang);
-  const study = dict.conceptStudies.find((s) => s.slug === slug);
-  if (!study) return {};
+  const item = getSite(lang).work.cases.find((entry) => entry.slug === slug);
+  if (!item) return {};
   return pageMetadata({
     lang,
     path: `/work/${slug}`,
-    title: `${study.name} — ${dict.common.conceptStudy}`,
-    description: study.summary,
+    title: `${item.title} | ${item.label}`,
+    description: item.summary,
   });
 }
 
-export default async function CaseStudyPage({
+export default async function CasePage({
   params,
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }) {
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang);
-  const study = dict.conceptStudies.find((s) => s.slug === slug);
-  if (!study) notFound();
-
-  const blocks = [
-    { label: dict.workPage.contextLabel, text: study.brief },
-    {
-      label: dict.workPage.challengeLabel,
-      text: `${study.audience} ${study.challenge}`,
-    },
-    { label: dict.workPage.roleLabel, text: study.role },
-    {
-      label: dict.workPage.processLabel,
-      text: `${study.direction} ${study.process}`,
-    },
-    { label: dict.workPage.solutionLabel, text: study.solution },
-    { label: dict.workPage.outcomeLabel, text: study.outcome },
-  ];
+  const site = getSite(lang);
+  const cases = site.work.cases;
+  const index = cases.findIndex((entry) => entry.slug === slug);
+  if (index < 0) notFound();
+  const item = cases[index];
+  const next = cases[(index + 1) % cases.length];
+  const l = site.labels;
 
   return (
     <>
-      <section className="bg-graphite pb-20 pt-36 text-porcelain sm:pb-28 sm:pt-44">
+      <section className="bg-night pb-16 pt-28 text-sand sm:pb-24 sm:pt-36">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal>
-            <Link
-              href={localePath(lang, "/work")}
-              className="group mb-12 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-porcelain/50 hover:text-porcelain"
-            >
-              <ArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-1" />
-              {dict.common.backToWork}
+          <Rise>
+            <Link href={localePath(lang, "/work")} className="eyebrow group inline-flex min-h-11 items-center gap-3 text-sand/70 hover:text-sand">
+              <ArrowLeft aria-hidden className="size-4 transition-transform duration-500 group-hover:-translate-x-1" />
+              {l.back}
             </Link>
-          </Reveal>
-          <div className="flex flex-wrap items-center gap-4">
-            <Badge tone="concept">{dict.common.conceptStudy}</Badge>
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-porcelain/50">
-              {study.sector}
-            </span>
-          </div>
-          <TextReveal
-            as="h1"
-            text={study.name}
-            className="mt-6 font-display text-[clamp(3rem,8vw,7.5rem)] font-semibold leading-[1.0] tracking-[-0.02em]"
-          />
-          <Reveal delay={0.2}>
-            <p className="mt-8 max-w-2xl text-[16px] leading-relaxed text-porcelain/60">
-              {study.summary}
+          </Rise>
+          <Rise className="mt-8 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+            <p className="eyebrow text-spice-bright">{item.label}</p>
+            <p className="eyebrow text-sand/60">
+              {item.period} · {item.status}
             </p>
-          </Reveal>
+          </Rise>
+          <Rule className="mt-5 text-sand" />
+          <Headline
+            as="h1"
+            parts={item.title}
+            className="mt-10 max-w-[16ch] text-balance text-[length:var(--text-hero)] leading-[0.98] sm:mt-14"
+            start={120}
+          />
+          <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-12">
+            <Rise delay={300} className="lg:col-span-6 lg:col-start-7">
+              <p className="lead text-pretty text-sand/85">{item.summary}</p>
+              {item.href && (
+                <Link href={localePath(lang, item.href)} className="cta cta-spice group mt-9 w-full sm:w-auto">
+                  {l.tryIt}
+                  <ArrowUpRight
+                    aria-hidden
+                    className="size-[1.25em] transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  />
+                </Link>
+              )}
+            </Rise>
+          </div>
         </div>
       </section>
 
-      <section className="bg-graphite pb-24 text-porcelain">
+      <section className="bg-sand py-20 sm:py-32">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal>
-            <div className="overflow-hidden rounded-2xl">
-              <Image
-                src={COVERS[study.slug]}
-                alt={study.coverAlt}
-                width={800}
-                height={600}
-                priority
-                className="aspect-[21/10] w-full object-cover"
-              />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="bg-porcelain py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="space-y-16">
-            {blocks.map((block, i) => (
-              <Reveal key={block.label} delay={i * 0.05}>
-                <div className="grid gap-5 border-t border-graphite/12 pt-10 lg:grid-cols-[280px_1fr] lg:gap-16">
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-cobalt">
-                    {block.label}
-                  </h2>
-                  <p className="max-w-2xl text-[15.5px] leading-relaxed text-graphite/70">
-                    {block.text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+          <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <h2 className="eyebrow text-spice">{l.context}</h2>
+            </Rise>
+            <Rise delay={100} className="lg:col-span-8">
+              <p className="text-pretty font-display text-[clamp(1.6rem,2.8vw,2.5rem)] leading-[1.16] tracking-[-0.012em]">
+                {item.context}
+              </p>
+            </Rise>
           </div>
 
-          <div className="mt-20 grid gap-10 lg:grid-cols-2 lg:gap-16">
-            <Reveal>
-              <div className="rounded-2xl border border-graphite/12 bg-porcelain-deep/50 p-8">
-                <h2 className="mb-6 font-mono text-[11px] uppercase tracking-[0.22em] text-graphite/50">
-                  {dict.common.includes}
-                </h2>
-                <ul className="space-y-3">
-                  {study.deliverables.map((d) => (
-                    <li key={d} className="flex items-start gap-3 text-[14.5px] text-graphite/75">
-                      <Check className="mt-0.5 size-4 shrink-0 text-cobalt" />
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div className="rounded-2xl bg-graphite p-8 text-porcelain">
-                <h2 className="mb-6 font-mono text-[11px] uppercase tracking-[0.22em] text-porcelain/50">
-                  {dict.common.demonstrates}
-                </h2>
-                <ul className="space-y-4">
-                  {study.demonstrates.map((d) => (
-                    <li
-                      key={d}
-                      className="border-l-2 border-cobalt-bright pl-4 text-[14.5px] leading-relaxed text-porcelain/75"
-                    >
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
+          <div className="mt-20 grid gap-x-10 gap-y-6 sm:mt-28 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <h2 className="eyebrow text-spice">{l.did}</h2>
+            </Rise>
+            <ol className="lg:col-span-8">
+              {item.did.map((point, i) => (
+                <li key={point}>
+                  <Rule className="text-night" delay={i * 70} />
+                  <Rise delay={i * 70} className="grid grid-cols-[3rem_1fr] items-baseline py-5 text-[18px] leading-snug sm:py-6">
+                    <span className="font-display text-[1.05rem] italic text-spice">0{i + 1}</span>
+                    <span>{point}</span>
+                  </Rise>
+                </li>
+              ))}
+              <li aria-hidden>
+                <Rule className="text-night" />
+              </li>
+            </ol>
           </div>
 
-          <Reveal className="mt-20">
-            <div className="flex flex-wrap items-center justify-between gap-6 border-t border-graphite/12 pt-10">
-              <div>
-                <h2 className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-graphite/50">
-                  {dict.common.relatedServices}
-                </h2>
-                <ul className="flex flex-wrap gap-2.5">
-                  {study.services.map((s) => (
-                    <li
-                      key={s}
-                      className="rounded-full border border-graphite/15 px-4 py-1.5 text-[13px] text-graphite/65"
-                    >
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <Link
-                href={localePath(lang, "/contact")}
-                className="group inline-flex items-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-[14.5px] font-medium text-porcelain transition-colors duration-300 hover:bg-cobalt"
-              >
-                {dict.nav.cta}
-                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-            </div>
-          </Reveal>
+          <div className="mt-20 grid gap-x-10 gap-y-6 sm:mt-28 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <h2 className="eyebrow text-spice">{l.tags}</h2>
+            </Rise>
+            <Rise delay={100} className="lg:col-span-8">
+              <ul className="flex flex-wrap gap-x-8 gap-y-2 font-display text-[clamp(1.3rem,2vw,1.8rem)] leading-tight">
+                {item.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            </Rise>
+          </div>
         </div>
       </section>
+
+      <section className="bg-sand-deep py-20 sm:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-x-10 gap-y-6 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
+          <Rise className="lg:col-span-3">
+            <h2 className="eyebrow text-spice">{l.shows}</h2>
+          </Rise>
+          <Headline
+            as="p"
+            parts={item.shows}
+            className="text-pretty text-[clamp(1.9rem,3.8vw,3.5rem)] italic leading-[1.08] lg:col-span-9"
+            step={30}
+          />
+        </div>
+      </section>
+
+      <section className="bg-night text-sand">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <Link
+            href={localePath(lang, `/work/${next.slug}`)}
+            className="row-fill group grid grid-cols-12 items-baseline gap-4 py-12 sm:py-16"
+            style={{ "--row-fill": "var(--color-sand)", "--row-ink": "var(--color-night)" } as React.CSSProperties}
+          >
+            <span className="eyebrow col-span-12 opacity-65 lg:col-span-2">{l.next}</span>
+            <span className="row-shift col-span-10 font-display text-[clamp(2rem,5vw,4.6rem)] leading-none lg:col-span-9">
+              {next.title}
+            </span>
+            <span className="col-span-2 justify-self-end lg:col-span-1">
+              <ArrowUpRight aria-hidden className="row-arrow size-9" strokeWidth={1.1} />
+            </span>
+          </Link>
+          <Rule className="text-sand" />
+        </div>
+      </section>
+
+      <FinalCta lang={lang} />
     </>
   );
 }

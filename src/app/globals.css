@@ -1,44 +1,72 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens.
+ * Three flat colour families and nothing else: night (near-black), sand (the
+ * page) and spice (the single accent). No gradients, no rounded corners, no
+ * decorative shapes. Atmosphere comes from scale, hairlines, grain and type.
+ */
 @theme {
-  --color-porcelain: #f4f1ea;
-  --color-porcelain-deep: #e9e5da;
-  --color-graphite: #121215;
-  --color-graphite-soft: #232329;
-  --color-graphite-mute: #4a4a52;
-  --color-cobalt: #1f3be0;
-  --color-cobalt-bright: #3d5bff;
-  --color-cobalt-deep: #12258f;
+  --color-night: #0b0a09;
+  --color-night-soft: #171513;
+  --color-night-mute: #5b5348;
+  --color-sand: #ece4d4;
+  --color-sand-deep: #dfd4bf;
+  --color-dune: #b9a57f;
+  --color-dawn: #f3e7cf;
+  /* spice passes 4.5:1 as text on sand and behind sand text */
+  --color-spice: #9c350c;
+  /* spice-bright is for night backgrounds only */
+  --color-spice-bright: #e8642c;
+  --color-spice-deep: #7d2a08;
 
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  /* aliases still referenced by a few shared components */
+  --color-line: color-mix(in srgb, var(--color-night) 16%, transparent);
+  --color-accent: var(--color-spice);
 
-  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Display: Bodoni Moda (didone, optical sizes, true italic).
+     Text and labels: Hanken Grotesk. Both SIL Open Font Licence. */
+  --font-display: var(--font-bodoni), "Bodoni 72", Didot, "Times New Roman", serif;
+  --font-sans: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  --animate-marquee: marquee 28s linear infinite;
+  --text-hero: clamp(2.75rem, 6.3vw, 7.25rem);
+  --text-h2: clamp(2.2rem, 5vw, 4.75rem);
+  --text-h3: clamp(1.5rem, 2.3vw, 2.15rem);
+  --text-lead: clamp(1.15rem, 1.55vw, 1.4rem);
+
+  --ease-luxe: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
   --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+  --animate-ticker: ticker 48s linear infinite;
 
-  @keyframes marquee {
-    to {
-      transform: translateX(-50%);
-    }
-  }
   @keyframes pulse-dot {
     0%,
     100% {
       opacity: 1;
-      transform: scale(1);
     }
     50% {
-      opacity: 0.55;
-      transform: scale(0.8);
+      opacity: 0.35;
+    }
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
     }
   }
 }
 
+/* Square everything. Applies to third-party and legacy markup as well. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
 html {
   scroll-behavior: smooth;
+  background: var(--color-night);
 }
 
 html.lenis,
@@ -53,40 +81,381 @@ html.lenis body {
 }
 
 body {
-  @apply bg-porcelain text-graphite font-sans antialiased;
+  @apply bg-sand text-night font-sans antialiased;
+  font-size: 1.0625rem;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  font-feature-settings: "kern", "liga", "ss01";
 }
 
 ::selection {
-  background: var(--color-cobalt);
-  color: var(--color-porcelain);
+  background: var(--color-spice);
+  color: var(--color-sand);
 }
 
-/* Thin quiet scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-porcelain);
+  background: var(--color-night);
 }
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--color-graphite) 28%, transparent);
-  border-radius: 8px;
-  border: 2px solid var(--color-porcelain);
+  background: var(--color-night-mute);
 }
 
-/* Film grain overlay — fixed, non-interactive */
+/*
+ * Type roles. Kept outside Tailwind's layers so they win over weight and
+ * tracking utilities left on older markup.
+ */
+.font-display {
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  /* A fixed, moderate optical size keeps the hairlines strong enough to read
+     at every size; the automatic setting thins them too far above 40px. */
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 20;
+  font-feature-settings: "kern", "liga", "lnum";
+}
+.font-display em,
+.font-display i {
+  font-style: italic;
+}
+.font-mono {
+  font-weight: 500;
+}
+
+/* Small tracked label */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.71875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Larger paragraph that carries the argument */
+.lead {
+  font-size: var(--text-lead);
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+/* Film grain: fixed, non-interactive */
 .grain-overlay {
   position: fixed;
   inset: -50%;
-  z-index: 90;
+  z-index: 95;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.06;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 300px 300px;
   mix-blend-mode: multiply;
 }
+
+/* Hairline that draws itself across when it enters the viewport */
+.rule {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  opacity: 0.22;
+  transform-origin: left center;
+}
+
+/* Text link with a line that slides in from the left */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s var(--ease-luxe);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.group:hover .link-underline::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Underlined by default, used for the quiet secondary action */
+.link-line {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.55rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform 0.6s var(--ease-luxe);
+}
+.link-line:hover::after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+/*
+ * Primary action. A flat rectangle; on hover a block of spice slides up
+ * from the bottom edge. The same shape everywhere.
+ */
+.cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  min-height: 3.5rem;
+  padding: 0.9rem 1.75rem;
+  text-wrap: balance;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-night);
+  background: var(--color-sand);
+  transition: color 0.45s var(--ease-luxe);
+}
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-spice-bright);
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease-luxe);
+}
+.cta:hover::before,
+.cta:focus-visible::before {
+  transform: translateY(0);
+}
+.cta:active {
+  transform: scale(0.99);
+}
+.cta-sm {
+  min-height: 2.75rem;
+  padding: 0 1.15rem;
+  font-size: 0.75rem;
+}
+/* On sand the button is night; the hover block is the deeper spice */
+.cta-on-sand {
+  color: var(--color-sand);
+  background: var(--color-night);
+}
+.cta-on-sand::before {
+  background: var(--color-spice);
+}
+.cta-spice {
+  color: var(--color-night);
+  background: var(--color-spice-bright);
+}
+.cta-spice::before {
+  background: var(--color-sand);
+}
+
+/* Outlined secondary action */
+.ghost {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  min-height: 3.5rem;
+  padding: 0 1.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+  transition:
+    border-color 0.4s,
+    color 0.45s var(--ease-luxe);
+}
+.ghost:hover {
+  border-color: currentColor;
+}
+
+/*
+ * Index rows: the table-of-contents pattern used for doors, offers and work.
+ * A block of colour rises behind the row on hover.
+ */
+.row-fill {
+  position: relative;
+  isolation: isolate;
+}
+.row-fill::before {
+  content: "";
+  position: absolute;
+  inset: 0 -1.25rem;
+  z-index: -1;
+  background: var(--row-fill, var(--color-night));
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.6s var(--ease-luxe);
+}
+@media (hover: hover) {
+  .row-fill:hover::before,
+  .row-fill:focus-visible::before {
+    transform: scaleY(1);
+  }
+  .row-fill:hover,
+  .row-fill:focus-visible {
+    color: var(--row-ink, var(--color-sand));
+  }
+  .row-fill .row-shift {
+    transition: transform 0.6s var(--ease-luxe);
+  }
+  .row-fill:hover .row-shift {
+    transform: translateX(0.9rem);
+  }
+  .row-fill .row-arrow {
+    transition:
+      transform 0.6s var(--ease-luxe),
+      opacity 0.4s;
+  }
+  .row-fill:hover .row-arrow {
+    transform: translate(0.35rem, -0.35rem);
+  }
+}
+.row-fill {
+  transition: color 0.45s var(--ease-luxe);
+}
+
+/* Slow line of words that runs across the page; pauses under the pointer */
+.ticker {
+  display: flex;
+  width: max-content;
+}
 @media (prefers-reduced-motion: no-preference) {
+  .ticker {
+    animation: ticker var(--ticker-duration, 60s) linear infinite;
+  }
+  .ticker-wrap:hover .ticker {
+    animation-play-state: paused;
+  }
+}
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Marker for content that still needs the owner's input */
+.draft {
+  border: 1px dashed var(--color-spice);
+  background: color-mix(in srgb, var(--color-spice-bright) 10%, transparent);
+}
+.draft-tag {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-spice);
+  color: var(--color-sand);
+}
+
+/* Portrait: black and white at rest, colour on hover */
+.portrait img {
+  filter: grayscale(1) contrast(1.08);
+  transition:
+    filter 1.2s var(--ease-luxe),
+    transform 1.6s var(--ease-luxe);
+}
+@media (hover: hover) {
+  .portrait:hover img {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.02);
+  }
+}
+
+/*
+ * Motion. Everything below only hides content once the inline script in the
+ * layout has confirmed JavaScript runs (html.js), and only for visitors who
+ * have not asked for reduced motion. Elements are flagged with [data-seen]
+ * as they enter the viewport.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  /* fade and rise */
+  html.js [data-rise]:not([data-seen]) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  html.js [data-rise] {
+    transition:
+      opacity 1s var(--ease-luxe) var(--d, 0ms),
+      transform 1.2s var(--ease-luxe) var(--d, 0ms);
+  }
+
+  /* headline words rising from behind a mask */
+  .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding: 0.08em 0.12em 0.2em;
+    margin: -0.08em -0.12em -0.2em;
+  }
+  .w > span {
+    display: inline-block;
+    transition: transform 1.15s var(--ease-luxe) var(--d, 0ms);
+  }
+  html.js [data-words]:not([data-seen]) .w > span {
+    transform: translateY(118%);
+  }
+
+  /* hairline draw */
+  html.js [data-draw]:not([data-seen]) {
+    transform: scaleX(0);
+  }
+  html.js [data-draw] {
+    transition: transform 1.6s var(--ease-inout) var(--d, 0ms);
+  }
+
+  /* image uncovered from the bottom up */
+  /* The clip sits on the child: a fully clipped element never reports as
+     visible to the observer, so the frame itself must stay unclipped. */
+  html.js [data-wipe]:not([data-seen]) > * {
+    clip-path: inset(100% 0 0 0);
+  }
+  html.js [data-wipe] > * {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1.5s var(--ease-inout) var(--d, 0ms);
+  }
+  html.js [data-wipe]:not([data-seen]) img {
+    transform: scale(1.14);
+  }
+  html.js [data-wipe][data-seen] img {
+    transform: scale(1);
+  }
+
   .grain-overlay {
     animation: grain-shift 900ms steps(2) infinite;
   }
@@ -109,55 +478,14 @@ body {
   }
 }
 
-/* Editorial link underline */
-.link-underline {
-  position: relative;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 1px;
-  width: 100%;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.5s var(--ease-luxe);
-}
-.link-underline:hover::after,
-.link-underline:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* Outlined display text */
-.text-outline {
-  -webkit-text-stroke: 1px color-mix(in srgb, currentColor 38%, transparent);
-  color: transparent;
-}
-
-/* Custom cursor — hidden unless fine pointer + enabled */
+/* The old custom cursor is retired; keep the hook inert in case markup lingers */
 .custom-cursor {
   display: none;
 }
-@media (pointer: fine) {
-  .custom-cursor {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    pointer-events: none;
-    mix-blend-mode: difference;
-  }
-}
 
-/* Focus visibility, quiet but present */
 :focus-visible {
-  outline: 2px solid var(--color-cobalt-bright);
+  outline: 2px solid var(--color-spice-bright);
   outline-offset: 3px;
-  border-radius: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

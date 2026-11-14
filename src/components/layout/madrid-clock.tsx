@@ -20,9 +20,9 @@ export function MadridClock({ label }: { label: string }) {
   }, []);
 
   return (
-    <span className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] text-porcelain/50 uppercase">
+    <span className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] text-sand/65 uppercase">
       <span className="relative flex size-1.5">
-        <span className="absolute inline-flex size-full animate-pulse-dot rounded-full bg-cobalt-bright" />
+        <span className="absolute inline-flex size-full animate-pulse-dot rounded-full bg-spice-bright" />
       </span>
       {label} {time || "--:--:--"}
     </span>

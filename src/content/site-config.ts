@@ -36,14 +36,18 @@ export const siteConfig = {
   },
 
   features: {
-    showPrices: false,
+    // Prices come from the offer catalogue (version 3). Set to false to hide them all.
+    showPrices: true,
     showEmployerReference: false,
+    // Shows dashed "Draft" blocks where content still needs confirming (prices,
+    // client quotes). Set to false before the redesign goes live.
+    showDraftPlaceholders: true,
     enableAnalytics: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true",
     experimentalWebGPU: process.env.NEXT_PUBLIC_EXPERIMENTAL_WEBGPU === "true",
   },
 
   theme: {
-    accent: "#1f3be0",
+    accent: "#9c350c",
   },
 
   seo: {

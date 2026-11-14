@@ -32,7 +32,7 @@ export function LanguageSwitcher({
               aria-hidden
               className={cn(
                 "mx-1.5 h-3 w-px",
-                tone === "dark" ? "bg-porcelain/25" : "bg-graphite/20",
+                tone === "dark" ? "bg-sand/25" : "bg-night/20",
               )}
             />
           )}
@@ -45,11 +45,11 @@ export function LanguageSwitcher({
               "font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300",
               locale === current
                 ? tone === "dark"
-                  ? "text-porcelain"
-                  : "text-graphite"
+                  ? "text-sand"
+                  : "text-night"
                 : tone === "dark"
-                  ? "text-porcelain/45 hover:text-porcelain"
-                  : "text-graphite/45 hover:text-graphite",
+                  ? "text-sand/65 hover:text-sand"
+                  : "text-night/70 hover:text-night",
             )}
           >
             {locale}

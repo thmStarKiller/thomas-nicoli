@@ -1,0 +1,234 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { siteConfig } from "@/content/site-config";
+import { hasLocale } from "@/i18n/config";
+import { getSite } from "@/i18n/site";
+import { pageMetadata } from "@/lib/seo";
+import { AuditFeature } from "@/components/sections/audit-feature";
+import { FaqSection } from "@/components/sections/faq-section";
+import { FinalCta } from "@/components/sections/final-cta";
+import { CtaLink } from "@/components/ui/cta-link";
+import { Headline, Rule } from "@/components/ui/headline";
+import { PageHero } from "@/components/ui/page-hero";
+import { Rise } from "@/components/ui/rise";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!hasLocale(lang)) return {};
+  const { meta } = getSite(lang).business;
+  return pageMetadata({ lang, path: "/business", title: meta.title, description: meta.description });
+}
+
+export default async function BusinessPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!hasLocale(lang)) notFound();
+  const site = getSite(lang);
+  const b = site.business;
+  const showPrices = siteConfig.features.showPrices;
+
+  return (
+    <>
+      <PageHero eyebrow={b.hero.eyebrow} title={b.hero.title} intro={b.hero.intro}>
+        <CtaLink lang={lang} service="ai-opportunity-audit" className="w-full sm:w-auto">
+          {site.home.hero.primary}
+        </CtaLink>
+      </PageHero>
+
+      {/* The three steps, as a band that closes the hero */}
+      <section className="bg-night pb-20 text-sand sm:pb-28">
+        <ol className="mx-auto grid max-w-[1440px] gap-x-10 px-5 sm:px-8 md:grid-cols-3 lg:px-12">
+          {b.steps.map((step, i) => (
+            <li key={step.name}>
+              <Rule className="text-sand" delay={i * 120} />
+              <Rise delay={i * 120} className="py-7">
+                <p className="font-display text-[1.3rem] text-spice-bright">{step.numeral}</p>
+                <h2 className="mt-3 font-display text-[clamp(1.6rem,2.4vw,2.2rem)] leading-tight">{step.name}</h2>
+                <p className="mt-3 max-w-[26rem] text-[17px] leading-relaxed text-sand/75">{step.text}</p>
+              </Rise>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Signals */}
+      <section className="bg-sand py-24 sm:py-36">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+          <div className="lg:col-span-4">
+            <Rise>
+              <p className="eyebrow text-spice">{b.signals.eyebrow}</p>
+            </Rise>
+            <Headline
+              parts={b.signals.title}
+              className="mt-6 text-balance text-[clamp(2rem,3.6vw,3.4rem)] leading-[1.04]"
+            />
+          </div>
+          <ul className="lg:col-span-7 lg:col-start-6">
+            {b.signals.items.map((signal, i) => (
+              <li key={signal}>
+                <Rule className="text-night" delay={i * 70} />
+                <Rise delay={i * 70} className="grid grid-cols-[3.25rem_1fr] items-baseline py-5 sm:py-6">
+                  <span className="font-display text-[1.05rem] italic text-spice">0{i + 1}</span>
+                  <span className="font-display text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.25] tracking-[-0.01em]">
+                    {signal}
+                  </span>
+                </Rise>
+              </li>
+            ))}
+            <li aria-hidden>
+              <Rule className="text-night" />
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <AuditFeature lang={lang} site={site} eyebrow={`${b.steps[0].numeral}. ${b.steps[0].name}`} />
+
+      {/* Build offers */}
+      <section id="build" className="scroll-mt-20 bg-sand py-24 sm:py-36">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-6 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <p className="eyebrow text-spice">{b.build.eyebrow}</p>
+            </Rise>
+            <div className="lg:col-span-9">
+              <Headline parts={b.build.title} className="text-balance text-[length:var(--text-h2)] leading-[1.02]" />
+              <Rise delay={150}>
+                <p className="lead mt-8 max-w-[38rem] text-pretty text-night/85">{b.build.intro}</p>
+              </Rise>
+            </div>
+          </div>
+
+          <div className="mt-16 sm:mt-24">
+            {b.build.offers.map((offer, i) => (
+              <article key={offer.slug} id={offer.slug} className="scroll-mt-24">
+                <Rule className="text-night" />
+                <Rise className="grid gap-x-10 gap-y-8 py-12 sm:py-16 lg:grid-cols-12">
+                  <div className="lg:col-span-5">
+                    <p className="font-display text-[1.05rem] italic text-spice">0{i + 1}</p>
+                    <h3 className="mt-3 text-balance font-display text-[clamp(1.9rem,3.2vw,3rem)] leading-[1.04]">
+                      {offer.name}
+                    </h3>
+                    <p className="mt-5 max-w-[30rem] text-[18px] leading-relaxed text-night/85">{offer.line}</p>
+                  </div>
+
+                  <div className="lg:col-span-4">
+                    <p className="eyebrow text-spice">{site.labels.included}</p>
+                    <ul className="mt-4">
+                      {offer.deliverables.map((item) => (
+                        <li
+                          key={item}
+                          className="border-b border-night/15 py-3 text-[17px] leading-snug last:border-b-0"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    {offer.examples && (
+                      <p className="mt-5 text-[15.5px] leading-relaxed text-night-mute">
+                        <span className="font-semibold text-night">{site.labels.examples}: </span>
+                        {offer.examples}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-6 lg:col-span-3 lg:items-end lg:text-right">
+                    <div>
+                      {showPrices && (
+                        <>
+                          <p className="font-display text-[clamp(2.6rem,4.4vw,4rem)] leading-none">{offer.price}</p>
+                          <p className="eyebrow mt-3 text-night-mute">{offer.priceNote}</p>
+                        </>
+                      )}
+                      <p className="eyebrow mt-3 text-night">{offer.turnaround}</p>
+                    </div>
+                    <CtaLink lang={lang} tone="night" size="sm" service={offer.slug} className="w-full sm:w-auto">
+                      {site.cta.question}
+                    </CtaLink>
+                  </div>
+                </Rise>
+              </article>
+            ))}
+            <Rule className="text-night" />
+          </div>
+        </div>
+      </section>
+
+      {/* Monthly support */}
+      <section id="support" className="scroll-mt-20 bg-sand-deep py-20 sm:py-28">
+        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
+          <div className="lg:col-span-7">
+            <Rise>
+              <p className="eyebrow text-spice">{b.support.eyebrow}</p>
+              <h2 className="mt-6 text-balance font-display text-[clamp(2rem,3.6vw,3.4rem)] leading-[1.04]">
+                {b.support.title}
+              </h2>
+              <p className="lead mt-6 max-w-[34rem] text-night/85">{b.support.text}</p>
+            </Rise>
+          </div>
+          <Rise delay={120} className="lg:col-span-4 lg:col-start-9 lg:text-right">
+            {showPrices && (
+              <p className="flex items-baseline gap-3 lg:justify-end">
+                <span className="font-display text-[clamp(3rem,5.4vw,4.8rem)] leading-none">{b.support.price}</span>
+                <span className="eyebrow text-night-mute">{b.support.priceNote}</span>
+              </p>
+            )}
+            <CtaLink lang={lang} tone="night" size="sm" service="monthly-support" className="mt-7 w-full sm:w-auto">
+              {site.cta.question}
+            </CtaLink>
+          </Rise>
+          <Rise className="lg:col-span-12">
+            <p className="border-t border-night/25 pt-6 text-[17px] text-night/85">{b.support.custom}</p>
+          </Rise>
+        </div>
+      </section>
+
+      {/* Limits */}
+      <section className="bg-night py-24 text-sand sm:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+          <div className="lg:col-span-4">
+            <Rise>
+              <p className="eyebrow text-spice-bright">{b.limits.eyebrow}</p>
+            </Rise>
+            <Headline
+              parts={b.limits.title}
+              className="mt-6 text-balance text-[clamp(2rem,3.6vw,3.4rem)] leading-[1.04]"
+            />
+          </div>
+          <ul className="lg:col-span-7 lg:col-start-6">
+            {b.limits.items.map((item, i) => (
+              <li key={item}>
+                <Rule className="text-sand" delay={i * 70} />
+                <Rise delay={i * 70} className="py-5 font-display text-[clamp(1.3rem,1.9vw,1.7rem)] leading-tight tracking-[-0.01em] sm:py-6">
+                  {item}
+                </Rise>
+              </li>
+            ))}
+            <li aria-hidden>
+              <Rule className="text-sand" />
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <FaqSection
+        eyebrow={b.faq.eyebrow}
+        title={b.faq.title}
+        items={b.faq.items}
+        aside={
+          <CtaLink lang={lang} tone="night" service="ai-opportunity-audit">
+            {site.cta.audit}
+          </CtaLink>
+        }
+      />
+      <FinalCta lang={lang} />
+    </>
+  );
+}

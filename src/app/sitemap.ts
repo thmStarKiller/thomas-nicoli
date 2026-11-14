@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
 import { locales, localePath } from "@/i18n/config";
+import { getSite } from "@/i18n/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
 const STATIC_PATHS = [
   "/",
-  "/services",
+  "/business",
+  "/professionals",
   "/work",
   "/about",
   "/contact",
@@ -14,10 +16,10 @@ const STATIC_PATHS = [
   "/privacy",
   "/legal",
 ];
-const STUDY_SLUGS = ["aurea-studio", "casa-nomada", "atelier-vela"];
+const CASE_SLUGS = getSite("en").work.cases.map((item) => item.slug);
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = [...STATIC_PATHS, ...STUDY_SLUGS.map((s) => `/work/${s}`)];
+  const paths = [...STATIC_PATHS, ...CASE_SLUGS.map((s) => `/work/${s}`)];
   const now = new Date();
 
   return paths.flatMap((path) =>

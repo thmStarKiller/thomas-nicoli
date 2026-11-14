@@ -179,16 +179,16 @@ export function ProjectClarityForm({
         initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden rounded-[2rem] border border-cobalt/20 bg-white p-6 shadow-[0_28px_80px_rgba(18,18,21,0.08)] sm:p-10"
+        className="relative overflow-hidden rounded-[2rem] border border-spice/20 bg-white p-6 shadow-[0_28px_80px_rgba(13,10,7,0.08)] sm:p-10"
       >
         <motion.div
           aria-hidden
-          className="absolute -right-16 -top-16 size-48 rounded-full bg-cobalt/10 blur-3xl"
+          className="absolute -right-16 -top-16 size-48 rounded-full bg-spice/10 blur-3xl"
           animate={reduceMotion ? undefined : { scale: [0.9, 1.12, 0.9], opacity: [0.35, 0.7, 0.35] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="relative flex size-12 items-center justify-center rounded-full bg-cobalt text-porcelain"
+          className="relative flex size-12 items-center justify-center rounded-full bg-spice text-sand"
           initial={reduceMotion ? false : { scale: 0.6, rotate: -12 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: reduceMotion ? 0 : 0.12, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -196,15 +196,15 @@ export function ProjectClarityForm({
           <Check className="size-6" />
         </motion.div>
         <h2 id="clarity-confirmation" className="relative mt-6 font-display text-4xl font-semibold">{copy.confirmationTitle}</h2>
-        <p className="relative mt-4 max-w-2xl leading-relaxed text-graphite/65">{copy.confirmationText}</p>
-        <p className="relative mt-6 font-mono text-sm text-cobalt"><strong>{copy.reference}:</strong> {confirmation.referenceId}</p>
-        {confirmation.duplicate && <p className="relative mt-3 text-sm text-graphite/65">{copy.duplicate}</p>}
+        <p className="relative mt-4 max-w-2xl leading-relaxed text-night/65">{copy.confirmationText}</p>
+        <p className="relative mt-6 font-mono text-sm text-spice"><strong>{copy.reference}:</strong> {confirmation.referenceId}</p>
+        {confirmation.duplicate && <p className="relative mt-3 text-sm text-night/65">{copy.duplicate}</p>}
         <h3 className="relative mt-8 font-display text-2xl">{copy.summaryTitle}</h3>
         <dl className="relative mt-4 grid gap-4">
           {Object.entries(confirmation.summary).map(([key, value]) => (
-            <div key={key} className="border-t border-graphite/10 pt-3">
-              <dt className="font-mono text-[10px] uppercase tracking-widest text-graphite/45">{key}</dt>
-              <dd className="mt-1 whitespace-pre-wrap text-sm text-graphite/75">{value}</dd>
+            <div key={key} className="border-t border-night/10 pt-3">
+              <dt className="font-mono text-[10px] uppercase tracking-widest text-night/70">{key}</dt>
+              <dd className="mt-1 whitespace-pre-wrap text-sm text-night/75">{value}</dd>
             </div>
           ))}
         </dl>
@@ -213,17 +213,17 @@ export function ProjectClarityForm({
   }
 
   const title = copy.questions[step].title;
-  const inputClass = "mt-4 w-full rounded-2xl border border-graphite/15 bg-white px-4 py-3.5 text-base text-graphite outline-none transition focus:border-cobalt focus:ring-2 focus:ring-cobalt/15";
+  const inputClass = "mt-4 w-full rounded-2xl border border-night/15 bg-white px-4 py-3.5 text-base text-night outline-none transition focus:border-spice focus:ring-2 focus:ring-spice/15";
 
   return (
-    <form onSubmit={submit} noValidate className="overflow-hidden rounded-[2rem] border border-graphite/10 bg-porcelain-deep/45 p-5 shadow-[0_30px_90px_rgba(18,18,21,0.06)] sm:p-8 lg:p-10">
+    <form onSubmit={submit} noValidate className="overflow-hidden rounded-[2rem] border border-night/10 bg-sand-deep/45 p-5 shadow-[0_30px_90px_rgba(13,10,7,0.06)] sm:p-8 lg:p-10">
       <div aria-hidden className="mb-8 grid grid-cols-6 gap-2">
         {copy.questions.map((question, index) => {
           const active = details || index <= step;
           return (
-            <span key={question.title} className="h-1 overflow-hidden rounded-full bg-graphite/10">
+            <span key={question.title} className="h-1 overflow-hidden rounded-full bg-night/10">
               <motion.span
-                className="block h-full origin-left rounded-full bg-cobalt"
+                className="block h-full origin-left rounded-full bg-spice"
                 initial={false}
                 animate={{ scaleX: active ? 1 : 0, opacity: active ? 1 : 0.25 }}
                 transition={{
@@ -250,19 +250,19 @@ export function ProjectClarityForm({
       {!details ? (
         <fieldset aria-describedby={`clarity-hint-${step} clarity-error`}>
           <legend className="sr-only">{title}</legend>
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cobalt" aria-live="polite">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-spice" aria-live="polite">
             {copy.progress.replace("{current}", String(step + 1))}
           </p>
           <h2 ref={headingRef} tabIndex={-1} className="mt-4 max-w-3xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
             {title}
           </h2>
-          <p id={`clarity-hint-${step}`} className="mt-4 max-w-2xl text-sm leading-relaxed text-graphite/60">{copy.questions[step].hint}</p>
+          <p id={`clarity-hint-${step}`} className="mt-4 max-w-2xl text-sm leading-relaxed text-night/60">{copy.questions[step].hint}</p>
           <p className="sr-only" role="status">{copy.stepAnnouncement.replace("{current}", String(step + 1)).replace("{title}", title)}</p>
 
           {step === 0 && (
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {buyerValues.map((value, index) => (
-                <label key={value} className="flex cursor-pointer items-center gap-3 rounded-2xl border border-graphite/15 bg-white p-4 has-[:checked]:border-cobalt has-[:checked]:ring-2 has-[:checked]:ring-cobalt/15">
+                <label key={value} className="flex cursor-pointer items-center gap-3 rounded-2xl border border-night/15 bg-white p-4 has-[:checked]:border-spice has-[:checked]:ring-2 has-[:checked]:ring-spice/15">
                   <input type="radio" name="buyerType" value={value} checked={form.buyerType === value} onChange={() => update("buyerType", value)} />
                   <span>{copy.buyerOptions[index]}</span>
                 </label>
@@ -286,7 +286,7 @@ export function ProjectClarityForm({
           {step === 5 && (
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {languageValues.map((value, index) => (
-                <label key={value} className="flex cursor-pointer items-center gap-3 rounded-2xl border border-graphite/15 bg-white p-4 has-[:checked]:border-cobalt has-[:checked]:ring-2 has-[:checked]:ring-cobalt/15">
+                <label key={value} className="flex cursor-pointer items-center gap-3 rounded-2xl border border-night/15 bg-white p-4 has-[:checked]:border-spice has-[:checked]:ring-2 has-[:checked]:ring-spice/15">
                   <input type="radio" name="responseLanguage" value={value} checked={form.responseLanguage === value} onChange={() => update("responseLanguage", value)} />
                   <span>{copy.languageOptions[index]}</span>
                 </label>
@@ -298,7 +298,7 @@ export function ProjectClarityForm({
       ) : (
         <fieldset>
           <legend ref={headingRef} tabIndex={-1} className="font-display text-3xl font-semibold tracking-tight sm:text-5xl">{copy.detailsTitle}</legend>
-          <p className="mt-4 text-sm text-graphite/60">{copy.detailsIntro}</p>
+          <p className="mt-4 text-sm text-night/60">{copy.detailsIntro}</p>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
             {([
               ["name", copy.name, "text", CLARITY_LIMITS.name],
@@ -313,8 +313,8 @@ export function ProjectClarityForm({
               </div>
             ))}
           </div>
-          <div className="mt-6 rounded-2xl border border-graphite/10 bg-white p-4">
-            <label className="flex items-start gap-3 text-sm text-graphite/70">
+          <div className="mt-6 rounded-2xl border border-night/10 bg-white p-4">
+            <label className="flex items-start gap-3 text-sm text-night/70">
               <input type="checkbox" name="clarityConsent" checked={form.consent} disabled={!legalReady} onChange={(event) => update("consent", event.target.checked)} aria-invalid={error === "consent"} className="mt-1" />
               <span>{copy.consentPending} <Link className="underline" href={`/${lang}/privacy`}>{copy.privacyLink}</Link></span>
             </label>
@@ -330,9 +330,9 @@ export function ProjectClarityForm({
             </div>
           )}
           {!legalReady && (
-            <div role="status" className="mt-6 rounded-2xl border border-cobalt/25 bg-cobalt/5 p-5">
-              <h3 className="font-semibold text-cobalt">{copy.checkpointTitle}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-graphite/65">{copy.checkpointText}</p>
+            <div role="status" className="mt-6 rounded-2xl border border-spice/25 bg-spice/5 p-5">
+              <h3 className="font-semibold text-spice">{copy.checkpointTitle}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-night/65">{copy.checkpointText}</p>
             </div>
           )}
           {serverError && <p role="alert" className="mt-4 text-sm text-red-700">{serverError}</p>}
@@ -342,15 +342,15 @@ export function ProjectClarityForm({
       </AnimatePresence>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-        <button type="button" onClick={goBack} disabled={!details && step === 0} className="inline-flex items-center gap-2 rounded-full border border-graphite/20 px-5 py-3 text-sm disabled:opacity-35"><ArrowLeft className="size-4" />{copy.back}</button>
+        <button type="button" onClick={goBack} disabled={!details && step === 0} className="inline-flex items-center gap-2 rounded-full border border-night/20 px-5 py-3 text-sm disabled:opacity-35"><ArrowLeft className="size-4" />{copy.back}</button>
         {!details ? (
-          <button type="button" onClick={goNext} className="inline-flex items-center gap-2 rounded-full bg-cobalt px-6 py-3 text-sm font-medium text-porcelain">{copy.next}<ArrowRight className="size-4" /></button>
+          <button type="button" onClick={goNext} className="inline-flex items-center gap-2 rounded-full bg-spice px-6 py-3 text-sm font-medium text-sand">{copy.next}<ArrowRight className="size-4" /></button>
         ) : (
-          <button type="submit" disabled={!legalReady || submitting} className="rounded-full bg-cobalt px-6 py-3 text-sm font-medium text-porcelain disabled:cursor-not-allowed disabled:opacity-40">{submitting ? copy.submitting : copy.submit}</button>
+          <button type="submit" disabled={!legalReady || submitting} className="rounded-full bg-spice px-6 py-3 text-sm font-medium text-sand disabled:cursor-not-allowed disabled:opacity-40">{submitting ? copy.submitting : copy.submit}</button>
         )}
       </div>
-      <p className="mt-8 text-sm text-graphite/55">{copy.alternative} <Link href={`/${lang}/contact`} className="font-medium text-cobalt underline">{copy.contactCta}</Link></p>
-      <noscript><p className="mt-4 rounded-xl bg-white p-4 text-sm"><a className="text-cobalt underline" href={`/${lang}/contact`}>{copy.contactCta}</a></p></noscript>
+      <p className="mt-8 text-sm text-night/70">{copy.alternative} <Link href={`/${lang}/contact`} className="font-medium text-spice underline">{copy.contactCta}</Link></p>
+      <noscript><p className="mt-4 rounded-xl bg-white p-4 text-sm"><a className="text-spice underline" href={`/${lang}/contact`}>{copy.contactCta}</a></p></noscript>
     </form>
   );
 }

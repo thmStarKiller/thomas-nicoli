@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, Calendar, Mail, MessageCircle, Phone } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/content/site-config";
 import { getDictionary } from "@/i18n";
 import { hasLocale } from "@/i18n/config";
 import { getProjectClarityCopy } from "@/i18n/project-clarity";
+import { getSite } from "@/i18n/site";
 import { pageMetadata } from "@/lib/seo";
-import { TextReveal } from "@/components/motion/text-reveal";
-import { Reveal } from "@/components/ui/reveal";
 import { ContactForm } from "@/components/forms/contact-form";
+import { PageHero } from "@/components/ui/page-hero";
+import { Rise } from "@/components/ui/rise";
 
 export async function generateMetadata({
   params,
@@ -35,6 +36,7 @@ export default async function ContactPage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const site = getSite(lang);
   const contactCopy = getProjectClarityCopy(lang).contact;
   const { contact } = siteConfig;
   // Widen `as const` literals so empty-string channels stay type-safe when filled in later.
@@ -44,44 +46,30 @@ export default async function ContactPage({
   const linkedinUrl: string = contact.socials.linkedin;
 
   const channels = [
-    contact.email && { icon: Mail, label: contact.email, href: `mailto:${contact.email}` },
-    calendarUrl && { icon: Calendar, label: dict.contact.channelsTitle, href: calendarUrl },
-    whatsappUrl && { icon: MessageCircle, label: "WhatsApp", href: whatsappUrl },
-    phone && { icon: Phone, label: phone, href: `tel:${phone.replace(/\s/g, "")}` },
-    linkedinUrl && { icon: ArrowUpRight, label: "LinkedIn", href: linkedinUrl },
-  ].filter(Boolean) as { icon: typeof Calendar; label: string; href: string }[];
+    calendarUrl && { label: dict.nav.cta, href: calendarUrl },
+    contact.email && { label: contact.email, href: `mailto:${contact.email}` },
+    whatsappUrl && { label: "WhatsApp", href: whatsappUrl },
+    phone && { label: phone, href: `tel:${phone.replace(/\s/g, "")}` },
+    linkedinUrl && { label: "LinkedIn", href: linkedinUrl },
+  ].filter(Boolean) as { label: string; href: string }[];
 
   return (
     <>
-      <section className="bg-graphite pb-24 pt-40 text-porcelain sm:pb-32 sm:pt-48">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.24em] text-porcelain/50">
-            {dict.contact.eyebrow}
-          </p>
-          <TextReveal
-            as="h1"
-            text={dict.contact.title}
-            className="max-w-4xl font-display text-[clamp(2.6rem,6vw,5.6rem)] font-semibold leading-[1.04] tracking-[-0.02em]"
-          />
-          <Reveal delay={0.25}>
-            <p className="mt-8 max-w-xl text-[15.5px] leading-relaxed text-porcelain/60">
-              {dict.contact.intro}
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={dict.contact.eyebrow}
+        title={dict.contact.title}
+        intro={dict.contact.intro}
+        meta={site.cta.reply}
+      />
 
-      <section className="bg-porcelain py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] gap-16 px-5 sm:px-8 lg:grid-cols-[1.3fr_0.7fr] lg:gap-24 lg:px-12">
-          <Reveal>
+      <section className="bg-sand py-20 sm:py-28">
+        <div className="mx-auto grid max-w-[1440px] gap-16 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+          <Rise className="lg:col-span-7">
             <Suspense
               fallback={
-                <div className="rounded-[2rem] border border-graphite/10 bg-porcelain-deep/45 p-6 sm:p-10">
-                  <h2 className="font-display text-3xl font-semibold">{contactCopy.noJs}</h2>
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="mt-6 inline-flex rounded-full bg-cobalt px-6 py-3 text-sm font-medium text-porcelain"
-                  >
+                <div className="border border-night p-6 sm:p-10">
+                  <h2 className="font-display text-3xl">{contactCopy.noJs}</h2>
+                  <a href={`mailto:${contact.email}`} className="cta cta-on-sand mt-6">
                     {contact.email}
                   </a>
                 </div>
@@ -89,36 +77,31 @@ export default async function ContactPage({
             >
               <ContactForm lang={lang} dict={dict} />
             </Suspense>
-          </Reveal>
+          </Rise>
 
-          <div>
-            <h2 className="mb-8 font-mono text-[11px] uppercase tracking-[0.22em] text-graphite/50">
-              {dict.contact.channelsTitle}
-            </h2>
-            <ul className="space-y-4">
+          <aside className="lg:col-span-4 lg:col-start-9">
+            <h2 className="eyebrow text-spice">{dict.contact.channelsTitle}</h2>
+            <ul className="mt-5 border-b border-night/25">
               {channels.map((channel) => (
                 <li key={channel.href}>
                   <a
                     href={channel.href}
                     target={channel.href.startsWith("http") ? "_blank" : undefined}
                     rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="group flex items-center justify-between rounded-2xl border border-graphite/12 px-6 py-5 transition-all duration-300 hover:border-cobalt hover:bg-porcelain-deep/60"
+                    className="row-fill group flex min-h-14 items-center justify-between gap-4 border-t border-night/25 py-4 text-[17px]"
                   >
-                    <span className="flex items-center gap-4 text-[15px] font-medium">
-                      <channel.icon className="size-5 text-cobalt" />
-                      {channel.label}
-                    </span>
-                    <ArrowUpRight className="size-4 text-graphite/40 transition-all duration-300 group-hover:text-cobalt" />
+                    <span className="row-shift break-all">{channel.label}</span>
+                    <ArrowUpRight aria-hidden className="row-arrow size-5 shrink-0" strokeWidth={1.3} />
                   </a>
                 </li>
               ))}
             </ul>
-            <p className="mt-10 font-mono text-[11px] uppercase leading-loose tracking-[0.18em] text-graphite/45">
+            <p className="eyebrow mt-8 leading-loose text-night-mute">
               {dict.common.basedIn}
               <br />
-              {dict.hero.trustLine}
+              {site.home.hero.note}
             </p>
-          </div>
+          </aside>
         </div>
       </section>
     </>

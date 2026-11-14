@@ -2,19 +2,16 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { hasLocale } from "@/i18n/config";
+import { getSite } from "@/i18n/site";
 import { pageMetadata } from "@/lib/seo";
-import { Hero } from "@/components/sections/hero";
-import { BuyerPaths } from "@/components/sections/buyer-paths";
-import { Marquee } from "@/components/motion/marquee";
-import { OutcomeStatement } from "@/components/sections/outcome-statement";
-import { ServicesOverview } from "@/components/sections/services-overview";
-import { FeaturedWork } from "@/components/sections/featured-work";
-import { WhyMe } from "@/components/sections/why-me";
-import { ProcessSection } from "@/components/sections/process-section";
-import { PackagesSection } from "@/components/sections/packages-section";
-import { AboutPreview } from "@/components/sections/about-preview";
+import { HomeHero } from "@/components/home/hero";
+import { Ticker } from "@/components/home/ticker";
+import { Doors, Facts } from "@/components/home/doors";
+import { HomeWork, Method } from "@/components/home/sections";
+import { AuditFeature } from "@/components/sections/audit-feature";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCta } from "@/components/sections/final-cta";
+import { CtaLink } from "@/components/ui/cta-link";
 
 export async function generateMetadata({
   params,
@@ -40,32 +37,44 @@ export default async function HomePage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const site = getSite(lang);
+  const faq = site.home.faq;
+
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
 
   return (
     <>
-      <Hero lang={lang} dict={dict} />
-      <div data-testid="home-blue-banderole">
-        <Marquee
-          items={[...dict.hero.marquee]}
-          className="border-y border-cobalt-deep/40 bg-cobalt py-4 text-porcelain"
-          itemClassName="font-mono text-[12px] uppercase tracking-[0.22em]"
-          duration={30}
-        />
-      </div>
-      <BuyerPaths lang={lang} />
-      <OutcomeStatement dict={dict} />
-      <ServicesOverview lang={lang} dict={dict} />
-      <FeaturedWork lang={lang} dict={dict} />
-      <WhyMe dict={dict} />
-      <ProcessSection dict={dict} />
-      <PackagesSection lang={lang} dict={dict} />
-      <AboutPreview lang={lang} dict={dict} />
-      <FaqSection
-        eyebrow={dict.faq.eyebrow}
-        title={dict.faq.title}
-        items={dict.faq.items}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
-      <FinalCta lang={lang} dict={dict} />
+      <HomeHero lang={lang} dict={dict} site={site} />
+      <Ticker items={site.home.ticker} />
+      <Facts site={site} />
+      <Doors lang={lang} site={site} />
+      <AuditFeature lang={lang} site={site} />
+      <HomeWork lang={lang} site={site} />
+      <Method lang={lang} site={site} />
+      <FaqSection
+        tone="sand-deep"
+        eyebrow={faq.eyebrow}
+        title={faq.title}
+        items={faq.items}
+        aside={
+          <CtaLink lang={lang} tone="night">
+            {site.cta.question}
+          </CtaLink>
+        }
+      />
+      <FinalCta lang={lang} />
     </>
   );
 }

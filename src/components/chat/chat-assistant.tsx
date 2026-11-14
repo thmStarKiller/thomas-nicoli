@@ -58,15 +58,15 @@ function LoopRail({ labels, reduced }: { labels: readonly string[]; reduced: boo
     <div data-testid="site-chat-loop" aria-hidden className="relative mt-4 grid grid-cols-4 gap-1 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-3">
       {!reduced && (
         <motion.span
-          className="absolute inset-y-0 w-1/4 bg-gradient-to-r from-transparent via-cobalt/25 to-transparent"
+          className="absolute inset-y-0 w-1/4 bg-spice-bright/15"
           animate={{ x: ["-100%", "400%"] }}
           transition={{ duration: 4.8, repeat: Infinity, ease: "linear" }}
         />
       )}
       {labels.map((label, index) => (
         <div key={label} className="relative flex min-w-0 flex-col items-center gap-1.5 text-center">
-          <span className="flex size-5 items-center justify-center rounded-full border border-cobalt-bright/45 bg-graphite text-[9px] font-semibold text-cobalt-bright">{index + 1}</span>
-          <span className="w-full truncate font-mono text-[8px] uppercase tracking-[0.08em] text-porcelain/55">{label}</span>
+          <span className="flex size-5 items-center justify-center rounded-full border border-spice-bright/45 bg-night text-[9px] font-semibold text-spice-bright">{index + 1}</span>
+          <span className="w-full truncate font-mono text-[8px] uppercase tracking-[0.08em] text-sand/65">{label}</span>
         </div>
       ))}
     </div>
@@ -364,20 +364,20 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.97 }}
             transition={{ duration: reduced ? 0 : 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[76px] right-0 flex h-[min(720px,calc(100svh-112px))] w-[min(390px,calc(100vw-32px))] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-graphite text-porcelain shadow-[0_28px_100px_rgba(18,18,21,0.42)]"
+            className="absolute bottom-[76px] right-0 flex h-[min(720px,calc(100svh-112px))] w-[min(390px,calc(100vw-32px))] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-night text-sand shadow-[0_28px_100px_rgba(13,10,7,0.42)]"
           >
             <header className="border-b border-white/10 px-5 pb-4 pt-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-cobalt text-porcelain"><Bot className="size-5" /></div>
+                  <div className="flex size-10 items-center justify-center rounded-2xl bg-spice text-sand"><Bot className="size-5" /></div>
                   <div>
                     <h2 id="chat-title" className="font-display text-xl font-semibold">{copy.title}</h2>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-porcelain/55"><span className="size-1.5 rounded-full bg-emerald-400" />{copy.status}</p>
+                    <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-sand/65"><span className="size-1.5 rounded-full bg-emerald-400" />{copy.status}</p>
                   </div>
                 </div>
                 <div className="flex gap-1.5">
-                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-porcelain/70 transition hover:bg-white/10 hover:text-white disabled:opacity-35"><RotateCcw className="size-4" /></button>
-                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-porcelain/70 transition hover:bg-white/10 hover:text-white"><X className="size-4" /></button>
+                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-sand/70 transition hover:bg-white/10 hover:text-white disabled:opacity-35"><RotateCcw className="size-4" /></button>
+                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-sand/70 transition hover:bg-white/10 hover:text-white"><X className="size-4" /></button>
                 </div>
               </div>
               <LoopRail labels={copy.loopLabels} reduced={reduced} />
@@ -390,15 +390,15 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                   data-message-role={message.role}
                   initial={reduced ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={message.role === "user" ? "ml-8 rounded-2xl rounded-br-md bg-cobalt px-4 py-3 text-sm leading-relaxed" : "mr-8 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-sm leading-relaxed text-porcelain/85"}
+                  className={message.role === "user" ? "ml-8 rounded-2xl rounded-br-md bg-spice px-4 py-3 text-sm leading-relaxed" : "mr-8 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-sm leading-relaxed text-sand/85"}
                 >
                   {message.content}
                 </motion.div>
               ))}
               {busy && (
-                <div className="mr-16 flex items-center gap-2 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-xs text-porcelain/55">
-                  <Sparkles className="size-3.5 text-cobalt-bright" />{activity}
-                  <span className="flex gap-1">{[0, 1, 2].map((item) => <motion.span key={item} className="size-1 rounded-full bg-cobalt-bright" animate={reduced ? undefined : { opacity: [0.25, 1, 0.25] }} transition={{ duration: 1.1, repeat: Infinity, delay: item * 0.16 }} />)}</span>
+                <div className="mr-16 flex items-center gap-2 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-xs text-sand/65">
+                  <Sparkles className="size-3.5 text-spice-bright" />{activity}
+                  <span className="flex gap-1">{[0, 1, 2].map((item) => <motion.span key={item} className="size-1 rounded-full bg-spice-bright" animate={reduced ? undefined : { opacity: [0.25, 1, 0.25] }} transition={{ duration: 1.1, repeat: Infinity, delay: item * 0.16 }} />)}</span>
                 </div>
               )}
               {emailed && !busy && <p className="flex items-center justify-end gap-1.5 pr-1 text-[10px] text-emerald-300/75"><MailCheck className="size-3" />{copy.emailed}</p>}
@@ -407,25 +407,25 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
 
             <div className="border-t border-white/10 bg-black/10 px-4 pb-4 pt-3">
               {atLimit ? (
-                <div className="rounded-2xl border border-cobalt/30 bg-cobalt/10 p-3 text-xs leading-relaxed text-porcelain/75">
+                <div className="rounded-2xl border border-spice/30 bg-spice/10 p-3 text-xs leading-relaxed text-sand/75">
                   <p>{copy.limit}</p>
-                  <button type="button" onClick={resetConversation} className="mt-3 inline-flex items-center gap-2 rounded-full bg-cobalt px-4 py-2 font-medium text-white"><RotateCcw className="size-3.5" />{copy.restart}</button>
+                  <button type="button" onClick={resetConversation} className="mt-3 inline-flex items-center gap-2 rounded-full bg-spice px-4 py-2 font-medium text-white"><RotateCcw className="size-3.5" />{copy.restart}</button>
                 </div>
               ) : (
                 <>
                   {suggestions.length > 0 && (
                     <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
-                      {suggestions.map((suggestion) => <button key={suggestion} type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="shrink-0 rounded-full border border-white/12 px-3 py-1.5 text-[10px] text-porcelain/65 transition hover:border-cobalt hover:text-white disabled:opacity-40">{suggestion}</button>)}
+                      {suggestions.map((suggestion) => <button key={suggestion} type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="shrink-0 rounded-full border border-white/12 px-3 py-1.5 text-[10px] text-sand/65 transition hover:border-spice hover:text-white disabled:opacity-40">{suggestion}</button>)}
                     </div>
                   )}
                   {!sessionToken && (
                     <div className="mb-2 rounded-xl bg-white/[0.04] p-2">
-                      <p className="mb-1.5 text-[10px] leading-relaxed text-porcelain/45">{copy.verify}</p>
+                      <p className="mb-1.5 text-[10px] leading-relaxed text-sand/65">{copy.verify}</p>
                       <TurnstileWidget key={turnstileCycle} action="site_chat" onToken={handleTurnstile} onError={handleTurnstileError} />
                       {turnstileToken && <p className="mt-1 flex items-center gap-1 text-[10px] text-emerald-300"><Check className="size-3" />OK</p>}
                     </div>
                   )}
-                  <div className="flex items-end gap-2 rounded-2xl border border-white/12 bg-white/[0.05] p-2 focus-within:border-cobalt/70">
+                  <div className="flex items-end gap-2 rounded-2xl border border-white/12 bg-white/[0.05] p-2 focus-within:border-spice/70">
                     <textarea
                       ref={textareaRef}
                       disabled={busy || Boolean(pending)}
@@ -435,12 +435,12 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                       rows={2}
                       maxLength={CHAT_LIMITS.message}
                       placeholder={copy.placeholder}
-                      className="max-h-28 min-h-12 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-white outline-none placeholder:text-porcelain/35"
+                      className="max-h-28 min-h-12 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-white outline-none placeholder:text-sand/65"
                     />
-                    <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cobalt text-white transition hover:bg-cobalt-bright disabled:cursor-not-allowed disabled:opacity-35"><Send className="size-4" /></button>
+                    <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-spice text-white transition hover:bg-spice-deep disabled:cursor-not-allowed disabled:opacity-35"><Send className="size-4" /></button>
                   </div>
                   {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
-                  <p className="mt-2 text-[9px] leading-relaxed text-porcelain/35">{copy.privacy}</p>
+                  <p className="mt-2 text-[9px] leading-relaxed text-sand/65">{copy.privacy}</p>
                 </>
               )}
             </div>
@@ -455,11 +455,11 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
         aria-expanded={open}
         aria-label={open ? copy.closeLabel : copy.openLabel}
         onClick={() => setOpen((value) => !value)}
-        className="group relative flex h-14 items-center gap-2 overflow-visible rounded-full bg-graphite px-4 text-sm font-medium text-porcelain shadow-[0_16px_50px_rgba(18,18,21,0.3)]"
+        className="group relative flex h-14 items-center gap-2 overflow-visible border border-sand/25 bg-night px-4 text-sm font-medium text-sand"
       >
         <span className="relative flex size-8 items-center justify-center">
-          {!reduced && <motion.span data-testid="site-chat-orbit" aria-hidden className="absolute -inset-1.5 rounded-full border border-cobalt/70 border-r-transparent" animate={{ rotate: 360, scale: [1, 1.08, 1] }} transition={{ rotate: { duration: 4.5, repeat: Infinity, ease: "linear" }, scale: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} />}
-          <span className="relative flex size-8 items-center justify-center rounded-full bg-cobalt"><MessageCircle className="size-4" /></span>
+          {!reduced && <motion.span data-testid="site-chat-orbit" aria-hidden className="absolute -inset-1.5 rounded-full border border-spice-bright/80" animate={{ opacity: [0.9, 0.2, 0.9] }} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }} />}
+          <span className="relative flex size-8 items-center justify-center rounded-full bg-spice"><MessageCircle className="size-4" /></span>
         </span>
         <span className="relative hidden pr-1 sm:block">{copy.launcher}</span>
       </button>

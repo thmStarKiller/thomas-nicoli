@@ -1,8 +1,16 @@
 / /es 302
-/services /es/services 302
+/services /es/business 302
+/business /es/business 302
+/professionals /es/professionals 302
+/es/services /es/business 301
+/en/services /en/business 301
+/fr/services /fr/business 301
 /work /es/work 302
 /about /es/about 302
 /contact /es/contact 302
 /privacy /es/privacy 302
 /legal /es/legal 302
 /work/* /es/work/:splat 302
+/:lang/work/aurea-studio /:lang/work 301
+/:lang/work/casa-nomada /:lang/work 301
+/:lang/work/atelier-vela /:lang/work 301

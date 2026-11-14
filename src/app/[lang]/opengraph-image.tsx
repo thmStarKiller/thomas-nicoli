@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/content/site-config";
-import { getDictionary } from "@/i18n";
+import { getSite } from "@/i18n/site";
 import { hasLocale, locales } from "@/i18n/config";
 
 export const size = { width: 1200, height: 630 };
@@ -18,7 +18,7 @@ export default async function OgImage({
 }) {
   const { lang } = await params;
   const locale = hasLocale(lang) ? lang : "es";
-  const dict = await getDictionary(locale);
+  const { hero } = getSite(locale).home;
 
   return new ImageResponse(
     (
@@ -29,28 +29,25 @@ export default async function OgImage({
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#121215",
+          background: "#0b0a09",
           padding: 72,
           fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ width: 14, height: 14, borderRadius: 99, background: "#3d5bff" }} />
-          <span style={{ color: "#f4f1ea", fontSize: 30, letterSpacing: 1 }}>
-            {siteConfig.identity.studioName}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ color: "#ece4d4", fontSize: 34 }}>{siteConfig.identity.ownerName}</span>
+          <span style={{ color: "#e8642c", fontSize: 20, letterSpacing: 4, textTransform: "uppercase" }}>
+            {hero.label}
           </span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <span style={{ color: "#f4f1ea", fontSize: 84, fontWeight: 600, lineHeight: 1.04 }}>
-            {dict.hero.line1}
-          </span>
-          <span style={{ color: "#3d5bff", fontSize: 84, fontWeight: 600, fontStyle: "italic", lineHeight: 1.04 }}>
-            {dict.hero.line2} {dict.hero.line3}
-          </span>
+        <div style={{ display: "flex", flexWrap: "wrap", fontSize: 92, lineHeight: 1.02, letterSpacing: -2 }}>
+          <span style={{ color: "#ece4d4" }}>{hero.title[0]}</span>
+          <span style={{ color: "#e8642c", fontStyle: "italic" }}>{hero.title[1]}</span>
+          <span style={{ color: "#ece4d4" }}>{hero.title[2]}</span>
         </div>
-        <span style={{ color: "rgba(244,241,234,0.55)", fontSize: 26 }}>
-          {dict.hero.trustLine}
-        </span>
+        <div style={{ display: "flex", borderTop: "1px solid rgba(236,228,212,0.3)", paddingTop: 24 }}>
+          <span style={{ color: "rgba(236,228,212,0.75)", fontSize: 26 }}>{hero.note}</span>
+        </div>
       </div>
     ),
     size,

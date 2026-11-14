@@ -1,10 +1,10 @@
 # Thomas Nicoli Consulting — website
 
-Personal website for an independent consultant working across e-commerce, CRM, web and automation, based in Madrid. Built with Next.js 16 (App Router + Turbopack), React 19, TypeScript strict, Tailwind CSS 4, Motion, Lenis and React Three Fiber.
+Personal website for Thomas Nicoli, an independent AI consultant for businesses and professionals, based in Madrid. Built with Next.js 16 (App Router + Turbopack), React 19, TypeScript strict, Tailwind CSS 4, Motion and Lenis.
 
 **Trilingual (ES / EN / FR)** — Spanish is the default locale. All routes live under `/[lang]` (`/es`, `/en`, `/fr`); a Next 16 `proxy.ts` redirects unprefixed paths to the best locale from `Accept-Language`. Every page ships canonical + hreflang (`x-default` → ES), localized metadata, localized OG images and a 3-locale sitemap.
 
-Fully independent side business — no employer names, assets, or implied endorsements anywhere. Case studies are honestly labelled **concept studies** until real client work replaces them.
+Fully independent side business: no employer names, assets or implied endorsements anywhere. The work pages show real experience and self-initiated builds only. No client results are claimed.
 
 ## Local setup
 
@@ -37,22 +37,29 @@ Copy `.env.example` to `.env.local` for local development. In Cloudflare Pages, 
 | `NEXT_PUBLIC_CALENDAR_URL` | Shows the "Book a discovery call" button when set |
 | `NEXT_PUBLIC_WHATSAPP_URL` | Shows the WhatsApp button when set |
 | `NEXT_PUBLIC_ENABLE_ANALYTICS` | Feature flag (no analytics shipped by default) |
-| `NEXT_PUBLIC_EXPERIMENTAL_WEBGPU` | Reserved flag — WebGPU is not implemented; the site uses stable WebGL2 |
 
 ## Editing text and links
 
-All copy lives in the **dictionaries** — one per locale, same shape enforced by TypeScript:
+Copy lives in two places, one file per locale in each, with the same shape enforced by TypeScript:
 
-- **`src/i18n/dictionaries/es.ts`** — Spanish (default public locale)
-- **`src/i18n/dictionaries/en.ts`** — English
-- **`src/i18n/dictionaries/fr.ts`** — French
-- **`src/content/site-config.ts`** — locale-independent identity: name, contact channels, socials, profile image path, feature flags, site URL.
+- **`src/i18n/site/{es,en,fr}.ts`**: home, the two audience pages (`/business`, `/professionals`), offers and prices, the work index and every case. The shape is in `src/i18n/site/types.ts`.
+- **`src/i18n/dictionaries/{es,en,fr}.ts`**: about, contact form, privacy, legal, footer and page metadata.
+- **`src/content/site-config.ts`**: name, contact channels, socials, profile image path, feature flags, site URL.
 
-Components never hardcode copy; empty contact values (email, phone, WhatsApp, calendar) automatically hide the related UI. To change the default locale, edit `defaultLocale` in `src/i18n/config.ts`.
+Feature flags in `site-config.ts`:
+
+- `showPrices`: prices come from the offer catalogue. Set to `false` to hide every price.
+- `showDraftPlaceholders`: shows dashed "Draft" blocks where content is still missing (client quotes). Set to `false` before going live.
+
+Empty contact values (email, phone, WhatsApp, calendar) hide the related UI. With `NEXT_PUBLIC_CALENDAR_URL` set, the main button opens the calendar; without it, it leads to the enquiry form. To change the default locale, edit `defaultLocale` in `src/i18n/config.ts`.
 
 ## Design system
 
-Avant-garde editorial direction: porcelain `#f4f1ea` / graphite `#121215` / cobalt `#1f3be0→#3d5bff`, Fraunces (display) + Inter (body) + JetBrains Mono (meta labels). Motion: Lenis smooth scroll, masked word reveals (`TextReveal`), magnetic buttons, custom difference-blend cursor, clip-path image reveals, scroll-pinned horizontal work gallery, film-grain overlay — all disabled under `prefers-reduced-motion`. Hero 3D: custom GLSL simplex-displacement blob with cobalt fresnel rim (WebGL2, procedural lighting only, static SVG fallback).
+Flat and square, on purpose: no gradients, no rounded corners, no decorative shapes. Tokens are in `src/app/globals.css`.
+
+- Colour: night `#0b0a09`, sand `#ece4d4` and `#dfd4bf`, one accent, spice `#9c350c` on sand and `#e8642c` on night.
+- Type: Bodoni Moda for display (fixed optical size so the hairlines stay readable), Hanken Grotesk for text and labels. Both are SIL Open Font Licence and self-hosted through `next/font`.
+- Motion: headline words rise from a mask (`Headline`), hairlines draw across (`Rule`), images are uncovered from the bottom (`data-wipe`), sections fade up (`Rise`), figures count up, index rows and buttons fill on hover, the portrait drifts on scroll, the header hides going down and returns going up, plus Lenis smooth scroll. A small inline script in the layout flags elements as they enter the viewport. Everything is off under `prefers-reduced-motion`, and nothing is hidden without JavaScript.
 
 ## Replacing the profile photo
 
@@ -61,16 +68,11 @@ Avant-garde editorial direction: porcelain `#f4f1ea` / graphite `#121215` / coba
 3. Preserve the source ratio in the image container. Adjust `media.profileImageFocus` only if a different-ratio crop is intentional.
 4. Rollback: point to `/images/profile-placeholder.svg`.
 
-See `docs/IMAGE_GUIDE.md` for the portrait art-direction brief and concept-cover briefs.
+The portrait is shown in black and white and returns to colour on hover.
 
-## Replacing concept work with real work
+## Adding a case to the work index
 
-In each file under `src/i18n/dictionaries/`:
-
-1. Add the verified project content to the same dictionary shape in ES, EN and FR.
-2. Include context, exact contribution, decisions, launched output and sourced results.
-3. Replace or add the cover in `public/visuals/` or `public/images/` with imagery you are allowed to publish.
-4. Keep concept studies separate from real client work; never remove the concept label from a fictional case.
+In each of `src/i18n/site/{es,en,fr}.ts`, add an entry to `work.cases` with the same `slug` in all three files: period, title, label, status, summary, context, what was built, what it shows and the stack. The case page and the sitemap pick it up from there. Experience entries are in `work.experience.items`. Keep to verified facts and do not name an employer.
 
 ## Enabling Resend (contact-form email)
 
@@ -79,10 +81,6 @@ In each file under `src/i18n/dictionaries/`:
 3. Redeploy. Missing required email variables produces an error rather than silently discarding a real enquiry.
 
 The browser performs localized validation, then the Cloudflare Pages Function revalidates every field before calling Resend. It includes a honeypot + time-trap and never logs message contents.
-
-## WebGPU experimentation
-
-Not implemented. The hero uses stable WebGL2 via React Three Fiber. `NEXT_PUBLIC_EXPERIMENTAL_WEBGPU` is reserved in config for a future progressive-enhancement branch; leave it `false`.
 
 ## Deploying to Cloudflare Pages
 
@@ -110,13 +108,13 @@ Work through **`docs/CONTENT_CHECKLIST.md`** — legal identity (NIF, address fo
 ```
 src/
   app/            routes + sitemap.ts, robots.ts, opengraph-image.tsx
-  components/     layout/ sections/ ui/ three/ forms/
-  content/        site-config.ts, site-content.ts  ← edit these
+  components/     layout/ home/ sections/ ui/ motion/ forms/ chat/
+  content/        site-config.ts
+  i18n/           site/ (new structure copy), dictionaries/ (shared copy)
   lib/            cn, seo, structured-data
   types/          shared domain types
 functions/        Cloudflare Pages Function for Resend contact delivery
 scripts/          Cloudflare Pages build adapter
 public/images/    profile.webp, profile-placeholder.svg
-public/visuals/   concept-study SVG covers
 docs/             BUILD_PLAN, IMAGE_GUIDE, CONTENT_CHECKLIST
 ```
