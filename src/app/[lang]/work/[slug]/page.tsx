@@ -67,7 +67,7 @@ export default async function CasePage({
           <Headline
             as="h1"
             parts={item.title}
-            className="mt-10 max-w-[16ch] text-balance text-[length:var(--text-hero)] leading-[0.98] sm:mt-14"
+            className="mt-10 max-w-[14ch] text-balance text-[length:var(--text-hero)] leading-[0.92] tracking-[-0.03em] sm:mt-14"
             start={120}
           />
           <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-12">
@@ -154,10 +154,9 @@ export default async function CasePage({
           <Link
             href={localePath(lang, `/work/${next.slug}`)}
             className="row-fill group grid grid-cols-12 items-baseline gap-4 py-12 sm:py-16"
-            style={{ "--row-fill": "var(--color-sand)", "--row-ink": "var(--color-night)" } as React.CSSProperties}
           >
             <span className="eyebrow col-span-12 opacity-65 lg:col-span-2">{l.next}</span>
-            <span className="row-shift col-span-10 font-display text-[clamp(2rem,5vw,4.6rem)] leading-none lg:col-span-9">
+            <span className="row-shift col-span-10 font-display text-[clamp(2.4rem,8vw,8.5rem)] leading-[0.9] tracking-[-0.03em] lg:col-span-9">
               {next.title}
             </span>
             <span className="col-span-2 justify-self-end lg:col-span-1">

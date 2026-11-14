@@ -10,6 +10,7 @@ import { buildStructuredData } from "@/lib/structured-data";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { StickyCta } from "@/components/layout/sticky-cta";
+import { RouteCurtain } from "@/components/motion/route-curtain";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { ChatAssistant } from "@/components/chat/chat-assistant";
 import "../globals.css";
@@ -35,7 +36,13 @@ const hanken = Hanken_Grotesk({
  * then flags animated elements as they enter the viewport, including ones
  * added later by client-side navigation.
  */
-const revealScript = `(function(){var d=document,r=d.documentElement;r.classList.add("js");if(!("IntersectionObserver" in window)){return r.classList.remove("js")}var S="[data-rise]:not([data-seen]),[data-words]:not([data-seen]),[data-wipe]:not([data-seen]),[data-draw]:not([data-seen])";var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.setAttribute("data-seen","");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:0.05});function scan(n){if(!n.querySelectorAll)return;if(n.matches&&n.matches(S))io.observe(n);n.querySelectorAll(S).forEach(function(el){io.observe(el)})}function start(){scan(d.body);new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(scan)})}).observe(d.body,{childList:true,subtree:true})}if(d.body)start();else d.addEventListener("DOMContentLoaded",start)})();`;
+const revealScript = `(function(){var d=document,r=d.documentElement;r.classList.add("js");if(!("IntersectionObserver" in window)){return r.classList.remove("js")}var S="[data-rise]:not([data-seen]),[data-words]:not([data-seen]),[data-wipe]:not([data-seen]),[data-draw]:not([data-seen])";var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.setAttribute("data-seen","");io.unobserve(e.target)}})},{rootMargin:"0px 0px 90px 0px",threshold:0});function scan(n){if(!n.querySelectorAll)return;if(n.matches&&n.matches(S))io.observe(n);n.querySelectorAll(S).forEach(function(el){io.observe(el)})}function start(){scan(d.body);new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(scan)})}).observe(d.body,{childList:true,subtree:true})}if(d.body)start();else d.addEventListener("DOMContentLoaded",start)})();`;
+
+/**
+ * Decides, before first paint, whether to play the opening curtain: once per
+ * browser session and never for visitors who prefer reduced motion.
+ */
+const introScript = `(function(){try{var r=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("tn-intro"))return;sessionStorage.setItem("tn-intro","1");r.classList.add("intro-on");setTimeout(function(){r.classList.remove("intro-on")},2700)}catch(e){}})();`;
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -61,8 +68,8 @@ export async function generateMetadata({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0d0a07" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0a07" },
+    { media: "(prefers-color-scheme: light)", color: "#0b0a09" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0a09" },
   ],
 };
 
@@ -85,7 +92,14 @@ export default async function LocaleLayout({
     <html lang={lang} className={`${bodoni.variable} ${hanken.variable}`}
       suppressHydrationWarning>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: introScript }} />
         <script dangerouslySetInnerHTML={{ __html: revealScript }} />
+        <div aria-hidden className="intro">
+          <span className="intro-name font-display">
+            <span>{siteConfig.identity.ownerName}</span>
+          </span>
+        </div>
+        <RouteCurtain />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

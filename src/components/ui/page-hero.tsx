@@ -32,7 +32,7 @@ export function PageHero({
           as="h1"
           parts={title}
           accentClassName="text-spice-bright"
-          className="mt-10 max-w-[18ch] text-balance text-[length:var(--text-hero)] leading-[0.98] sm:mt-14"
+          className="mt-10 max-w-[15ch] text-balance text-[length:var(--text-hero)] leading-[0.92] tracking-[-0.03em] sm:mt-14"
           start={120}
         />
         {(intro || children) && (

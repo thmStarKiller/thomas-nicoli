@@ -16,8 +16,8 @@ export function FinalCta({ lang }: { lang: Locale }) {
         <Headline
           parts={c.title}
           accentClassName="text-spice-bright"
-          className="max-w-[14ch] text-balance text-[clamp(3rem,9.6vw,10.5rem)] leading-[0.92]"
-          step={80}
+          className="text-balance text-[15.5vw] leading-[0.86] tracking-[-0.035em] lg:max-w-[8em] lg:text-[length:var(--text-mega)]"
+          step={90}
         />
         <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-12">
           <Rise delay={200} className="lg:col-span-5 lg:col-start-7">

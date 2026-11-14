@@ -56,9 +56,14 @@ export default async function HomePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
-      <HomeHero lang={lang} dict={dict} site={site} />
-      <Ticker items={site.home.ticker} />
-      <Facts site={site} />
+      {/* The hero is pinned inside this wrapper; the bands below slide over it */}
+      <div className="relative">
+        <HomeHero lang={lang} dict={dict} site={site} />
+        <div className="relative z-10">
+          <Ticker items={site.home.ticker} />
+          <Facts site={site} />
+        </div>
+      </div>
       <Doors lang={lang} site={site} />
       <AuditFeature lang={lang} site={site} />
       <HomeWork lang={lang} site={site} />

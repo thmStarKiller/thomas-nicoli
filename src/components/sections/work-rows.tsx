@@ -13,13 +13,12 @@ export function WorkRows({ lang, cases }: { lang: Locale; cases: readonly CaseIt
           <Link
             href={localePath(lang, `/work/${item.slug}`)}
             className="row-fill group grid grid-cols-12 items-baseline gap-x-4 gap-y-2 border-t border-sand/20 py-7 sm:py-9"
-            style={{ "--row-fill": "var(--color-sand)", "--row-ink": "var(--color-night)" } as React.CSSProperties}
           >
             <span className="eyebrow col-span-12 opacity-65 lg:col-span-1">{item.period}</span>
-            <span className="row-shift col-span-12 font-display text-[clamp(1.7rem,3.3vw,2.9rem)] leading-[1.04] lg:col-span-5">
+            <span className="row-shift col-span-12 font-display text-[clamp(2rem,4.6vw,4.4rem)] leading-[0.98] tracking-[-0.03em] lg:col-span-6">
               {item.title}
             </span>
-            <span className="col-span-12 lg:col-span-4">
+            <span className="col-span-12 lg:col-span-3">
               <span className="block max-w-[32rem] text-[17px] leading-snug opacity-85">{item.summary}</span>
             </span>
             <span className="eyebrow col-span-10 opacity-65 lg:col-span-1">{item.status}</span>

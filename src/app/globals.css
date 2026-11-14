@@ -30,12 +30,15 @@
   --font-sans: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  --text-hero: clamp(2.75rem, 6.3vw, 7.25rem);
-  --text-h2: clamp(2.2rem, 5vw, 4.75rem);
+  /* mega: the home hero and the closing question, set as large as the page allows */
+  --text-mega: clamp(3.1rem, 10.6vw, 13rem);
+  --text-hero: clamp(2.9rem, 7.8vw, 9rem);
+  --text-h2: clamp(2.4rem, 6.2vw, 6.5rem);
   --text-h3: clamp(1.5rem, 2.3vw, 2.15rem);
   --text-lead: clamp(1.15rem, 1.55vw, 1.4rem);
 
   --ease-luxe: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 
   --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
@@ -315,7 +318,7 @@ body {
   position: absolute;
   inset: 0 -1.25rem;
   z-index: -1;
-  background: var(--row-fill, var(--color-night));
+  background: var(--row-fill, var(--color-spice-bright));
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.6s var(--ease-luxe);
@@ -327,7 +330,7 @@ body {
   }
   .row-fill:hover,
   .row-fill:focus-visible {
-    color: var(--row-ink, var(--color-sand));
+    color: var(--row-ink, var(--color-night));
   }
   .row-fill .row-shift {
     transition: transform 0.6s var(--ease-luxe);
@@ -364,6 +367,79 @@ body {
 @keyframes ticker {
   to {
     transform: translateX(-50%);
+  }
+}
+
+/*
+ * Opening curtain. A flat block of spice with the name on it, shown once per
+ * visit, then pulled up off the page. The inline script in the layout adds
+ * html.intro-on before first paint; the animation ends with the curtain fully
+ * clipped, so it can never stay in the way.
+ */
+.intro {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.intro-on .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    pointer-events: none;
+    padding: 0 1.25rem 1.5rem;
+    color: var(--color-night);
+    background: var(--color-spice-bright);
+    animation: curtain-up 0.95s var(--ease-inout) 0.85s forwards;
+  }
+  html.intro-on .intro-name {
+    display: block;
+    overflow: hidden;
+    font-size: 12.6vw;
+    line-height: 0.86;
+    white-space: nowrap;
+  }
+  html.intro-on .intro-name > span {
+    display: block;
+    animation: intro-rise 0.8s var(--ease-snap) 0.05s both;
+  }
+
+  /* Wipe between pages: the same block crosses the screen after a navigation */
+  .route-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    pointer-events: none;
+    background: var(--color-spice-bright);
+    animation: curtain-up 0.75s var(--ease-inout) forwards;
+  }
+}
+@keyframes curtain-up {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes intro-rise {
+  from {
+    transform: translateY(110%) rotate(6deg);
+  }
+  to {
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* The home hero stays put while the next band slides over it */
+@media (min-width: 1024px) and (min-height: 760px) {
+  .hero-pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    /* sized so four lines of headline plus the text below always fit */
+    --text-mega: min(10.6vw, calc((100svh - 330px) / 3.44), 13rem);
   }
 }
 
@@ -407,12 +483,12 @@ body {
   /* fade and rise */
   html.js [data-rise]:not([data-seen]) {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(64px);
   }
   html.js [data-rise] {
     transition:
-      opacity 1s var(--ease-luxe) var(--d, 0ms),
-      transform 1.2s var(--ease-luxe) var(--d, 0ms);
+      opacity 0.8s var(--ease-snap) var(--d, 0ms),
+      transform 1.1s var(--ease-snap) var(--d, 0ms);
   }
 
   /* headline words rising from behind a mask */
@@ -425,10 +501,17 @@ body {
   }
   .w > span {
     display: inline-block;
-    transition: transform 1.15s var(--ease-luxe) var(--d, 0ms);
+    transform-origin: 0% 100%;
+    transition: transform 1.05s var(--ease-snap) var(--d, 0ms);
   }
   html.js [data-words]:not([data-seen]) .w > span {
-    transform: translateY(118%);
+    transform: translateY(125%) rotate(9deg);
+  }
+  /* while the opening curtain is up, hold the hero back so it lands after it */
+  html.intro-on [data-words] .w > span,
+  html.intro-on [data-rise],
+  html.intro-on [data-wipe] > * {
+    transition-delay: calc(var(--d, 0ms) + 1050ms);
   }
 
   /* hairline draw */

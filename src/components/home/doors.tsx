@@ -9,7 +9,7 @@ import { Rise } from "@/components/ui/rise";
 /** Four checkable facts, set large. */
 export function Facts({ site }: { site: SiteCopy }) {
   return (
-    <section className="bg-sand pt-16 sm:pt-24">
+    <section className="bg-sand pb-4 pt-16 sm:pt-24">
       <dl className="mx-auto grid max-w-[1440px] grid-cols-2 gap-x-6 gap-y-12 px-5 sm:px-8 lg:grid-cols-4 lg:gap-x-10 lg:px-12">
         {site.home.facts.map((fact, i) => (
           <Rise key={fact.label} delay={i * 90} className="border-t border-night/25 pt-5">
@@ -17,9 +17,9 @@ export function Facts({ site }: { site: SiteCopy }) {
             <dd>
               <CountUp
                 value={fact.value}
-                className="block whitespace-nowrap font-display text-[clamp(2.8rem,6.6vw,6rem)] leading-none"
+                className="block whitespace-nowrap font-display text-[clamp(3.2rem,7.4vw,8rem)] leading-[0.85]"
               />
-              <span className="mt-4 block max-w-[20ch] text-[16px] leading-snug text-night-mute">
+              <span className="mt-5 block max-w-[20ch] text-[17px] leading-snug text-night-mute">
                 {fact.label}
               </span>
             </dd>
@@ -57,15 +57,15 @@ export function Doors({ lang, site }: { lang: Locale; site: SiteCopy }) {
               <Rise as="li" key={door.href} delay={i * 110}>
                 <Link
                   href={href}
-                  className="row-fill group grid grid-cols-12 items-baseline gap-x-4 gap-y-3 border-t border-night/25 py-8 sm:py-11"
+                  className="row-fill group grid grid-cols-12 items-baseline gap-x-4 gap-y-3 border-t border-night/25 py-9 sm:py-14"
                 >
-                  <span className="col-span-2 font-display text-[1.6rem] text-spice transition-colors duration-500 group-hover:text-spice-bright lg:col-span-1">
+                  <span className="col-span-2 font-display text-[clamp(1.6rem,2.4vw,2.4rem)] text-spice transition-colors duration-500 group-hover:text-night lg:col-span-1">
                     {door.numeral}
                   </span>
-                  <span className="row-shift col-span-10 font-display text-[clamp(1.9rem,4.4vw,4.1rem)] leading-[1.02] lg:col-span-6">
+                  <span className="row-shift col-span-10 font-display text-[clamp(2.2rem,6.4vw,6.6rem)] leading-[0.95] tracking-[-0.03em] lg:col-span-7">
                     {door.title}
                   </span>
-                  <span className="col-span-10 col-start-3 lg:col-span-4 lg:col-start-auto">
+                  <span className="col-span-10 col-start-3 lg:col-span-3 lg:col-start-auto">
                     <span className="block max-w-[32rem] text-[17px] leading-snug opacity-85">{door.text}</span>
                     <span className="eyebrow mt-3 block opacity-70">{door.meta}</span>
                   </span>

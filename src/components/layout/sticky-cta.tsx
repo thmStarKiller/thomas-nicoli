@@ -40,7 +40,8 @@ export function StickyCta({ lang, label }: { lang: Locale; label: string }) {
 
   if (suppressed) return null;
 
-  const className = "cta cta-spice w-full border border-night/20";
+  // Sand with a night edge reads on all three section colours.
+  const className = "cta w-full border border-night";
   const inner = (
     <>
       {label}

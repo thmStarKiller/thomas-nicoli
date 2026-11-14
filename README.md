@@ -59,7 +59,8 @@ Flat and square, on purpose: no gradients, no rounded corners, no decorative sha
 
 - Colour: night `#0b0a09`, sand `#ece4d4` and `#dfd4bf`, one accent, spice `#9c350c` on sand and `#e8642c` on night.
 - Type: Bodoni Moda for display (fixed optical size so the hairlines stay readable), Hanken Grotesk for text and labels. Both are SIL Open Font Licence and self-hosted through `next/font`.
-- Motion: headline words rise from a mask (`Headline`), hairlines draw across (`Rule`), images are uncovered from the bottom (`data-wipe`), sections fade up (`Rise`), figures count up, index rows and buttons fill on hover, the portrait drifts on scroll, the header hides going down and returns going up, plus Lenis smooth scroll. A small inline script in the layout flags elements as they enter the viewport. Everything is off under `prefers-reduced-motion`, and nothing is hidden without JavaScript.
+- Scale: the home hero and the closing question use `--text-mega`, sized from the viewport so the headline runs across the portrait. The audit sits on a full block of spice with its price as the largest thing on the page.
+- Motion: an opening curtain once per browser session (`.intro`, started by an inline script in the layout), a wipe after each navigation (`RouteCurtain`), a hero pinned on tall desktop screens while two bands of oversized words slide over it and react to scroll speed (`Ticker`), headline words that rise and turn into place (`Headline`), hairlines that draw across (`Rule`), images uncovered from the bottom (`data-wipe`), sections that rise (`Rise`), figures that count up, index rows and buttons that fill with spice on hover, a portrait that drifts on scroll, a header that hides going down and returns going up, plus Lenis smooth scroll. Everything is off under `prefers-reduced-motion`, and nothing is hidden without JavaScript.
 
 ## Replacing the profile photo
 
