@@ -51,7 +51,9 @@ export const siteConfig = {
   },
 
   seo: {
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thomas-nicoli.com",
+    // The domain attached to the Pages project. Canonical URLs, hreflang, the
+    // sitemap and share images are all built from this.
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://metamorphoses-consulting.co.uk",
   },
 } as const;
 

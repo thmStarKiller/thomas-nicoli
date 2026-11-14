@@ -96,8 +96,8 @@ For a manual deployment, run `npm run pages:deploy` after `wrangler login`.
 
 ## Custom domain
 
-1. Keep `thomas-nicoli.com` attached to the existing Cloudflare Pages project.
-2. Set `NEXT_PUBLIC_SITE_URL=https://thomas-nicoli.com` and redeploy.
+1. `metamorphoses-consulting.co.uk` and `www.metamorphoses-consulting.co.uk` are attached to the Cloudflare Pages project.
+2. The site address defaults to `https://metamorphoses-consulting.co.uk` in `src/content/site-config.ts`. Set `NEXT_PUBLIC_SITE_URL` only to override it.
 3. Validate structured data at https://validator.schema.org/ and submit `/sitemap.xml` in Google Search Console.
 
 ## Pre-launch checklist
