@@ -211,7 +211,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         {status === "sending" ? <Loader2 className="size-4 animate-spin" /> : <ArrowUpRight aria-hidden className="size-[1.25em] transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />}
       </button>
       <noscript>
-        <p className="border border-night/25 p-4 text-[15px]">{additions.noJs} <a className="text-spice underline" href="mailto:bonjour@thomas-nicoli.com">{additions.emailCta}</a></p>
+        <p className="border border-night/25 p-4 text-[15px]">{additions.noJs} <a className="text-spice underline" href="mailto:thomas.nicoli@metamorphoses-consulting.co.uk">{additions.emailCta}</a></p>
       </noscript>
     </form>
   );

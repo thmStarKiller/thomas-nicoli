@@ -104,7 +104,7 @@ try {
     assert.equal(await page.evaluate(() => document.body.innerHTML.includes("opacity:0")), false);
     const contact = await page.goto(`${baseUrl}/${locale}/contact`, { waitUntil: "load" });
     assert.equal(contact?.status(), 200);
-    assert.equal(await page.locator('a[href="mailto:bonjour@thomas-nicoli.com"]').first().isVisible(), true);
+    assert.equal(await page.locator('a[href="mailto:thomas.nicoli@metamorphoses-consulting.co.uk"]').first().isVisible(), true);
     await page.evaluate(() => window.scrollTo(0, 0));
     const screenshot = join(outputDir, `${locale}-375-no-js.png`);
     await page.screenshot({ path: screenshot, fullPage: true });

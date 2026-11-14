@@ -15,7 +15,7 @@ export const siteConfig = {
 
   contact: {
     // Dedicated public business email used by the simple non-JavaScript fallback.
-    email: "bonjour@thomas-nicoli.com",
+    email: "thomas.nicoli@metamorphoses-consulting.co.uk",
     phone: "",
     whatsappUrl: process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "",
     calendarUrl: process.env.NEXT_PUBLIC_CALENDAR_URL ?? "",

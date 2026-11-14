@@ -30,7 +30,7 @@ const copy = {
       privacyAfter: "y acepto el uso de mis datos para responder.",
       turnstile: "Esta consulta está protegida por Cloudflare Turnstile.",
       noJs: "¿JavaScript no está disponible? Usa el contacto sencillo por email.",
-      emailCta: "Escribir a bonjour@thomas-nicoli.com",
+      emailCta: "Escribir a thomas.nicoli@metamorphoses-consulting.co.uk",
       websiteError: "Introduce una URL http o https válida.",
     },
     clarity: {
@@ -85,7 +85,7 @@ const copy = {
       { id: "digital-team", title: "For digital teams", text: "E-commerce and CRM diagnosis, stakeholder alignment, delivery support, platform operations, QA and handover.", cta: "Clarify the next step" },
     ],
     contact: {
-      website: "Current website or relevant URL (optional)", websitePlaceholder: "https://your-site.com", timing: "Desired timing (optional)", timingPlaceholder: "Choose an option", timingOptions: ["As soon as possible", "Within one to three months", "Within three to six months", "I am exploring"], location: "City / country (optional)", locationPlaceholder: "London, United Kingdom", privacyBefore: "I have read the", privacyLink: "privacy policy", privacyAfter: "and agree to my details being used to reply.", turnstile: "This enquiry is protected by Cloudflare Turnstile.", noJs: "JavaScript unavailable? Use the simple email contact route.", emailCta: "Email bonjour@thomas-nicoli.com", websiteError: "Enter a valid http or https URL.",
+      website: "Current website or relevant URL (optional)", websitePlaceholder: "https://your-site.com", timing: "Desired timing (optional)", timingPlaceholder: "Choose an option", timingOptions: ["As soon as possible", "Within one to three months", "Within three to six months", "I am exploring"], location: "City / country (optional)", locationPlaceholder: "London, United Kingdom", privacyBefore: "I have read the", privacyLink: "privacy policy", privacyAfter: "and agree to my details being used to reply.", turnstile: "This enquiry is protected by Cloudflare Turnstile.", noJs: "JavaScript unavailable? Use the simple email contact route.", emailCta: "Email thomas.nicoli@metamorphoses-consulting.co.uk", websiteError: "Enter a valid http or https URL.",
     },
     clarity: {
       eyebrow: "Project Clarity", title: "Clarify the project before building.", intro: "Six questions to organise the blockage, context and worthwhile outcome. This is not a chatbot or an instant answer.", asyncNote: "The request enters a secure queue even when my computer is off. A Gemma-assisted first read runs locally later; I review the report and every draft before replying.", signalStages: ["Context", "Secure queue", "Local Gemma", "Human review"], progress: "Question {current} of 6", stepAnnouncement: "Question {current} of 6: {title}",
@@ -107,7 +107,7 @@ const copy = {
       { id: "digital-team", title: "Pour les équipes digitales", text: "Diagnostic e-commerce et CRM, alignement des équipes et responsables, appui à la livraison, opérations de plateforme, QA et passation.", cta: "Clarifier la prochaine étape" },
     ],
     contact: {
-      website: "Site actuel ou URL utile (optionnel)", websitePlaceholder: "https://votre-site.fr", timing: "Échéance souhaitée (optionnel)", timingPlaceholder: "Choisir une option", timingOptions: ["Dès que possible", "Dans un à trois mois", "Dans trois à six mois", "Je suis en phase d’exploration"], location: "Ville / pays (optionnel)", locationPlaceholder: "Paris, France", privacyBefore: "J’ai lu la", privacyLink: "politique de confidentialité", privacyAfter: "et j’accepte l’utilisation de mes données pour recevoir une réponse.", turnstile: "Cette demande est protégée par Cloudflare Turnstile.", noJs: "JavaScript indisponible ? Utilisez le contact simple par email.", emailCta: "Écrire à bonjour@thomas-nicoli.com", websiteError: "Indiquez une URL http ou https valide.",
+      website: "Site actuel ou URL utile (optionnel)", websitePlaceholder: "https://votre-site.fr", timing: "Échéance souhaitée (optionnel)", timingPlaceholder: "Choisir une option", timingOptions: ["Dès que possible", "Dans un à trois mois", "Dans trois à six mois", "Je suis en phase d’exploration"], location: "Ville / pays (optionnel)", locationPlaceholder: "Paris, France", privacyBefore: "J’ai lu la", privacyLink: "politique de confidentialité", privacyAfter: "et j’accepte l’utilisation de mes données pour recevoir une réponse.", turnstile: "Cette demande est protégée par Cloudflare Turnstile.", noJs: "JavaScript indisponible ? Utilisez le contact simple par email.", emailCta: "Écrire à thomas.nicoli@metamorphoses-consulting.co.uk", websiteError: "Indiquez une URL http ou https valide.",
     },
     clarity: {
       eyebrow: "Project Clarity", title: "Clarifier le projet avant de construire.", intro: "Six questions pour ordonner le blocage, le contexte et le résultat qui mérite l’effort. Ce n’est ni un chatbot ni une réponse instantanée.", asyncNote: "La demande rejoint une file sécurisée même si mon ordinateur est éteint. Une première lecture assistée par Gemma est effectuée localement plus tard ; je relis le rapport et chaque brouillon avant de répondre.", signalStages: ["Contexte", "File sécurisée", "Gemma local", "Revue humaine"], progress: "Question {current} sur 6", stepAnnouncement: "Question {current} sur 6 : {title}",
