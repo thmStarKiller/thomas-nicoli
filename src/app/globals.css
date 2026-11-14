@@ -590,6 +590,12 @@ body {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--color-sand) 28%, transparent) transparent;
 }
+.chat-chips {
+  scrollbar-width: none;
+}
+.chat-chips::-webkit-scrollbar {
+  display: none;
+}
 .chat-chip {
   position: relative;
   isolation: isolate;

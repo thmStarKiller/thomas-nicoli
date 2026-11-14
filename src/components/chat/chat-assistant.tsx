@@ -58,6 +58,8 @@ function parsePendingChat(raw: string | null): PendingChat | null {
 const EASE = [0.19, 1, 0.22, 1] as const;
 const GLYPHS = "01<>/\\[]{}#%=+*";
 const MODEL_LABEL = "Nemotron 3.5 Super VL";
+/** Below Tailwind's `sm` breakpoint the panel takes the whole screen. */
+const PHONE_QUERY = "(max-width: 639px)";
 
 function scramble(length: number): string {
   let out = "";
@@ -199,7 +201,7 @@ function Elapsed({ reduced }: { reduced: boolean | null }) {
 /** The four real steps of a turn; the block marks where this turn is. */
 function LoopRail({ labels, stage, reduced }: { labels: readonly string[]; stage: number; reduced: boolean | null }) {
   return (
-    <div data-testid="site-chat-loop" aria-hidden className="relative mt-4 grid grid-cols-4 border-t border-sand/15">
+    <div data-testid="site-chat-loop" aria-hidden className="relative mt-3 grid grid-cols-4 border-t border-sand/15 sm:mt-4">
       <motion.span
         className="absolute left-0 top-[-1px] h-px w-1/4 bg-spice-bright"
         initial={false}
@@ -320,7 +322,9 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
 
   useEffect(() => {
     if (!open) return;
-    const raf = requestAnimationFrame(() => textareaRef.current?.focus());
+    const raf = requestAnimationFrame(() => {
+      if (!window.matchMedia(PHONE_QUERY).matches) textareaRef.current?.focus();
+    });
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
@@ -338,6 +342,38 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     if (!open) return;
     messagesEndRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "end" });
   }, [busy, messages, open, reduced]);
+
+  // On phones the panel is the whole visible screen. It tracks the visual
+  // viewport, so the input stays above the on-screen keyboard, and the page
+  // behind it does not scroll.
+  useEffect(() => {
+    if (!open) return;
+    const phone = window.matchMedia(PHONE_QUERY);
+    const viewport = window.visualViewport;
+    const style = document.documentElement.style;
+    const release = () => {
+      style.removeProperty("--chat-height");
+      style.removeProperty("--chat-top");
+      style.removeProperty("overflow");
+    };
+    const apply = () => {
+      if (!phone.matches) return release();
+      style.setProperty("--chat-height", `${Math.round(viewport?.height ?? window.innerHeight)}px`);
+      style.setProperty("--chat-top", `${Math.round(viewport?.offsetTop ?? 0)}px`);
+      style.setProperty("overflow", "hidden");
+      messagesEndRef.current?.scrollIntoView({ block: "end" });
+    };
+    apply();
+    viewport?.addEventListener("resize", apply);
+    viewport?.addEventListener("scroll", apply);
+    phone.addEventListener("change", apply);
+    return () => {
+      viewport?.removeEventListener("resize", apply);
+      viewport?.removeEventListener("scroll", apply);
+      phone.removeEventListener("change", apply);
+      release();
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!busy) return;
@@ -541,7 +577,8 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
             animate={{ clipPath: "inset(0% 0% 0% 0%)", opacity: 1 }}
             exit={reduced ? { opacity: 0 } : { clipPath: "inset(100% 0% 0% 0%)" }}
             transition={{ duration: reduced ? 0 : 0.55, ease: EASE }}
-            className="absolute bottom-[72px] right-0 flex h-[min(760px,calc(100svh-104px))] w-[min(440px,calc(100vw-32px))] flex-col overflow-hidden border border-sand/20 bg-night text-sand"
+            data-lenis-prevent
+            className="fixed inset-x-0 top-[var(--chat-top,0px)] flex h-[var(--chat-height,100dvh)] flex-col overflow-hidden border-sand/20 bg-night text-sand sm:absolute sm:inset-x-auto sm:bottom-[72px] sm:right-0 sm:top-auto sm:h-[min(760px,calc(100svh-104px))] sm:w-[440px] sm:border"
           >
             <CornerTicks />
             {!reduced && (
@@ -554,18 +591,22 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               />
             )}
 
-            <header className="relative border-b border-sand/15 px-5 pb-4 pt-4">
+            <header className="relative border-b border-sand/15 px-4 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-4">
               <div className="flex items-center justify-between gap-3">
-                <p className="flex min-w-0 items-center gap-2 font-hud text-[8px] uppercase leading-snug tracking-[0.14em] text-sand/60">
+                <p className="hidden min-w-0 items-center gap-2 font-hud text-[8px] uppercase leading-snug tracking-[0.14em] text-sand/60 sm:flex">
                   <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
                   <span>{copy.status}</span>
                 </p>
-                <div className="flex shrink-0">
-                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="chat-chip flex size-9 items-center justify-center border border-sand/20 text-sand/70 disabled:opacity-35"><RotateCcw className="size-4" /></button>
-                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="chat-chip -ml-px flex size-9 items-center justify-center border border-sand/20 text-sand/70"><X className="size-4" /></button>
+                <p aria-hidden className="flex min-w-0 items-center gap-2.5 font-display text-[1.3rem] leading-none sm:hidden">
+                  <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
+                  <span className="truncate pb-0.5">{titleHead}{titleTail ? ", " : ""}{titleTail && <em className="text-spice-bright">{titleTail}</em>}</span>
+                </p>
+                <div className="flex shrink-0 items-center">
+                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="chat-chip flex size-10 items-center justify-center border border-sand/20 text-sand/70 disabled:opacity-35 sm:size-9"><RotateCcw className="size-4" /></button>
+                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="chat-chip -ml-px flex size-10 items-center justify-center border border-sand/20 text-sand/70 sm:size-9"><X className="size-4" /></button>
                 </div>
               </div>
-              <div className="mt-3 flex items-end justify-between gap-4">
+              <div className="mt-3 hidden items-end justify-between gap-4 sm:flex">
                 <h2 id="chat-title" className="font-display text-[2.1rem] leading-[0.95]">
                   <span className="block overflow-hidden">
                     <motion.span className="block" initial={reduced ? false : { y: "105%" }} animate={{ y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: reduced ? 0 : 0.5 }}>{titleHead}{titleTail ? "," : ""}</motion.span>
@@ -584,7 +625,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               <LoopRail labels={copy.loopLabels} stage={stage} reduced={reduced} />
             </header>
 
-            <div className="chat-scroll relative flex-1 overflow-y-auto px-5 pb-6 pt-5" aria-live="polite" aria-busy={busy}>
+            <div className="chat-scroll relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6 pt-5 sm:px-5" aria-live="polite" aria-busy={busy}>
               <div className="space-y-6">
                 {messages.map((message, index) => {
                   const fromUser = message.role === "user";
@@ -636,7 +677,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="border-t border-sand/15 px-5 pb-4 pt-3">
+            <div className="border-t border-sand/15 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:px-5 sm:pb-4">
               {atLimit ? (
                 <div className="border border-spice-bright/50 p-4 text-sm leading-relaxed text-sand/80">
                   <p>{copy.limit}</p>
@@ -645,18 +686,19 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
               ) : (
                 <>
                   {suggestions.length > 0 && (
-                    <ul className="mb-3 border-t border-sand/15">
+                    <ul className="chat-chips -mx-4 mb-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:block sm:border-t sm:border-sand/15 sm:px-0">
                       {suggestions.map((suggestion, index) => (
                         <motion.li
                           key={suggestion}
+                          className="shrink-0 sm:shrink"
                           initial={reduced ? false : { opacity: 0, x: -12 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: reduced ? 0 : 0.5, ease: EASE, delay: reduced ? 0 : 0.08 * index }}
                         >
-                          <button type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="chat-chip flex w-full items-center gap-3 border-b border-sand/15 px-2 py-2.5 text-left text-[0.8125rem] leading-snug text-sand/80 disabled:opacity-40">
+                          <button type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="chat-chip flex items-center gap-2 whitespace-nowrap border border-sand/20 px-3 py-2.5 text-left text-[0.8125rem] leading-snug text-sand/80 disabled:opacity-40 sm:w-full sm:gap-3 sm:whitespace-normal sm:border-x-0 sm:border-t-0 sm:border-sand/15 sm:px-2">
                             <span className="font-hud text-[8px] tabular-nums tracking-[0.14em] opacity-60">{pad(index + 1)}</span>
                             <span className="min-w-0 flex-1">{suggestion}</span>
-                            <ArrowUpRight className="size-3.5 shrink-0" />
+                            <ArrowUpRight className="hidden size-3.5 shrink-0 sm:block" />
                           </button>
                         </motion.li>
                       ))}
@@ -683,18 +725,18 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                       maxLength={CHAT_LIMITS.message}
                       placeholder={copy.placeholder}
                       aria-label={copy.placeholder}
-                      className="max-h-28 min-h-14 flex-1 resize-none bg-transparent py-2.5 pr-2 text-[0.9375rem] leading-relaxed text-sand outline-none placeholder:text-sand/45 focus-visible:outline-none"
+                      className="max-h-28 min-h-14 flex-1 resize-none bg-transparent py-2.5 pr-2 text-base leading-snug text-sand outline-none placeholder:text-sand/45 focus-visible:outline-none sm:text-[0.9375rem] sm:leading-relaxed"
                     />
                     <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="group flex w-14 shrink-0 items-center justify-center bg-spice-bright text-night transition-colors duration-300 hover:bg-sand disabled:cursor-not-allowed disabled:bg-sand/15 disabled:text-sand/40">
                       <ArrowUp className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-disabled:translate-y-0" />
                     </button>
                   </div>
-                  <div className="mt-1.5 flex items-center justify-between font-hud text-[8px] uppercase tracking-[0.14em] text-sand/45">
+                  <div className="mt-1.5 hidden items-center justify-between font-hud text-[8px] uppercase tracking-[0.14em] text-sand/45 sm:flex">
                     <span>{MODEL_LABEL}</span>
                     <span className="tabular-nums">{String(input.length).padStart(3, "0")}/{CHAT_LIMITS.message}</span>
                   </div>
                   {error && <p role="alert" className="mt-2 border-l-2 border-spice-bright pl-2 text-xs leading-relaxed text-sand">{error}</p>}
-                  <p className="mt-2 text-[0.625rem] leading-relaxed text-sand/55">{copy.privacy}</p>
+                  <p className={`mt-2 text-[0.625rem] leading-snug text-sand/55 sm:leading-relaxed ${turn > 0 ? "hidden sm:block" : ""}`}>{copy.privacy}</p>
                 </>
               )}
             </div>
@@ -709,7 +751,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
         aria-expanded={open}
         aria-label={open ? copy.closeLabel : copy.openLabel}
         onClick={() => setOpen((value) => !value)}
-        className="group relative flex h-14 items-stretch overflow-hidden border border-sand/25 bg-night text-sand"
+        className={`group relative h-14 items-stretch overflow-hidden border border-sand/25 bg-night text-sand ${open ? "hidden sm:flex" : "flex"}`}
       >
         <span className="flex w-14 shrink-0 items-center justify-center bg-spice-bright text-night transition-colors duration-300 group-hover:bg-sand">
           {open
