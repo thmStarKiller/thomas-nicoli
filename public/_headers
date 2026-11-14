@@ -13,3 +13,12 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
+
+/es/opengraph-image
+  Content-Type: image/png
+
+/en/opengraph-image
+  Content-Type: image/png
+
+/fr/opengraph-image
+  Content-Type: image/png
