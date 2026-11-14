@@ -597,7 +597,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                   <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
                   <span>{copy.status}</span>
                 </p>
-                <p aria-hidden className="flex min-w-0 items-center gap-2.5 font-display text-[1.3rem] leading-none sm:hidden">
+                <p aria-hidden className="flex min-w-0 items-center gap-2.5 font-display text-[clamp(1rem,5vw,1.3rem)] leading-none sm:hidden">
                   <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
                   <span className="truncate pb-0.5">{titleHead}{titleTail ? ", " : ""}{titleTail && <em className="text-spice-bright">{titleTail}</em>}</span>
                 </p>
