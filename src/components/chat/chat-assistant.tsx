@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Bot, Check, MailCheck, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Check, MailCheck, RotateCcw, X } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { getChatCopy } from "@/i18n/chat";
 import { CHAT_LIMITS } from "@/lib/chat/contracts";
@@ -13,6 +13,8 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  /** True until the reply has been written out on screen once. */
+  fresh?: boolean;
 }
 
 interface ChatResponse {
@@ -53,23 +55,177 @@ function parsePendingChat(raw: string | null): PendingChat | null {
   }
 }
 
-function LoopRail({ labels, reduced }: { labels: readonly string[]; reduced: boolean | null }) {
+const EASE = [0.19, 1, 0.22, 1] as const;
+const GLYPHS = "01<>/\\[]{}#%=+*";
+const MODEL_LABEL = "Nemotron 3.5 Super VL";
+
+function scramble(length: number): string {
+  let out = "";
+  for (let index = 0; index < length; index += 1) out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+  return out;
+}
+
+function pad(value: number): string {
+  return String(value).padStart(2, "0");
+}
+
+/**
+ * Signal bars. Square blocks that rise and fall out of step with each other.
+ * Static when motion is reduced.
+ */
+function SignalBars({
+  count,
+  active,
+  reduced,
+  className,
+  testId,
+}: {
+  count: number;
+  active: boolean;
+  reduced: boolean | null;
+  className?: string;
+  testId?: string;
+}) {
   return (
-    <div data-testid="site-chat-loop" aria-hidden className="relative mt-4 grid grid-cols-4 gap-1 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-3">
-      {!reduced && (
-        <motion.span
-          className="absolute inset-y-0 w-1/4 bg-spice-bright/15"
-          animate={{ x: ["-100%", "400%"] }}
-          transition={{ duration: 4.8, repeat: Infinity, ease: "linear" }}
-        />
-      )}
+    <span aria-hidden className={`flex items-end gap-[3px] ${className ?? ""}`}>
+      {Array.from({ length: count }, (_, index) => {
+        const rest = 0.22 + ((index * 37) % 50) / 100;
+        if (reduced) {
+          return <span key={index} className="h-full flex-1 bg-current" style={{ transform: `scaleY(${rest})`, transformOrigin: "center bottom" }} />;
+        }
+        const style = {
+          "--bar-delay": `${-((index * 173) % 1400)}ms`,
+          "--bar-speed": `${(active ? 620 : 1500) + ((index * 97) % 520)}ms`,
+          "--bar-peak": active ? 1 : rest,
+        } as CSSProperties;
+        return <span key={index} data-testid={index === 0 ? testId : undefined} className="chat-bar h-full flex-1 bg-current" style={style} />;
+      })}
+    </span>
+  );
+}
+
+/** A label that settles out of noise whenever its text changes. */
+function ScrambleLabel({ text, reduced }: { text: string; reduced: boolean | null }) {
+  const [settled, setSettled] = useState(reduced ? text.length : 0);
+  const [noise, setNoise] = useState("");
+
+  useEffect(() => {
+    if (reduced) return;
+    let frame = 0;
+    let started = 0;
+    const duration = Math.min(700, 220 + text.length * 16);
+    const step = (time: number) => {
+      if (!started) started = time;
+      const done = Math.min(text.length, Math.floor(((time - started) / duration) * text.length));
+      setSettled(done);
+      setNoise(scramble(text.length - done));
+      if (done < text.length) frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [reduced, text]);
+
+  if (reduced || settled >= text.length) return <span>{text}</span>;
+  return (
+    <span>
+      <span aria-hidden>{text.slice(0, settled)}<span className="text-spice-bright">{noise}</span></span>
+      <span className="sr-only">{text}</span>
+    </span>
+  );
+}
+
+/**
+ * Writes a reply out once. The full text holds its place from the first frame,
+ * so nothing below it moves, and assistive tech reads the whole reply at once.
+ */
+function RevealText({
+  text,
+  animate,
+  onDone,
+}: {
+  text: string;
+  animate: boolean;
+  onDone: () => void;
+}) {
+  const [shown, setShown] = useState(animate ? 0 : text.length);
+  const [head, setHead] = useState("");
+  const doneRef = useRef(onDone);
+
+  useEffect(() => {
+    doneRef.current = onDone;
+  }, [onDone]);
+
+  useEffect(() => {
+    if (!animate) return;
+    let frame = 0;
+    let started = 0;
+    const duration = Math.min(2600, Math.max(520, text.length * 13));
+    const step = (time: number) => {
+      if (!started) started = time;
+      const count = Math.min(text.length, Math.floor(((time - started) / duration) * text.length));
+      setShown(count);
+      setHead(text.slice(count, count + 4).replace(/\S/g, () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)]));
+      if (count < text.length) frame = requestAnimationFrame(step);
+      else doneRef.current();
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [animate, text]);
+
+  if (!animate || shown >= text.length) return <>{text}</>;
+  return (
+    <>
+      <span aria-hidden>
+        {text.slice(0, shown)}
+        <span className="bg-spice-bright text-night">{head}</span>
+        <span className="invisible">{text.slice(shown + head.length)}</span>
+      </span>
+      <span className="sr-only">{text}</span>
+    </>
+  );
+}
+
+/** Seconds since the model started working, as a readout. */
+function Elapsed({ reduced }: { reduced: boolean | null }) {
+  const [tenths, setTenths] = useState(0);
+  useEffect(() => {
+    const started = Date.now();
+    const timer = window.setInterval(() => setTenths(Math.floor((Date.now() - started) / 100)), reduced ? 1000 : 100);
+    return () => window.clearInterval(timer);
+  }, [reduced]);
+  return <span className="tabular-nums">T+{pad(Math.floor(tenths / 10))}.{tenths % 10}s</span>;
+}
+
+/** The four real steps of a turn; the block marks where this turn is. */
+function LoopRail({ labels, stage, reduced }: { labels: readonly string[]; stage: number; reduced: boolean | null }) {
+  return (
+    <div data-testid="site-chat-loop" aria-hidden className="relative mt-4 grid grid-cols-4 border-t border-sand/15">
+      <motion.span
+        className="absolute left-0 top-[-1px] h-px w-1/4 bg-spice-bright"
+        initial={false}
+        animate={{ x: `${stage * 100}%` }}
+        transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+      />
       {labels.map((label, index) => (
-        <div key={label} className="relative flex min-w-0 flex-col items-center gap-1.5 text-center">
-          <span className="flex size-5 items-center justify-center rounded-full border border-spice-bright/45 bg-night text-[9px] font-semibold text-spice-bright">{index + 1}</span>
-          <span className="w-full truncate font-mono text-[8px] uppercase tracking-[0.08em] text-sand/65">{label}</span>
+        <div key={label} className={`flex min-w-0 items-baseline gap-1.5 pt-2 font-hud text-[8px] uppercase tracking-[0.14em] transition-colors duration-500 ${index === stage ? "text-sand" : "text-sand/40"}`}>
+          <span className={index === stage ? "text-spice-bright" : undefined}>{pad(index + 1)}</span>
+          <span className="truncate">{label}</span>
         </div>
       ))}
     </div>
+  );
+}
+
+/** Square brackets at the four corners of the panel. */
+function CornerTicks() {
+  const base = "pointer-events-none absolute z-10 size-2.5 border-spice-bright";
+  return (
+    <span aria-hidden>
+      <span className={`${base} left-0 top-0 border-l border-t`} />
+      <span className={`${base} right-0 top-0 border-r border-t`} />
+      <span className={`${base} bottom-0 left-0 border-b border-l`} />
+      <span className={`${base} bottom-0 right-0 border-b border-r`} />
+    </span>
   );
 }
 
@@ -92,6 +248,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
   const [activity, setActivity] = useState<string>(copy.sending);
   const [pending, setPending] = useState<PendingChat | null>(null);
   const [resumeVersion, setResumeVersion] = useState(0);
+  const [phase, setPhase] = useState(0);
   const pendingStorageKey = `site-chat-pending:${lang}`;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
@@ -113,7 +270,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     if (!payload.reply) return;
     setMessages((current) => [
       ...current.filter((message) => message.id !== `pending-${record.interactionId}` && message.id !== record.interactionId),
-      { id: record.interactionId, role: "assistant", content: payload.reply! },
+      { id: record.interactionId, role: "assistant", content: payload.reply!, fresh: true },
     ]);
     setTurn((current) => Math.max(current, record.turnIndex));
     setSuggestions((payload.suggestions ?? []).slice(0, CHAT_LIMITS.suggestions));
@@ -127,7 +284,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     setSessionToken("");
     setTurnstileToken("");
     setTurnstileCycle((value) => value + 1);
-    setMessages([{ id: "greeting", role: "assistant", content: copy.greeting }]);
+    setMessages([{ id: "greeting", role: "assistant", content: copy.greeting, fresh: true }]);
     setInput("");
     setTurn(0);
     setSuggestions([...copy.quickPrompts]);
@@ -154,7 +311,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
       } else {
         sessionStorage.removeItem(pendingStorageKey);
         setSessionId(crypto.randomUUID());
-        setMessages([{ id: "greeting", role: "assistant", content: copy.greeting }]);
+        setMessages([{ id: "greeting", role: "assistant", content: copy.greeting, fresh: true }]);
         setSuggestions([...copy.quickPrompts]);
       }
     });
@@ -181,6 +338,20 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
     if (!open) return;
     messagesEndRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "end" });
   }, [busy, messages, open, reduced]);
+
+  useEffect(() => {
+    if (!busy) return;
+    const reset = requestAnimationFrame(() => setPhase(0));
+    const timer = window.setInterval(() => setPhase((value) => Math.min(value + 1, copy.phases.length - 1)), 1_700);
+    return () => {
+      cancelAnimationFrame(reset);
+      window.clearInterval(timer);
+    };
+  }, [busy, copy.phases.length]);
+
+  const settleMessage = useCallback((id: string) => {
+    setMessages((current) => current.map((message) => (message.id === id && message.fresh ? { ...message, fresh: false } : message)));
+  }, [setMessages]);
 
   const handleTurnstile = (token: string) => {
     setTurnstileToken(token);
@@ -350,6 +521,12 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
 
   if (!enabled) return null;
   const atLimit = turn >= CHAT_LIMITS.sessionTurns;
+  const lastMessage = messages[messages.length - 1];
+  const answered = !busy && lastMessage?.role === "assistant" && lastMessage.id !== "greeting" && !lastMessage.id.startsWith("pending-");
+  const stage = busy ? 1 : answered ? (emailed ? 3 : 2) : 0;
+  const waitingForBackup = activity === copy.waiting;
+  const [titleHead, ...titleRest] = copy.title.split(",");
+  const titleTail = titleRest.join(",").trim();
 
   return (
     <div className="fixed bottom-4 right-4 z-[90] sm:bottom-6 sm:right-6">
@@ -360,72 +537,142 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
             role="dialog"
             aria-modal="false"
             aria-labelledby="chat-title"
-            initial={reduced ? false : { opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.97 }}
-            transition={{ duration: reduced ? 0 : 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[76px] right-0 flex h-[min(720px,calc(100svh-112px))] w-[min(390px,calc(100vw-32px))] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-night text-sand shadow-[0_28px_100px_rgba(13,10,7,0.42)]"
+            initial={reduced ? false : { clipPath: "inset(100% 0% 0% 0%)" }}
+            animate={{ clipPath: "inset(0% 0% 0% 0%)", opacity: 1 }}
+            exit={reduced ? { opacity: 0 } : { clipPath: "inset(100% 0% 0% 0%)" }}
+            transition={{ duration: reduced ? 0 : 0.55, ease: EASE }}
+            className="absolute bottom-[72px] right-0 flex h-[min(760px,calc(100svh-104px))] w-[min(440px,calc(100vw-32px))] flex-col overflow-hidden border border-sand/20 bg-night text-sand"
           >
-            <header className="border-b border-white/10 px-5 pb-4 pt-5">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-spice text-sand"><Bot className="size-5" /></div>
-                  <div>
-                    <h2 id="chat-title" className="font-display text-xl font-semibold">{copy.title}</h2>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-sand/65"><span className="size-1.5 rounded-full bg-emerald-400" />{copy.status}</p>
-                  </div>
-                </div>
-                <div className="flex gap-1.5">
-                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-sand/70 transition hover:bg-white/10 hover:text-white disabled:opacity-35"><RotateCcw className="size-4" /></button>
-                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="flex size-9 items-center justify-center rounded-full border border-white/10 text-sand/70 transition hover:bg-white/10 hover:text-white"><X className="size-4" /></button>
+            <CornerTicks />
+            {!reduced && (
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-20 origin-top bg-spice-bright"
+                initial={{ scaleY: 1 }}
+                animate={{ scaleY: 0 }}
+                transition={{ duration: 0.7, ease: EASE, delay: 0.18 }}
+              />
+            )}
+
+            <header className="relative border-b border-sand/15 px-5 pb-4 pt-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="flex min-w-0 items-center gap-2 font-hud text-[8px] uppercase leading-snug tracking-[0.14em] text-sand/60">
+                  <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
+                  <span>{copy.status}</span>
+                </p>
+                <div className="flex shrink-0">
+                  <button type="button" disabled={busy} aria-label={copy.restart} onClick={resetConversation} className="chat-chip flex size-9 items-center justify-center border border-sand/20 text-sand/70 disabled:opacity-35"><RotateCcw className="size-4" /></button>
+                  <button type="button" aria-label={copy.closeLabel} onClick={() => { setOpen(false); launcherRef.current?.focus(); }} className="chat-chip -ml-px flex size-9 items-center justify-center border border-sand/20 text-sand/70"><X className="size-4" /></button>
                 </div>
               </div>
-              <LoopRail labels={copy.loopLabels} reduced={reduced} />
+              <div className="mt-3 flex items-end justify-between gap-4">
+                <h2 id="chat-title" className="font-display text-[2.1rem] leading-[0.95]">
+                  <span className="block overflow-hidden">
+                    <motion.span className="block" initial={reduced ? false : { y: "105%" }} animate={{ y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: reduced ? 0 : 0.5 }}>{titleHead}{titleTail ? "," : ""}</motion.span>
+                  </span>
+                  {titleTail && (
+                    <span className="block overflow-hidden">
+                      <motion.em className="block text-spice-bright" initial={reduced ? false : { y: "105%" }} animate={{ y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: reduced ? 0 : 0.6 }}>{titleTail}</motion.em>
+                    </span>
+                  )}
+                </h2>
+                <div className="shrink-0 text-right font-hud text-[9px] uppercase tracking-[0.14em] text-sand/50">
+                  <SignalBars count={14} active={busy} reduced={reduced} className={`ml-auto h-7 w-24 ${busy ? "text-spice-bright" : "text-sand/45"}`} />
+                  <p className="mt-1.5 tabular-nums">{copy.turnLabel} {pad(Math.min(turn + (busy ? 1 : 0), CHAT_LIMITS.sessionTurns))}/{CHAT_LIMITS.sessionTurns}</p>
+                </div>
+              </div>
+              <LoopRail labels={copy.loopLabels} stage={stage} reduced={reduced} />
             </header>
 
-            <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite" aria-busy={busy}>
-              {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  data-message-role={message.role}
-                  initial={reduced ? false : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={message.role === "user" ? "ml-8 rounded-2xl rounded-br-md bg-spice px-4 py-3 text-sm leading-relaxed" : "mr-8 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-sm leading-relaxed text-sand/85"}
-                >
-                  {message.content}
-                </motion.div>
-              ))}
-              {busy && (
-                <div className="mr-16 flex items-center gap-2 rounded-2xl rounded-bl-md bg-white/[0.08] px-4 py-3 text-xs text-sand/65">
-                  <Sparkles className="size-3.5 text-spice-bright" />{activity}
-                  <span className="flex gap-1">{[0, 1, 2].map((item) => <motion.span key={item} className="size-1 rounded-full bg-spice-bright" animate={reduced ? undefined : { opacity: [0.25, 1, 0.25] }} transition={{ duration: 1.1, repeat: Infinity, delay: item * 0.16 }} />)}</span>
-                </div>
-              )}
-              {emailed && !busy && <p className="flex items-center justify-end gap-1.5 pr-1 text-[10px] text-emerald-300/75"><MailCheck className="size-3" />{copy.emailed}</p>}
+            <div className="chat-scroll relative flex-1 overflow-y-auto px-5 pb-6 pt-5" aria-live="polite" aria-busy={busy}>
+              <div className="space-y-6">
+                {messages.map((message, index) => {
+                  const fromUser = message.role === "user";
+                  return (
+                    <motion.div
+                      key={message.id}
+                      data-message-role={message.role}
+                      initial={reduced ? false : fromUser ? { clipPath: "inset(0% 0% 0% 100%)" } : { opacity: 0, y: 8 }}
+                      animate={fromUser ? { clipPath: "inset(0% 0% 0% 0%)" } : { opacity: 1, y: 0 }}
+                      transition={{ duration: reduced ? 0 : 0.5, ease: EASE }}
+                      className={fromUser ? "ml-10" : "mr-4"}
+                    >
+                      <p aria-hidden className={`flex items-center gap-2 font-hud text-[8px] uppercase tracking-[0.18em] ${fromUser ? "flex-row-reverse text-sand/55" : "text-sand/55"}`}>
+                        <span className={fromUser ? "text-sand" : "text-spice-bright"}>{fromUser ? copy.youLabel : "TomBot"}</span>
+                        <motion.span
+                          className={`h-px flex-1 bg-sand/20 ${fromUser ? "origin-right" : "origin-left"}`}
+                          initial={reduced ? false : { scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: reduced ? 0 : 0.7, ease: EASE, delay: reduced ? 0 : 0.1 }}
+                        />
+                        <span className="tabular-nums">{pad(index + 1)}</span>
+                      </p>
+                      <div className={fromUser ? "mt-2 whitespace-pre-line bg-spice px-4 py-3 text-[0.9375rem] leading-relaxed text-sand" : "mt-2 whitespace-pre-line text-[0.9375rem] leading-relaxed text-sand/90"}>
+                        {fromUser
+                          ? message.content
+                          : <RevealText text={message.content} animate={Boolean(message.fresh) && !reduced} onDone={() => settleMessage(message.id)} />}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+                {busy && (
+                  <div className="relative overflow-hidden border border-sand/20 px-4 py-3">
+                    <p className="flex items-center justify-between gap-3 font-hud text-[9px] uppercase tracking-[0.14em] text-sand/70">
+                      <span className="flex min-w-0 items-center gap-2">
+                        <span className={`size-1.5 shrink-0 bg-spice-bright ${reduced ? "" : "chat-blink"}`} />
+                        <span className="truncate">{waitingForBackup ? copy.loopLabels[1] : <ScrambleLabel key={phase} text={copy.phases[phase]} reduced={reduced} />}</span>
+                      </span>
+                      <span className="shrink-0 text-spice-bright"><Elapsed reduced={reduced} /></span>
+                    </p>
+                    <div className="relative mt-3">
+                      <SignalBars count={36} active reduced={reduced} className="h-8 text-spice-bright" />
+                      {!reduced && <span aria-hidden className="chat-scan pointer-events-none absolute inset-y-0 w-px bg-sand" />}
+                    </div>
+                    <p className="mt-3 text-xs leading-relaxed text-sand/65">{activity}</p>
+                  </div>
+                )}
+                {emailed && !busy && <p className="flex items-center justify-end gap-1.5 font-hud text-[8px] uppercase tracking-[0.14em] text-sand/60"><MailCheck className="size-3 text-spice-bright" />{copy.emailed}</p>}
+              </div>
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="border-t border-white/10 bg-black/10 px-4 pb-4 pt-3">
+            <div className="border-t border-sand/15 px-5 pb-4 pt-3">
               {atLimit ? (
-                <div className="rounded-2xl border border-spice/30 bg-spice/10 p-3 text-xs leading-relaxed text-sand/75">
+                <div className="border border-spice-bright/50 p-4 text-sm leading-relaxed text-sand/80">
                   <p>{copy.limit}</p>
-                  <button type="button" onClick={resetConversation} className="mt-3 inline-flex items-center gap-2 rounded-full bg-spice px-4 py-2 font-medium text-white"><RotateCcw className="size-3.5" />{copy.restart}</button>
+                  <button type="button" onClick={resetConversation} className="cta cta-spice cta-sm mt-4"><RotateCcw className="size-3.5" />{copy.restart}</button>
                 </div>
               ) : (
                 <>
                   {suggestions.length > 0 && (
-                    <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
-                      {suggestions.map((suggestion) => <button key={suggestion} type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="shrink-0 rounded-full border border-white/12 px-3 py-1.5 text-[10px] text-sand/65 transition hover:border-spice hover:text-white disabled:opacity-40">{suggestion}</button>)}
-                    </div>
+                    <ul className="mb-3 border-t border-sand/15">
+                      {suggestions.map((suggestion, index) => (
+                        <motion.li
+                          key={suggestion}
+                          initial={reduced ? false : { opacity: 0, x: -12 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: reduced ? 0 : 0.5, ease: EASE, delay: reduced ? 0 : 0.08 * index }}
+                        >
+                          <button type="button" disabled={busy} onClick={() => void sendMessage(suggestion)} className="chat-chip flex w-full items-center gap-3 border-b border-sand/15 px-2 py-2.5 text-left text-[0.8125rem] leading-snug text-sand/80 disabled:opacity-40">
+                            <span className="font-hud text-[8px] tabular-nums tracking-[0.14em] opacity-60">{pad(index + 1)}</span>
+                            <span className="min-w-0 flex-1">{suggestion}</span>
+                            <ArrowUpRight className="size-3.5 shrink-0" />
+                          </button>
+                        </motion.li>
+                      ))}
+                    </ul>
                   )}
                   {!sessionToken && (
-                    <div className="mb-2 rounded-xl bg-white/[0.04] p-2">
-                      <p className="mb-1.5 text-[10px] leading-relaxed text-sand/65">{copy.verify}</p>
+                    <div className="mb-3 border border-sand/15 p-2.5">
+                      <p className="mb-2 flex items-center justify-between gap-2 text-[0.6875rem] leading-relaxed text-sand/70">
+                        <span>{copy.verify}</span>
+                        {turnstileToken && <span className="flex shrink-0 items-center gap-1 font-hud text-[8px] uppercase tracking-[0.14em] text-spice-bright"><Check className="size-3" />OK</span>}
+                      </p>
                       <TurnstileWidget key={turnstileCycle} action="site_chat" onToken={handleTurnstile} onError={handleTurnstileError} />
-                      {turnstileToken && <p className="mt-1 flex items-center gap-1 text-[10px] text-emerald-300"><Check className="size-3" />OK</p>}
                     </div>
                   )}
-                  <div className="flex items-end gap-2 rounded-2xl border border-white/12 bg-white/[0.05] p-2 focus-within:border-spice/70">
+                  <div className="flex items-stretch border border-sand/25 transition-colors duration-300 focus-within:border-spice-bright">
+                    <span aria-hidden className="flex w-8 shrink-0 items-start justify-center pt-3 font-hud text-sm text-spice-bright">&gt;</span>
                     <textarea
                       ref={textareaRef}
                       disabled={busy || Boolean(pending)}
@@ -435,12 +682,19 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                       rows={2}
                       maxLength={CHAT_LIMITS.message}
                       placeholder={copy.placeholder}
-                      className="max-h-28 min-h-12 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-white outline-none placeholder:text-sand/65"
+                      aria-label={copy.placeholder}
+                      className="max-h-28 min-h-14 flex-1 resize-none bg-transparent py-2.5 pr-2 text-[0.9375rem] leading-relaxed text-sand outline-none placeholder:text-sand/45 focus-visible:outline-none"
                     />
-                    <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-spice text-white transition hover:bg-spice-deep disabled:cursor-not-allowed disabled:opacity-35"><Send className="size-4" /></button>
+                    <button type="button" aria-label={copy.send} disabled={busy || Boolean(pending) || input.trim().length < 2} onClick={() => void sendMessage()} className="group flex w-14 shrink-0 items-center justify-center bg-spice-bright text-night transition-colors duration-300 hover:bg-sand disabled:cursor-not-allowed disabled:bg-sand/15 disabled:text-sand/40">
+                      <ArrowUp className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-disabled:translate-y-0" />
+                    </button>
                   </div>
-                  {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
-                  <p className="mt-2 text-[9px] leading-relaxed text-sand/65">{copy.privacy}</p>
+                  <div className="mt-1.5 flex items-center justify-between font-hud text-[8px] uppercase tracking-[0.14em] text-sand/45">
+                    <span>{MODEL_LABEL}</span>
+                    <span className="tabular-nums">{String(input.length).padStart(3, "0")}/{CHAT_LIMITS.message}</span>
+                  </div>
+                  {error && <p role="alert" className="mt-2 border-l-2 border-spice-bright pl-2 text-xs leading-relaxed text-sand">{error}</p>}
+                  <p className="mt-2 text-[0.625rem] leading-relaxed text-sand/55">{copy.privacy}</p>
                 </>
               )}
             </div>
@@ -455,13 +709,18 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
         aria-expanded={open}
         aria-label={open ? copy.closeLabel : copy.openLabel}
         onClick={() => setOpen((value) => !value)}
-        className="group relative flex h-14 items-center gap-2 overflow-visible border border-sand/25 bg-night px-4 text-sm font-medium text-sand"
+        className="group relative flex h-14 items-stretch overflow-hidden border border-sand/25 bg-night text-sand"
       >
-        <span className="relative flex size-8 items-center justify-center">
-          {!reduced && <motion.span data-testid="site-chat-orbit" aria-hidden className="absolute -inset-1.5 rounded-full border border-spice-bright/80" animate={{ opacity: [0.9, 0.2, 0.9] }} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }} />}
-          <span className="relative flex size-8 items-center justify-center rounded-full bg-spice"><MessageCircle className="size-4" /></span>
+        <span className="flex w-14 shrink-0 items-center justify-center bg-spice-bright text-night transition-colors duration-300 group-hover:bg-sand">
+          {open
+            ? <X className="size-5" />
+            : <SignalBars count={5} active={false} reduced={reduced} className="h-5 w-6" testId="site-chat-orbit" />}
         </span>
-        <span className="relative hidden pr-1 sm:block">{copy.launcher}</span>
+        <span className="relative hidden flex-col justify-center px-4 text-left sm:flex">
+          <span className="font-hud text-[8px] uppercase tracking-[0.2em] text-sand/55">{copy.kicker} · TomBot</span>
+          <span className="mt-0.5 text-[0.75rem] font-semibold uppercase tracking-[0.14em]">{copy.launcher}</span>
+        </span>
+        {!reduced && <span aria-hidden className="chat-sweep pointer-events-none absolute bottom-0 left-0 h-px w-1/4 bg-spice-bright" />}
       </button>
     </div>
   );

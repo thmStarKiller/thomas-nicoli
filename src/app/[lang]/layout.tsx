@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
+import { Bodoni_Moda, Hanken_Grotesk, Martian_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/content/site-config";
 import { getDictionary, type Dictionary } from "@/i18n";
@@ -17,7 +17,8 @@ import "../globals.css";
 
 // Display: Bodoni Moda, a didone with optical sizes and a true italic.
 // Text and labels: Hanken Grotesk.
-// Both are SIL Open Font Licence and are self-hosted by next/font at build time.
+// Chat readouts only: Martian Mono.
+// All three are SIL Open Font Licence and are self-hosted by next/font at build time.
 const bodoni = Bodoni_Moda({
   subsets: ["latin", "latin-ext"],
   style: ["normal", "italic"],
@@ -28,6 +29,11 @@ const bodoni = Bodoni_Moda({
 const hanken = Hanken_Grotesk({
   subsets: ["latin", "latin-ext"],
   variable: "--font-hanken",
+  display: "swap",
+});
+const martian = Martian_Mono({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-martian",
   display: "swap",
 });
 
@@ -89,7 +95,7 @@ export default async function LocaleLayout({
   });
 
   return (
-    <html lang={lang} className={`${bodoni.variable} ${hanken.variable}`}
+    <html lang={lang} className={`${bodoni.variable} ${hanken.variable} ${martian.variable}`}
       suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: introScript }} />

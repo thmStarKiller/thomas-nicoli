@@ -1,4 +1,4 @@
-# Site AI chat — local Ollama runtime
+# Site AI chat — hosted Nemotron, local Ollama fallback
 
 ## Runtime
 
@@ -7,19 +7,23 @@
 - Queue endpoint: `POST /api/chat`.
 - Browser polling endpoint: `POST /api/chat/status`.
 - Private worker endpoints: `POST /api/chat/claim` and `POST /api/chat/complete`.
-- Model: open-source `gemma4-local`, only through Ollama at `http://127.0.0.1:11434`.
+- Primary model: `nvidia/nemotron-3.5-super-vl-120b-a12b` on NVIDIA's hosted API (`https://integrate.api.nvidia.com/v1/chat/completions`), called from the Pages Function inside `POST /api/chat`. Code: `functions/_lib/hosted-chat-model.ts`.
+- Fallback model: open-source `gemma4-local`, only through Ollama at `http://127.0.0.1:11434`.
 - Store/outbox: the environment-specific `PROJECT_CLARITY_DB` D1 binding.
 - Owner summary delivery: Resend, attempted only after validated local-model completion.
-- There is **no Workers AI binding and no paid model API**.
+- There is no Workers AI binding. The hosted model needs the encrypted Pages secret `NVIDIA_API_KEY`; without it every turn uses the local queue.
 
-The public browser never calls Ollama or any model provider directly and receives no worker credential. Turnstile is required once per anonymous two-hour session. The opaque session token is stored only as a SHA-256 hash, is bound to a hashed source IP, and allows at most 12 sequential turns.
+The public browser never calls NVIDIA, Ollama or any model provider directly and receives no key or worker credential. Turnstile is required once per anonymous two-hour session. The opaque session token is stored only as a SHA-256 hash, is bound to a hashed source IP, and allows at most 12 sequential turns.
 
 ## Conversation loop
 
 1. The visitor completes Turnstile and receives an opaque session token.
 2. The browser sends the latest message plus at most 10 bounded recent messages.
-3. Cloudflare stores a bounded job in `site_chat_jobs` and returns HTTP 202.
-4. The local daemon claims the job with a two-minute lease and sends the payload to loopback Ollama.
+3. Cloudflare stores a bounded job in `site_chat_jobs`.
+   - With `NVIDIA_API_KEY` set, the same request leases the job for 75 seconds, calls the hosted model (two attempts, 25 seconds each), validates the JSON, publishes the reply, emails the owner summary and returns HTTP 200 with the reply.
+   - If the hosted call fails or returns invalid output, nothing is published: the job goes back to `queued` with a short diagnostic (`hosted_http_503`, `hosted_timeout`, `hosted_invalid_output`) and the request returns HTTP 202.
+   - Without the key, the request returns HTTP 202 straight away.
+4. For queued jobs, the local daemon claims the job with a two-minute lease and sends the payload to loopback Ollama.
 5. Ollama must return JSON matching the strict reply/summary/intent/urgency/suggestions schema.
 6. The daemon posts the validated result through the private worker endpoint.
 7. D1 publishes the reply and Resend sends Thomas one summary email.
@@ -59,6 +63,7 @@ The daemon polls every two seconds while idle. It logs only interaction IDs and 
 - Functions runtime: `CHATBOT_ENABLED=true`.
 - D1 migrations: `migrations/0003_site_chat.sql` and `migrations/0004_local_chat_jobs.sql`.
 - Private worker auth: encrypted `PROJECT_CLARITY_WORKER_TOKEN`.
+- Hosted model: encrypted `NVIDIA_API_KEY` (set with `npx wrangler pages secret put NVIDIA_API_KEY --project-name thomas-nicoli`, once for production and once with `--env preview`). Optional `NVIDIA_CHAT_MODEL` may select another `nvidia/...nemotron...` model.
 - No `AI` binding is configured.
 
 ## Verification

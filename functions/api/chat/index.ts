@@ -1,12 +1,20 @@
 import { CHAT_LIMITS, chatRequestSchema } from "../../../src/lib/chat/contracts";
 import { retentionUntil } from "../../_lib/chat";
+import { deliverChatOwnerSummary, publishChatOutput } from "../../_lib/chat-store";
+import { HostedChatModelError, runHostedChatModel } from "../../_lib/hosted-chat-model";
 import { HttpError, assertSameOrigin, jsonResponse, readBoundedBody, requestIp, sha256 } from "../../_lib/http";
 import { enforceRateLimit } from "../../_lib/rate-limit";
 import type { BaseEnv, D1DatabaseLike } from "../../_lib/types";
 
 interface Env extends BaseEnv {
   CHATBOT_ENABLED?: string;
+  /** Encrypted Pages secret. When absent, every turn waits for the local model. */
+  NVIDIA_API_KEY?: string;
+  NVIDIA_CHAT_MODEL?: string;
 }
+
+/** Long enough for two hosted attempts; after it, the local worker may take the job. */
+const HOSTED_LEASE_MS = 75_000;
 
 type Context = { request: Request; env: Env };
 type SessionRow = {
@@ -74,9 +82,47 @@ function jobResponse(row: JobRow): Response {
   }, 202);
 }
 
+/**
+ * Answers a freshly queued turn with the hosted model. Any failure hands the
+ * job back to the queue, where the local worker picks it up as before.
+ */
+async function answerWithHostedModel(
+  context: Context,
+  database: D1DatabaseLike,
+  job: JobRow,
+  payload: unknown,
+  now: Date,
+  fetcher: typeof fetch,
+): Promise<JobRow> {
+  const apiKey = context.env.NVIDIA_API_KEY?.trim();
+  if (!apiKey || job.status !== "queued") return job;
+
+  const leased = await database
+    .prepare("UPDATE site_chat_jobs SET status = 'processing', updated_at = ?1, lease_until = ?2, attempt_count = attempt_count + 1 WHERE interaction_id = ?3 AND status = 'queued'")
+    .bind(now.toISOString(), new Date(now.getTime() + HOSTED_LEASE_MS).toISOString(), job.interaction_id)
+    .run();
+  if ((leased.meta?.changes ?? 0) !== 1) return (await findJob(database, job.interaction_id)) ?? job;
+
+  try {
+    const result = await runHostedChatModel(payload, { apiKey, model: context.env.NVIDIA_CHAT_MODEL, fetcher });
+    const published = await publishChatOutput(database, job.interaction_id, result.output, new Date());
+    if (published) {
+      await deliverChatOwnerSummary(context.env, database, job.interaction_id, result.payload, result.output, fetcher);
+    }
+  } catch (error) {
+    const diagnostic = error instanceof HostedChatModelError ? error.diagnostic : "hosted_unexpected_error";
+    await database
+      .prepare("UPDATE site_chat_jobs SET status = 'queued', updated_at = ?1, lease_until = NULL, diagnostic = ?2 WHERE interaction_id = ?3 AND status = 'processing'")
+      .bind(new Date().toISOString(), diagnostic.slice(0, 300), job.interaction_id)
+      .run()
+      .catch(() => undefined);
+  }
+  return (await findJob(database, job.interaction_id)) ?? job;
+}
+
 export async function handleChat(
   context: Context,
-  dependencies: { now?: Date } = {},
+  dependencies: { now?: Date; fetcher?: typeof fetch } = {},
 ): Promise<Response> {
   try {
     assertSameOrigin(context.request);
@@ -179,7 +225,7 @@ export async function handleChat(
       await rollbackTurn().catch(() => undefined);
       throw new HttpError(503, "chat_store_conflict");
     }
-    return jobResponse(stored);
+    return jobResponse(await answerWithHostedModel(context, database, stored, payload, now, dependencies.fetcher ?? fetch));
   } catch (error) {
     if (error instanceof HttpError) return jsonResponse({ ok: false, error: error.code }, error.status);
     return jsonResponse({ ok: false, error: "server_error" }, 500);

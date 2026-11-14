@@ -29,6 +29,8 @@
   --font-display: var(--font-bodoni), "Bodoni 72", Didot, "Times New Roman", serif;
   --font-sans: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* hud: the chat's readouts and labels only */
+  --font-hud: var(--font-martian), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* mega: the home hero and the closing question, set as large as the page allows */
   --text-mega: clamp(3.1rem, 10.6vw, 13rem);
@@ -558,6 +560,93 @@ body {
   }
   100% {
     transform: translate(0, 0);
+  }
+}
+
+/*
+ * Site chat. Flat blocks and hairlines in motion: signal bars, a scan line,
+ * a block cursor. No glow, no gradient, no rounded shape.
+ */
+.font-hud {
+  font-weight: 400;
+  font-feature-settings: "zero", "kern";
+}
+.chat-bar {
+  transform-origin: center bottom;
+  transform: scaleY(0.2);
+  animation: chat-bar var(--bar-speed, 1.4s) var(--ease-inout) infinite;
+  animation-delay: var(--bar-delay, 0s);
+}
+.chat-scan {
+  animation: chat-scan 2.2s linear infinite;
+}
+.chat-blink {
+  animation: chat-blink 1.05s steps(1, end) infinite;
+}
+.chat-sweep {
+  animation: chat-sweep 3.2s var(--ease-inout) infinite;
+}
+.chat-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-sand) 28%, transparent) transparent;
+}
+.chat-chip {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.35s var(--ease-luxe),
+    border-color 0.35s var(--ease-luxe);
+}
+.chat-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-spice-bright);
+  transform: translateX(-101%);
+  transition: transform 0.45s var(--ease-luxe);
+}
+.chat-chip:not(:disabled):hover,
+.chat-chip:not(:disabled):focus-visible {
+  color: var(--color-night);
+  border-color: var(--color-spice-bright);
+}
+.chat-chip:not(:disabled):hover::before,
+.chat-chip:not(:disabled):focus-visible::before {
+  transform: translateX(0);
+}
+@keyframes chat-bar {
+  0%,
+  100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(var(--bar-peak, 1));
+  }
+}
+@keyframes chat-scan {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+@keyframes chat-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes chat-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
   }
 }
 

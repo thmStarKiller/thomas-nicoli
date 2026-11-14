@@ -1,5 +1,5 @@
-import { CHAT_LIMITS, chatAiOutputSchema, chatJobPayloadSchema, type ChatAiOutput, type ChatJobPayload } from "../../../src/lib/chat/contracts";
-import { buildChatOwnerEmail } from "../../_lib/chat";
+import { CHAT_LIMITS, chatAiOutputSchema, chatJobPayloadSchema, type ChatAiOutput } from "../../../src/lib/chat/contracts";
+import { deliverChatOwnerSummary, publishChatOutput } from "../../_lib/chat-store";
 import { cleanSingleLine, HttpError, jsonResponse, readBoundedBody } from "../../_lib/http";
 import { requireWorkerBearer } from "../../_lib/worker-auth";
 import type { BaseEnv } from "../../_lib/types";
@@ -19,25 +19,6 @@ type JobRow = {
   suggestions_json: string | null;
   email_status: "pending" | "delivered" | "failed";
 };
-
-async function sendOwnerEmail(env: Env, interactionId: string, request: ChatJobPayload, output: ChatAiOutput, fetcher: typeof fetch): Promise<boolean> {
-  if (!env.RESEND_API_KEY || !env.RESEND_TO) return false;
-  const email = buildChatOwnerEmail({ interactionId, request, output });
-  const from = env.RESEND_FROM_EMAIL?.trim()
-    || (env.MAIL_DOMAIN?.trim()
-      ? `Thomas Nicoli Consulting <bonjour@${env.MAIL_DOMAIN.trim()}>`
-      : "Thomas Nicoli Consulting <onboarding@resend.dev>");
-  const payload = JSON.stringify({ from, to: [env.RESEND_TO], subject: email.subject, html: email.html, text: email.text });
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await fetcher("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { authorization: "Bearer " + env.RESEND_API_KEY, "content-type": "application/json" },
-      body: payload,
-    });
-    if (response.ok) return true;
-  }
-  return false;
-}
 
 export async function handleChatComplete(
   context: { request: Request; env: Env },
@@ -81,25 +62,8 @@ export async function handleChatComplete(
       const outputResult = chatAiOutputSchema.safeParse(body.output);
       if (!outputResult.success) throw new HttpError(400, "invalid_model_output");
       output = outputResult.data;
-      const updated = await database
-        .prepare(
-          `UPDATE site_chat_jobs
-           SET status = 'completed', updated_at = ?1, lease_until = NULL,
-               assistant_reply = ?2, owner_summary = ?3, intent = ?4, urgency = ?5,
-               suggestions_json = ?6, diagnostic = NULL
-           WHERE interaction_id = ?7 AND status = 'processing'`,
-        )
-        .bind(
-          (dependencies.now ?? new Date()).toISOString(),
-          output.reply,
-          output.summary,
-          output.intent,
-          output.urgency,
-          JSON.stringify(output.suggestions).slice(0, 512),
-          interactionId,
-        )
-        .run();
-      if ((updated.meta?.changes ?? 0) !== 1) throw new HttpError(409, "chat_state_conflict");
+      const published = await publishChatOutput(database, interactionId, output, dependencies.now ?? new Date());
+      if (!published) throw new HttpError(409, "chat_state_conflict");
       row = { ...row, status: "completed", assistant_reply: output.reply, owner_summary: output.summary, intent: output.intent, urgency: output.urgency, suggestions_json: JSON.stringify(output.suggestions), email_status: "pending" };
     } else if (row.status === "completed" && row.assistant_reply && row.owner_summary && row.intent && row.urgency) {
       output = chatAiOutputSchema.parse({
@@ -116,11 +80,7 @@ export async function handleChatComplete(
       throw new HttpError(409, "chat_state_conflict");
     }
 
-    const emailed = await sendOwnerEmail(context.env, interactionId, requestPayload, output, dependencies.fetcher ?? fetch).catch(() => false);
-    await database
-      .prepare("UPDATE site_chat_jobs SET email_status = ?1 WHERE interaction_id = ?2")
-      .bind(emailed ? "delivered" : "failed", interactionId)
-      .run();
+    const emailed = await deliverChatOwnerSummary(context.env, database, interactionId, requestPayload, output, dependencies.fetcher ?? fetch);
     return jsonResponse({ ok: true, interactionId, status: "completed", emailed, maxTurns: CHAT_LIMITS.sessionTurns });
   } catch (error) {
     if (error instanceof HttpError) return jsonResponse({ ok: false, error: error.code }, error.status);

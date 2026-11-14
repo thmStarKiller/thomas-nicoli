@@ -247,3 +247,113 @@ describe("site local AI chat", () => {
     expect(status.status).toBe(401);
   });
 });
+
+describe("site chat hosted Nemotron model", () => {
+  const hostedKey = "test-hosted-key";
+  const hostedEnv = (database: FakeD1) => ({ ...env(database), NVIDIA_API_KEY: hostedKey });
+
+  function hostedNetwork(replies: Array<{ status?: number; content?: string }>) {
+    const calls: Array<{ url: string; body: string; authorization: string }> = [];
+    let hostedAttempt = 0;
+    const fetcher = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+      const headers = new Headers(init?.headers);
+      calls.push({ url, body: String(init?.body ?? ""), authorization: headers.get("authorization") ?? "" });
+      if (url.includes("siteverify")) return Response.json({ success: true, hostname: "preview.test", action: "site_chat" });
+      if (url.includes("integrate.api.nvidia.com")) {
+        const reply = replies[Math.min(hostedAttempt, replies.length - 1)] ?? {};
+        hostedAttempt += 1;
+        if ((reply.status ?? 200) !== 200) return new Response("{}", { status: reply.status });
+        return Response.json({ choices: [{ message: { role: "assistant", content: reply.content ?? "" } }] });
+      }
+      return new Response("{}", { status: 200 });
+    }) as unknown as typeof fetch;
+    return { fetcher, calls };
+  }
+
+  it("answers in the same request, stores the reply and emails the owner", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ content: `<think>private working {not json}</think>\n${JSON.stringify(aiPayload)}` }]);
+    await openSession(database, transport.fetcher);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+      { now, fetcher: transport.fetcher },
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ ok: true, queued: false, status: "completed", reply: aiPayload.reply, emailed: true, suggestions: aiPayload.suggestions });
+    expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "completed", owner_summary: aiPayload.summary, email_status: "delivered", attempt_count: 1 });
+
+    const hosted = transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"));
+    expect(hosted).toHaveLength(1);
+    expect(hosted[0].url).toBe("https://integrate.api.nvidia.com/v1/chat/completions");
+    expect(hosted[0].authorization).toBe("Bearer " + hostedKey);
+    const body = JSON.parse(hosted[0].body);
+    expect(body.model).toBe("nvidia/nemotron-3.5-super-vl-120b-a12b");
+    expect(body.stream).toBe(false);
+    expect(body.response_format).toMatchObject({ type: "json_schema", json_schema: { strict: true, schema: { type: "object", additionalProperties: false } } });
+    expect(body.chat_template_kwargs).toEqual({ enable_thinking: false });
+    expect(body.messages[0].content).toContain("untrusted visitor content");
+    expect(body.messages[1].content).toContain("fog machine");
+    expect(JSON.stringify(await (await handleChatStatus({
+      request: request("/api/chat/status", { sessionId, sessionToken, interactionId }),
+      env: hostedEnv(database),
+    }, { now })).json())).not.toContain(hostedKey);
+  });
+
+  it("retries once, then hands the job back to the local queue without publishing anything", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ status: 503 }, { content: "not json at all" }]);
+    await openSession(database, transport.fetcher);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+      { now, fetcher: transport.fetcher },
+    );
+    expect(response.status).toBe(202);
+    expect(await response.json()).toMatchObject({ ok: true, queued: true, status: "queued", interactionId });
+    expect(transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"))).toHaveLength(2);
+    expect(transport.calls.some((call) => call.url.includes("api.resend.com"))).toBe(false);
+    const job = database.chatJobs.get(interactionId);
+    expect(job).toMatchObject({ status: "queued", assistant_reply: null, lease_until: null, diagnostic: "hosted_invalid_output" });
+
+    const claimed = await claim(database);
+    expect(claimed.status).toBe(200);
+    expect(await claimed.json()).toMatchObject({ job: { interaction_id: interactionId, attempt_count: 2 } });
+  });
+
+  it("drops the strict options and tries once more when the provider rejects them", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ status: 400 }, { content: JSON.stringify(aiPayload) }]);
+    await openSession(database, transport.fetcher);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+      { now, fetcher: transport.fetcher },
+    );
+    expect(response.status).toBe(200);
+    const hosted = transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com")).map((call) => JSON.parse(call.body));
+    expect(hosted).toHaveLength(2);
+    expect(hosted[0]).toHaveProperty("response_format");
+    expect(hosted[1]).not.toHaveProperty("response_format");
+    expect(hosted[1]).not.toHaveProperty("chat_template_kwargs");
+    expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "completed", assistant_reply: aiPayload.reply });
+  });
+
+  it("does not retry a rejected key and never calls the model for a repeated turn", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ status: 401 }]);
+    await openSession(database, transport.fetcher);
+    const first = await handleChat({ request: request("/api/chat", chatBody()), env: hostedEnv(database) }, { now, fetcher: transport.fetcher });
+    expect(first.status).toBe(202);
+    expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "queued", diagnostic: "hosted_http_401" });
+    const again = await handleChat({ request: request("/api/chat", chatBody()), env: hostedEnv(database) }, { now, fetcher: transport.fetcher });
+    expect(again.status).toBe(202);
+    expect(transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"))).toHaveLength(1);
+  });
+
+  it("only lets configuration select NVIDIA Nemotron models", async () => {
+    const { resolveHostedChatModel, HOSTED_CHAT_MODEL } = await import("../../functions/_lib/hosted-chat-model");
+    expect(resolveHostedChatModel(undefined)).toBe(HOSTED_CHAT_MODEL);
+    expect(resolveHostedChatModel("nvidia/nemotron-3-super-120b-a12b")).toBe("nvidia/nemotron-3-super-120b-a12b");
+    expect(resolveHostedChatModel("someone/else-model")).toBe(HOSTED_CHAT_MODEL);
+    expect(resolveHostedChatModel("https://evil.example/v1")).toBe(HOSTED_CHAT_MODEL);
+  });
+});

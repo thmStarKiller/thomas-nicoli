@@ -138,6 +138,19 @@ class Statement implements D1PreparedStatement {
       row.intent = this.values[3]; row.urgency = this.values[4]; row.suggestions_json = this.values[5]; row.diagnostic = null;
       return { success: true, meta: { changes: 1 } };
     }
+    if (sql.startsWith("UPDATE site_chat_jobs SET status = 'processing'") && !sql.includes("RETURNING")) {
+      const row = this.database.chatJobs.get(String(this.values[2]));
+      if (!row || row.status !== "queued") return { success: true, meta: { changes: 0 } };
+      row.status = "processing"; row.updated_at = this.values[0]; row.lease_until = this.values[1];
+      row.attempt_count = Number(row.attempt_count ?? 0) + 1;
+      return { success: true, meta: { changes: 1 } };
+    }
+    if (sql.startsWith("UPDATE site_chat_jobs SET status = 'queued'")) {
+      const row = this.database.chatJobs.get(String(this.values[2]));
+      if (!row || row.status !== "processing") return { success: true, meta: { changes: 0 } };
+      row.status = "queued"; row.updated_at = this.values[0]; row.lease_until = null; row.diagnostic = this.values[1];
+      return { success: true, meta: { changes: 1 } };
+    }
     if (sql.startsWith("UPDATE site_chat_jobs SET status = 'failed'")) {
       const row = this.database.chatJobs.get(String(this.values[2]));
       if (!row || row.status !== "processing") return { success: true, meta: { changes: 0 } };

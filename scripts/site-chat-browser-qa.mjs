@@ -35,7 +35,7 @@ try {
   const panel = page.getByTestId("site-chat-panel");
   await panel.waitFor({ state: "visible" });
   assert.equal(await panel.getAttribute("role"), "dialog");
-  assert.equal(await panel.getByText("IA local · humano al final").isVisible(), true);
+  assert.equal(await panel.getByText("Nemotron 3.5 Super VL · humano al final").isVisible(), true);
   assert.equal(await page.getByTestId("site-chat-loop").isVisible(), true);
   assert.equal(await panel.getByText(/Cada mensaje se resume/).isVisible(), true);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);

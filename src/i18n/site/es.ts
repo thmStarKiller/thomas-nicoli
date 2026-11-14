@@ -503,22 +503,23 @@ export const site: SiteCopy = {
         slug: "site-chat",
         period: "2026",
         title: "El chat de esta web",
-        label: "Asistente de IA privado",
+        label: "Asistente de IA para la web",
         status: "Forma parte de esta web",
         summary:
-          "Responde preguntas sobre mis servicios con un modelo de código abierto que se ejecuta en mi propio ordenador.",
+          "Responde preguntas sobre mis servicios con un modelo Nemotron alojado por NVIDIA, y un modelo local de código abierto como reserva.",
         context:
-          "Quería un asistente para la web que no enviara las preguntas de los visitantes a un proveedor de IA de pago, y que me contara qué pregunta la gente.",
+          "Quería un asistente para la web que respondiera en segundos, se ciñera a lo que tengo publicado y me contara qué pregunta la gente.",
         did: [
-          "Cada mensaje y un contexto reciente acotado esperan en una cola segura en Cloudflare",
-          "Un modelo Gemma de código abierto, ejecutado en local con Ollama en mi ordenador, escribe la respuesta",
+          "Cada mensaje y un contexto reciente acotado se guardan en Cloudflare y se envían a la API de NVIDIA",
+          "El modelo Nemotron 3.5 Super VL escribe la respuesta a partir de las ofertas y precios publicados en esta web",
+          "Si ese servicio no responde, el mensaje espera en una cola segura y lo contesta un modelo Gemma, ejecutado en local con Ollama en mi ordenador",
           "Tras cada turno procesado, recibo un resumen por email",
           "Las sesiones son anónimas, están protegidas con Turnstile y se limitan a dos horas y doce turnos",
           "Los mensajes se conservan 30 días y se borran antes si se solicita",
         ],
         shows:
-          "Un asistente útil no exige entregar las conversaciones de los clientes a un tercero. El mismo esquema sirve para un negocio con consultas delicadas.",
-        tags: ["Gemma", "Ollama", "Cloudflare Pages Functions", "D1", "Turnstile", "Resend"],
+          "Un asistente puede responder rápido con un modelo alojado y tener uno privado en reserva. La clave se queda en el servidor y el visitante sabe qué proveedor responde.",
+        tags: ["Nemotron", "NVIDIA API", "Gemma", "Ollama", "Cloudflare Pages Functions", "D1", "Turnstile", "Resend"],
       },
       {
         slug: "project-clarity",

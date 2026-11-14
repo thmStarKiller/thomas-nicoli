@@ -503,22 +503,23 @@ export const site: SiteCopy = {
         slug: "site-chat",
         period: "2026",
         title: "The chat on this site",
-        label: "Private AI assistant",
+        label: "AI website assistant",
         status: "Part of this site",
         summary:
-          "Answers questions about my services with an open-source model that runs on my own computer.",
+          "Answers questions about my services with a Nemotron model hosted by NVIDIA, and a local open-source model as backup.",
         context:
-          "I wanted a site assistant that did not send visitors' questions to a paid AI provider, and that told me what people were asking.",
+          "I wanted a site assistant that answers in seconds, stays within what I have published, and tells me what people are asking.",
         did: [
-          "Each message and a bounded amount of recent context wait in a secure queue on Cloudflare",
-          "An open-source Gemma model, run locally through Ollama on my computer, writes the reply",
+          "Each message and a bounded amount of recent context are stored on Cloudflare and sent to NVIDIA's API",
+          "The Nemotron 3.5 Super VL model writes the reply from the offers and prices published on this site",
+          "If that service does not respond, the message waits in a secure queue and a Gemma model, run locally through Ollama on my computer, answers it",
           "After each processed turn, a summary reaches me by email",
           "Sessions are anonymous, protected by Turnstile and limited to two hours and twelve turns",
           "Messages are kept for 30 days and deleted earlier on request",
         ],
         shows:
-          "A useful assistant does not require handing customer conversations to a third party. The same pattern suits a business with sensitive enquiries.",
-        tags: ["Gemma", "Ollama", "Cloudflare Pages Functions", "D1", "Turnstile", "Resend"],
+          "An assistant can answer quickly from a hosted model and keep a private one in reserve. The key stays on the server, and the visitor is told which provider answers.",
+        tags: ["Nemotron", "NVIDIA API", "Gemma", "Ollama", "Cloudflare Pages Functions", "D1", "Turnstile", "Resend"],
       },
       {
         slug: "project-clarity",
