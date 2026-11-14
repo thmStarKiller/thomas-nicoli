@@ -15,6 +15,15 @@
 
 The public browser never calls NVIDIA, Ollama or any model provider directly and receives no key or worker credential. Turnstile is required once per anonymous two-hour session. The opaque session token is stored only as a SHA-256 hash, is bound to a hashed source IP, and allows at most 12 sequential turns.
 
+## Two voices
+
+Before the hosted model writes a reply, a short first call labels the latest visitor message `serious` or `playful` (`detectChatTone`, temperature 0, strict JSON, 8 second limit). Any failure or unexpected answer counts as `serious`.
+
+- `serious`: the sober assistant brief, temperature 0.45.
+- `playful`: a separate comedy brief, temperature 0.9. Prices and offers appear only when the visitor asks or jokes about paying, and are quoted exactly. It refuses offensive jokes, fake guarantees and instruction leaks in character, and never jokes about the visitor's data.
+
+Distress, job loss, health, legal trouble, complaints and "jokes aside" always label as `serious`. The local Ollama fallback uses the sober brief only. Both briefs live in `functions/_lib/chat.ts`.
+
 ## Conversation loop
 
 1. The visitor completes Turnstile and receives an opaque session token.

@@ -252,14 +252,23 @@ describe("site chat hosted Nemotron model", () => {
   const hostedKey = "test-hosted-key";
   const hostedEnv = (database: FakeD1) => ({ ...env(database), NVIDIA_API_KEY: hostedKey });
 
-  function hostedNetwork(replies: Array<{ status?: number; content?: string }>) {
+  const isToneCall = (body: string) => body.includes('"name":"chat_tone"');
+
+  /** `replies` answer the reply calls in order; the short tone call is answered separately. */
+  function hostedNetwork(replies: Array<{ status?: number; content?: string }>, tone: { status?: number; content?: string } = { content: '{"tone":"serious"}' }) {
     const calls: Array<{ url: string; body: string; authorization: string }> = [];
     let hostedAttempt = 0;
     const fetcher = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
       const headers = new Headers(init?.headers);
-      calls.push({ url, body: String(init?.body ?? ""), authorization: headers.get("authorization") ?? "" });
+      const requestBody = String(init?.body ?? "");
       if (url.includes("siteverify")) return Response.json({ success: true, hostname: "preview.test", action: "site_chat" });
+      if (url.includes("integrate.api.nvidia.com") && isToneCall(requestBody)) {
+        calls.push({ url: url + "#tone", body: requestBody, authorization: headers.get("authorization") ?? "" });
+        if ((tone.status ?? 200) !== 200) return new Response("{}", { status: tone.status });
+        return Response.json({ choices: [{ message: { role: "assistant", content: tone.content ?? "" } }] });
+      }
+      calls.push({ url, body: requestBody, authorization: headers.get("authorization") ?? "" });
       if (url.includes("integrate.api.nvidia.com")) {
         const reply = replies[Math.min(hostedAttempt, replies.length - 1)] ?? {};
         hostedAttempt += 1;
@@ -283,7 +292,7 @@ describe("site chat hosted Nemotron model", () => {
     expect(await response.json()).toMatchObject({ ok: true, queued: false, status: "completed", reply: aiPayload.reply, emailed: true, suggestions: aiPayload.suggestions });
     expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "completed", owner_summary: aiPayload.summary, email_status: "delivered", attempt_count: 1 });
 
-    const hosted = transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"));
+    const hosted = transport.calls.filter((call) => call.url.endsWith("/v1/chat/completions"));
     expect(hosted).toHaveLength(1);
     expect(hosted[0].url).toBe("https://integrate.api.nvidia.com/v1/chat/completions");
     expect(hosted[0].authorization).toBe("Bearer " + hostedKey);
@@ -310,7 +319,7 @@ describe("site chat hosted Nemotron model", () => {
     );
     expect(response.status).toBe(202);
     expect(await response.json()).toMatchObject({ ok: true, queued: true, status: "queued", interactionId });
-    expect(transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"))).toHaveLength(2);
+    expect(transport.calls.filter((call) => call.url.endsWith("/v1/chat/completions"))).toHaveLength(2);
     expect(transport.calls.some((call) => call.url.includes("api.resend.com"))).toBe(false);
     const job = database.chatJobs.get(interactionId);
     expect(job).toMatchObject({ status: "queued", assistant_reply: null, lease_until: null, diagnostic: "hosted_invalid_output" });
@@ -329,7 +338,7 @@ describe("site chat hosted Nemotron model", () => {
       { now, fetcher: transport.fetcher },
     );
     expect(response.status).toBe(200);
-    const hosted = transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com")).map((call) => JSON.parse(call.body));
+    const hosted = transport.calls.filter((call) => call.url.endsWith("/v1/chat/completions")).map((call) => JSON.parse(call.body));
     expect(hosted).toHaveLength(2);
     expect(hosted[0]).toHaveProperty("response_format");
     expect(hosted[1]).not.toHaveProperty("response_format");
@@ -346,7 +355,42 @@ describe("site chat hosted Nemotron model", () => {
     expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "queued", diagnostic: "hosted_http_401" });
     const again = await handleChat({ request: request("/api/chat", chatBody()), env: hostedEnv(database) }, { now, fetcher: transport.fetcher });
     expect(again.status).toBe(202);
-    expect(transport.calls.filter((call) => call.url.includes("integrate.api.nvidia.com"))).toHaveLength(1);
+    expect(transport.calls.filter((call) => call.url.endsWith("/v1/chat/completions"))).toHaveLength(1);
+  });
+
+  it("asks first whether the visitor is playing, and only then uses the comedy brief", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ content: JSON.stringify(aiPayload) }], { content: '{"tone":"playful"}' });
+    await openSession(database, transport.fetcher);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody({ message: "can I pay you in croquettes?" })), env: hostedEnv(database) },
+      { now, fetcher: transport.fetcher },
+    );
+    expect(response.status).toBe(200);
+    const toneCall = JSON.parse(transport.calls.find((call) => call.url.endsWith("#tone"))!.body);
+    expect(toneCall.temperature).toBe(0);
+    expect(toneCall.messages[1].content).toContain("croquettes");
+    const reply = JSON.parse(transport.calls.find((call) => call.url.endsWith("/v1/chat/completions"))!.body);
+    expect(reply.temperature).toBe(0.9);
+    expect(reply.messages[0].content).toContain("THE VISITOR IS PLAYING WITH YOU");
+    expect(reply.messages[0].content).toContain("untrusted visitor content");
+    expect(reply.messages[0].content).toContain("€490");
+  });
+
+  it("stays in the sober voice when the tone check fails or answers nonsense", async () => {
+    for (const tone of [{ status: 503 }, { content: "not json" }, { content: '{"tone":"chaotic"}' }]) {
+      const database = new FakeD1();
+      const transport = hostedNetwork([{ content: JSON.stringify(aiPayload) }], tone);
+      await openSession(database, transport.fetcher);
+      const response = await handleChat(
+        { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+        { now, fetcher: transport.fetcher },
+      );
+      expect(response.status).toBe(200);
+      const reply = JSON.parse(transport.calls.find((call) => call.url.endsWith("/v1/chat/completions"))!.body);
+      expect(reply.temperature).toBe(0.45);
+      expect(reply.messages[0].content).not.toContain("THE VISITOR IS PLAYING WITH YOU");
+    }
   });
 
   it("only lets configuration select NVIDIA Nemotron models", async () => {
