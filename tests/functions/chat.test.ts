@@ -393,6 +393,40 @@ describe("site chat hosted Nemotron model", () => {
     }
   });
 
+  it("calls fetch on its own, the only way Cloudflare's runtime accepts", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ content: JSON.stringify(aiPayload) }]);
+    // Cloudflare's fetch throws "Illegal invocation" when it runs as a method of another object.
+    const strictFetch = function (this: unknown, input: RequestInfo | URL, init?: RequestInit) {
+      if (this !== undefined) throw new TypeError("Illegal invocation");
+      return transport.fetcher(input, init);
+    } as typeof fetch;
+    await openSession(database, strictFetch);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+      { now, fetcher: strictFetch },
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ ok: true, queued: false, status: "completed", reply: aiPayload.reply });
+    expect(transport.calls.some((call) => call.url.endsWith("#tone"))).toBe(true);
+  });
+
+  it("records a request that never got an answer apart from a bad answer", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ content: JSON.stringify(aiPayload) }]);
+    const brokenFetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (String(input).includes("integrate.api.nvidia.com")) throw new TypeError("network down");
+      return transport.fetcher(input, init);
+    }) as typeof fetch;
+    await openSession(database, brokenFetch);
+    const response = await handleChat(
+      { request: request("/api/chat", chatBody()), env: hostedEnv(database) },
+      { now, fetcher: brokenFetch },
+    );
+    expect(await response.json()).toMatchObject({ ok: true, queued: true, status: "queued" });
+    expect(database.chatJobs.get(interactionId)).toMatchObject({ status: "queued", diagnostic: "hosted_request_failed" });
+  });
+
   it("only lets configuration select NVIDIA Nemotron models", async () => {
     const { resolveHostedChatModel, HOSTED_CHAT_MODEL } = await import("../../functions/_lib/hosted-chat-model");
     expect(resolveHostedChatModel(undefined)).toBe(HOSTED_CHAT_MODEL);

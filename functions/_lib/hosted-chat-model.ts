@@ -40,7 +40,10 @@ function stripReasoning(text: string): string {
 type Call = { apiKey: string; model: string; fetcher: typeof fetch };
 
 function post(call: Call, body: Record<string, unknown>, timeoutMs: number): Promise<Response> {
-  return call.fetcher(HOSTED_CHAT_ENDPOINT, {
+  // Cloudflare's fetch refuses to run as a method of another object
+  // ("Illegal invocation"), so it is taken off the object before the call.
+  const { fetcher } = call;
+  return fetcher(HOSTED_CHAT_ENDPOINT, {
     method: "POST",
     headers: {
       authorization: "Bearer " + call.apiKey,
@@ -99,6 +102,7 @@ export async function runHostedChatModel(
   let strict = true;
 
   for (let attempt = 0; attempt < attempts; attempt += 1) {
+    let answered = false;
     try {
       const response = await post(call, {
         ...SAMPLING[tone],
@@ -121,12 +125,15 @@ export async function runHostedChatModel(
         if (response.status === 401 || response.status === 403 || response.status === 404) break;
         continue;
       }
+      answered = true;
       const output = validateChatModelText(messageText(await response.json()));
       return { output, payload: safePayload, model: call.model, tone };
     } catch (error) {
       // Never keep provider text or headers: only a short, key-free reason.
+      // A request that never got an answer is told apart from a bad answer.
       const name = error instanceof Error ? error.name : "";
-      diagnostic = name === "TimeoutError" || name === "AbortError" ? "hosted_timeout" : "hosted_invalid_output";
+      if (name === "TimeoutError" || name === "AbortError") diagnostic = "hosted_timeout";
+      else diagnostic = answered ? "hosted_invalid_output" : "hosted_request_failed";
     }
   }
   throw new HostedChatModelError(diagnostic);
