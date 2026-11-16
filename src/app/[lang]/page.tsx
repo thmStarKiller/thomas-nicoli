@@ -74,7 +74,7 @@ export default async function HomePage({
         title={faq.title}
         items={faq.items}
         aside={
-          <CtaLink lang={lang} tone="night">
+          <CtaLink lang={lang} tone="night" service="other">
             {site.cta.question}
           </CtaLink>
         }
