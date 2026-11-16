@@ -188,7 +188,7 @@ export const dictionary = {
       },
       {
         heading: "Quién recibe tus datos",
-        body: "Nadie, más allá del proveedor de email usado para entregar tu consulta (actualmente Resend, bajo sus términos de tratamiento de datos). Tus datos nunca se venden, alquilan ni comparten con terceros para marketing.",
+        body: "Nadie, más allá de dos proveedores: el servicio de email usado para entregar tu consulta (actualmente Resend, bajo sus términos de tratamiento de datos) y Google Calendar, que gestiona la página de reservas y recibe el nombre y el email que escribes en ella si reservas una llamada. Tus datos nunca se venden, alquilan ni comparten con terceros para marketing.",
       },
       {
         heading: "Tus derechos",

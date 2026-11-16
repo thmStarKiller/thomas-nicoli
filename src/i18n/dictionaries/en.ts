@@ -188,7 +188,7 @@ export const dictionary = {
       },
       {
         heading: "Who receives your data",
-        body: "No one, beyond the email service provider used to deliver your enquiry (currently Resend, processed under their data-processing terms). Your details are never sold, rented or shared with third parties for marketing.",
+        body: "No one, beyond two service providers: the email service used to deliver your enquiry (currently Resend, processed under their data-processing terms) and Google Calendar, which runs the booking page and receives the name and email you enter there if you book a call. Your details are never sold, rented or shared with third parties for marketing.",
       },
       {
         heading: "Your rights",

@@ -188,7 +188,7 @@ export const dictionary = {
       },
       {
         heading: "Qui reçoit vos données",
-        body: "Personne, au-delà du prestataire d'email utilisé pour acheminer votre demande (actuellement Resend, dans le cadre de ses conditions de traitement des données). Vos informations ne sont jamais vendues, louées ni partagées avec des tiers à des fins marketing.",
+        body: "Personne, au-delà de deux prestataires : le service d'email utilisé pour acheminer votre demande (actuellement Resend, dans le cadre de ses conditions de traitement des données) et Google Agenda, qui gère la page de réservation et reçoit le nom et l'email que vous y saisissez si vous réservez un appel. Vos informations ne sont jamais vendues, louées ni partagées avec des tiers à des fins marketing.",
       },
       {
         heading: "Vos droits",
