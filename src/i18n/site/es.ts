@@ -12,6 +12,10 @@ export const site: SiteCopy = {
   },
   cta: {
     contact: "Escríbeme",
+    call: "Reservar una llamada",
+    callOption: "Una primera llamada",
+    callHint: "Dime dos o tres horarios que te vayan bien, hora de Madrid. Te confirmo uno por email.",
+    moreDetails: "Añadir detalles (opcional)",
     audit: "Solicitar la auditoría",
     question: "Hacer una pregunta",
     reply: "Respondo en un día laborable",
@@ -40,8 +44,8 @@ export const site: SiteCopy = {
       label: "Consultor de IA · Madrid",
       title: ["IA que ", "se gana su sitio", " en tu negocio."],
       text: "Ayudo a empresas y profesionales a poner la IA a trabajar en las tareas que se comen la semana: consultas, seguimientos y gestión repetitiva. Precios cerrados, un paso útil cada vez, y tú apruebas cada uno.",
-      primary: "Solicitar la auditoría de 490 €",
-      secondary: "Ver qué hago",
+      primary: "Reservar una llamada",
+      secondary: "Solicitar la auditoría de 490 €",
       caption: "Thomas Nicoli, Madrid",
       note: "Dos proyectos a la vez, por decisión propia",
     },
@@ -167,9 +171,9 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "IA para empresas: auditoría, automatización y asistentes a precio cerrado",
+      title: "IA para empresas: auditoría y automatización",
       description:
-        "Una auditoría de oportunidades de IA por 490 € y, después, sprints a precio cerrado para respuesta a contactos, automatización administrativa, asistentes web e informes. Madrid y remoto, en español, inglés o francés.",
+        "Auditoría de oportunidades de IA por 490 € y sprints a precio cerrado para contactos, tareas administrativas, asistentes web e informes. Madrid y remoto.",
     },
     hero: {
       eyebrow: "Para empresas",
@@ -325,9 +329,9 @@ export const site: SiteCopy = {
 
   professionals: {
     meta: {
-      title: "IA para profesionales y equipos: talleres prácticos en Madrid y online",
+      title: "Talleres de IA para profesionales y equipos",
       description:
-        "Talleres prácticos de IA para personas de marketing, e-commerce y operaciones, impartidos en español, inglés o francés. También contenido de e-commerce en francés y revisión de textos generados por IA para agencias.",
+        "Talleres prácticos de IA para marketing, e-commerce y operaciones, en español, inglés o francés. También contenido de e-commerce en francés para agencias.",
     },
     hero: {
       eyebrow: "Para profesionales y equipos",
@@ -452,7 +456,7 @@ export const site: SiteCopy = {
     meta: {
       title: "Trabajo: experiencia y proyectos",
       description:
-        "Más de diez años de comercio digital, contenido y plataformas, y las herramientas de IA que Thomas Nicoli ha diseñado y construido. Sin clientes inventados ni resultados prestados.",
+        "Más de diez años de comercio digital y contenido, y las herramientas de IA que Thomas Nicoli ha construido. Sin clientes inventados ni resultados prestados.",
     },
     hero: {
       eyebrow: "Trabajo",

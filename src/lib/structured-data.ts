@@ -65,3 +65,55 @@ export function buildStructuredData(
     ],
   };
 }
+
+/** FAQ markup for a page that shows these questions and answers. */
+export function buildFaqData(items: readonly { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
+/**
+ * Services shown on the business page. Only the audit carries a price,
+ * because it is the one offer with a single fixed fee; the sprints are
+ * quoted, so they are listed without one.
+ */
+export function buildServiceData(
+  lang: Locale,
+  audit: { name: string; description: string; price: string },
+  services: readonly { slug: string; name: string; description: string }[],
+) {
+  const page = absoluteUrl(localePath(lang, "/business"));
+  const provider = { "@id": `${absoluteUrl("/")}#studio` };
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        name: audit.name,
+        description: audit.description,
+        provider,
+        url: `${page}#audit`,
+        offers: {
+          "@type": "Offer",
+          price: audit.price.replace(/[^0-9]/g, ""),
+          priceCurrency: "EUR",
+          url: `${page}#audit`,
+        },
+      },
+      ...services.map((service) => ({
+        "@type": "Service",
+        name: service.name,
+        description: service.description,
+        provider,
+        url: `${page}#${service.slug}`,
+      })),
+    ],
+  };
+}

@@ -4,6 +4,7 @@ import { siteConfig } from "@/content/site-config";
 import { hasLocale } from "@/i18n/config";
 import { getSite } from "@/i18n/site";
 import { pageMetadata } from "@/lib/seo";
+import { buildFaqData, buildServiceData } from "@/lib/structured-data";
 import { AuditFeature } from "@/components/sections/audit-feature";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCta } from "@/components/sections/final-cta";
@@ -34,11 +35,23 @@ export default async function BusinessPage({
   const b = site.business;
   const showPrices = siteConfig.features.showPrices;
 
+  const audit = site.home.audit;
+  const serviceData = buildServiceData(
+    lang,
+    { name: audit.title.join("").replace(/\.$/, ""), description: audit.text, price: audit.price },
+    b.build.offers.map((offer) => ({ slug: offer.slug, name: offer.name, description: offer.line })),
+  );
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceData) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqData(b.faq.items)) }}
+      />
       <PageHero eyebrow={b.hero.eyebrow} title={b.hero.title} intro={b.hero.intro}>
         <CtaLink lang={lang} service="ai-opportunity-audit" className="w-full sm:w-auto">
-          {site.home.hero.primary}
+          {site.home.hero.secondary}
         </CtaLink>
       </PageHero>
 

@@ -3,9 +3,9 @@
 export const dictionary = {
   meta: {
     home: {
-      title: "Thomas Nicoli | Consultant IA pour entreprises et professionnels",
+      title: "Consultant IA à Madrid pour entreprises | Thomas Nicoli",
       description:
-        "Consultant IA à Madrid. J’aide les entreprises et les professionnels à automatiser le travail répétitif, une étape utile à la fois, avec un prix fixe convenu avant de commencer. Français, anglais et espagnol.",
+        "Consultant IA à Madrid. J’aide entreprises et professionnels à automatiser le travail répétitif, étape par étape, à prix fixe convenu avant de commencer.",
     },
     services: {
       title: "Services : audits IA, automatisation, assistants et formation",
@@ -18,12 +18,12 @@ export const dictionary = {
         "Les décisions, les systèmes et les enseignements derrière trois études de concept clairement identifiées et quatre outils personnels.",
     },
     about: {
-      title: "À propos | Thomas Nicoli",
+      title: "À propos",
       description:
         "Consultant e-commerce, CRM, web et automatisation à Madrid, je relie métier, création et plateformes, de la stratégie jusqu'à la mise en œuvre.",
     },
     contact: {
-      title: "Contact | Démarrer un projet",
+      title: "Contact",
       description:
         "Parlez-moi de votre activité et de ce que vous voulez accomplir. Réponse sous un jour ouvré, en français, anglais ou espagnol.",
     },

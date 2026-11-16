@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getSite } from "@/i18n/site";
 import { pageMetadata } from "@/lib/seo";
+import { buildFaqData } from "@/lib/structured-data";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCta } from "@/components/sections/final-cta";
 import { CtaLink } from "@/components/ui/cta-link";
@@ -33,6 +34,10 @@ export default async function ProfessionalsPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqData(p.faq.items)) }}
+      />
       <PageHero eyebrow={p.hero.eyebrow} title={p.hero.title} intro={p.hero.intro}>
         <CtaLink lang={lang} service="ai-training" className="w-full sm:w-auto">
           {site.cta.question}

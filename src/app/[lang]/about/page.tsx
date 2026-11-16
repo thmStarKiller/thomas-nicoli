@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { siteConfig } from "@/content/site-config";
 import { getDictionary } from "@/i18n";
 import { hasLocale, localePath } from "@/i18n/config";
 import { getSite } from "@/i18n/site";
@@ -12,6 +10,7 @@ import { Drift } from "@/components/motion/drift";
 import { FinalCta } from "@/components/sections/final-cta";
 import { CtaLink } from "@/components/ui/cta-link";
 import { Headline, Rule } from "@/components/ui/headline";
+import { Portrait } from "@/components/ui/portrait";
 import { Rise } from "@/components/ui/rise";
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"];
@@ -74,15 +73,7 @@ export default async function AboutPage({
               style={{ "--d": "250ms" } as React.CSSProperties}
             >
               <Drift className="absolute inset-0" distance={60}>
-                <Image
-                  src={siteConfig.media.profileImage}
-                  alt={a.portraitAlt}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 42vw"
-                  className="object-cover"
-                  style={{ objectPosition: "50% 26%" }}
-                />
+                <Portrait alt={a.portraitAlt} priority sizes="(max-width: 1024px) 100vw, 46vw" />
               </Drift>
             </div>
             <p className="eyebrow absolute bottom-5 left-5 text-sand/85 sm:left-8">{a.locationExperience}</p>

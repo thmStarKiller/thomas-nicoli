@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/content/site-config";
 import { localePath, type Locale } from "@/i18n/config";
@@ -14,7 +13,6 @@ import { cn } from "@/lib/cn";
 import { LanguageSwitcher } from "./language-switcher";
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
-const EASE = [0.19, 1, 0.22, 1] as const;
 
 export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const pathname = usePathname();
@@ -136,11 +134,11 @@ export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
             <LanguageSwitcher current={lang} tone="dark" />
             {cta.external ? (
               <a href={cta.href} target="_blank" rel="noopener noreferrer" className="cta cta-sm" data-cta="header">
-                {site.cta.contact}
+                {site.cta.call}
               </a>
             ) : (
               <Link href={cta.href} className="cta cta-sm" data-cta="header">
-                {site.cta.contact}
+                {site.cta.call}
               </Link>
             )}
           </div>
@@ -172,64 +170,55 @@ export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            ref={panelRef}
-            initial={{ clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.7, ease: EASE }}
-            className="fixed inset-0 flex min-h-svh flex-col justify-between overflow-y-auto bg-night px-5 pb-8 pt-24 sm:px-8 lg:hidden"
-          >
-            <nav aria-label="Mobile">
-              <p className="eyebrow mb-4 text-sand/65">{site.nav.index}</p>
-              {links.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.18 + i * 0.06, duration: 0.8, ease: EASE }}
-                >
-                  <Link
-                    href={link.href}
-                    className="group flex items-baseline gap-5 border-t border-sand/15 py-4 text-sand"
-                  >
-                    <span className="w-8 font-display text-lg text-spice-bright">{NUMERALS[i]}</span>
-                    <span className="font-display text-[2.1rem] leading-tight">{link.label}</span>
-                  </Link>
-                </motion.div>
-              ))}
-              <Link
-                href={localePath(lang, "/project-clarity")}
-                className="eyebrow flex min-h-11 items-center border-t border-sand/15 pt-4 text-sand/65"
-              >
-                {site.nav.clarity}
-              </Link>
-            </nav>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="mt-10 flex flex-col gap-6"
-            >
-              {cta.external ? (
-                <a href={cta.href} target="_blank" rel="noopener noreferrer" className="cta w-full">
-                  {site.cta.contact}
-                  <ArrowUpRight className="size-4" aria-hidden />
-                </a>
-              ) : (
-                <Link href={cta.href} className="cta w-full">
-                  {site.cta.contact}
-                  <ArrowUpRight className="size-4" aria-hidden />
-                </Link>
-              )}
-              <LanguageSwitcher current={lang} tone="dark" />
-            </motion.div>
-          </motion.div>
+      {/* Always in the page, uncovered with a clip when opened */}
+      <div
+        id="mobile-menu"
+        ref={panelRef}
+        inert={!open}
+        className={cn(
+          "fixed inset-0 flex min-h-svh flex-col justify-between overflow-y-auto bg-night px-5 pb-8 pt-24 transition-[clip-path,visibility] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] sm:px-8 lg:hidden",
+          open ? "visible [clip-path:inset(0_0_0_0)]" : "invisible [clip-path:inset(0_0_100%_0)]",
         )}
-      </AnimatePresence>
+      >
+        <nav aria-label="Mobile">
+          <p className="eyebrow mb-4 text-sand/65">{site.nav.index}</p>
+          {links.map((link, i) => (
+            <div
+              key={link.href}
+              className={cn(
+                "transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              )}
+              style={{ transitionDelay: open ? `${180 + i * 60}ms` : "0ms" }}
+            >
+              <Link href={link.href} className="group flex items-baseline gap-5 border-t border-sand/15 py-4 text-sand">
+                <span className="w-8 font-display text-lg text-spice-bright">{NUMERALS[i]}</span>
+                <span className="font-display text-[2.1rem] leading-tight">{link.label}</span>
+              </Link>
+            </div>
+          ))}
+          <Link
+            href={localePath(lang, "/project-clarity")}
+            className="eyebrow flex min-h-11 items-center border-t border-sand/15 pt-4 text-sand/65"
+          >
+            {site.nav.clarity}
+          </Link>
+        </nav>
+        <div className="mt-10 flex flex-col gap-6">
+          {cta.external ? (
+            <a href={cta.href} target="_blank" rel="noopener noreferrer" className="cta cta-spice w-full">
+              {site.cta.call}
+              <ArrowUpRight className="size-4" aria-hidden />
+            </a>
+          ) : (
+            <Link href={cta.href} className="cta cta-spice w-full">
+              {site.cta.call}
+              <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
+          )}
+          <LanguageSwitcher current={lang} tone="dark" />
+        </div>
+      </div>
     </header>
   );
 }

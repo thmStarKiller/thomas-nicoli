@@ -9,15 +9,21 @@ export function Rise({
   className,
   delay = 0,
   as: Tag = "div",
+  fade = true,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   as?: "div" | "li" | "section" | "article" | "p";
+  /**
+   * Set to false for content on the first screen: it then only slides into
+   * place and is never invisible, so it counts as painted straight away.
+   */
+  fade?: boolean;
 }) {
   return (
     <Tag
-      data-rise=""
+      {...(fade ? { "data-rise": "" } : { "data-lift": "" })}
       suppressHydrationWarning
       className={cn(className)}
       style={delay ? ({ "--d": `${delay}ms` } as React.CSSProperties) : undefined}

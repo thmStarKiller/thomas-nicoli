@@ -23,7 +23,7 @@ export function PageHero({
   return (
     <section className="bg-night pb-16 pt-32 text-sand sm:pb-24 sm:pt-44">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-        <Rise className="flex items-baseline justify-between gap-6">
+        <Rise fade={false} className="flex items-baseline justify-between gap-6">
           <p className="eyebrow text-spice-bright">{eyebrow}</p>
           {meta && <p className="eyebrow text-sand/60">{meta}</p>}
         </Rise>
@@ -38,7 +38,7 @@ export function PageHero({
         {(intro || children) && (
           <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-12">
             {intro && (
-              <Rise delay={350} className="lg:col-span-6 lg:col-start-7">
+              <Rise fade={false} delay={350} className="lg:col-span-6 lg:col-start-7">
                 <p className="lead text-pretty text-sand/80">{intro}</p>
                 {children && <div className="mt-9">{children}</div>}
               </Rise>

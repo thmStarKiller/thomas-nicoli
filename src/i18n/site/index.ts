@@ -15,6 +15,7 @@ export function getSite(lang: Locale): SiteCopy {
 export function getContactOptions(lang: Locale): { value: string; label: string }[] {
   const site = copy[lang];
   return [
+    { value: "discovery", label: site.cta.callOption },
     { value: "ai-opportunity-audit", label: site.home.audit.title.join("").replace(/\.$/, "") },
     ...site.business.build.offers.map((offer) => ({ value: offer.slug, label: offer.name })),
     { value: "monthly-support", label: site.business.support.title.replace(/\.$/, "") },

@@ -6,7 +6,7 @@ import { ArrowUpRight, Loader2 } from "lucide-react";
 import type { Dictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import { getProjectClarityCopy } from "@/i18n/project-clarity";
-import { getContactOptions } from "@/i18n/site";
+import { getContactOptions, getSite } from "@/i18n/site";
 import {
   CONTACT_BUDGET_IDS,
   CONTACT_LIMITS,
@@ -63,6 +63,8 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const additions = getProjectClarityCopy(lang).contact;
   const form = dict.contact.form;
   const options = getContactOptions(lang);
+  const site = getSite(lang);
+  const [moreOpen, setMoreOpen] = useState(false);
   const labelClass = "eyebrow text-night";
   const selectClass =
     "mt-1 w-full border-0 border-b border-night/40 bg-transparent px-0 py-3 text-[17px] text-night outline-none transition-colors duration-300 placeholder:text-night/70 focus:border-spice";
@@ -85,7 +87,10 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     const next: Partial<Record<Field, string>> = {};
     if (values.name.trim().length < 2) next.name = form.errors.name;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) next.email = form.errors.email;
-    if (!validUrl(values.website)) next.website = additions.websiteError;
+    if (!validUrl(values.website)) {
+      next.website = additions.websiteError;
+      setMoreOpen(true);
+    }
     if (!values.service) next.service = form.errorReview;
     if (values.message.trim().length < 20) next.message = form.errors.message;
     if (!values.consent) next.consent = form.errors.consent;
@@ -129,6 +134,14 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     );
   }
 
+  const autoComplete: Partial<Record<keyof Values, string>> = {
+    name: "name",
+    businessName: "organization",
+    email: "email",
+    website: "url",
+    location: "address-level2",
+  };
+
   const field = (name: keyof Values, label: string, type = "text", placeholder = "", maxLength?: number) => (
     <div>
       <label htmlFor={`contact-${name}`} className={labelClass}>{label}</label>
@@ -140,6 +153,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         onChange={(event) => update(name, event.target.value as never)}
         placeholder={placeholder}
         maxLength={maxLength}
+        autoComplete={autoComplete[name]}
         aria-invalid={Boolean(errors[name])}
         aria-describedby={errors[name] ? `contact-${name}-error` : undefined}
         className={selectClass}
@@ -152,45 +166,49 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     <form onSubmit={submit} noValidate className="space-y-8">
       <div className="grid gap-8 sm:grid-cols-2">
         {field("name", form.name, "text", form.namePlaceholder, CONTACT_LIMITS.name)}
-        {field("businessName", form.businessName, "text", form.businessPlaceholder, CONTACT_LIMITS.businessName)}
-      </div>
-      <div className="grid gap-8 sm:grid-cols-2">
         {field("email", form.email, "email", form.emailPlaceholder, CONTACT_LIMITS.email)}
-        {field("website", additions.website, "url", additions.websitePlaceholder, CONTACT_LIMITS.website)}
       </div>
-      <div className="grid gap-8 sm:grid-cols-2">
-        <div>
-          <label htmlFor="contact-service" className={labelClass}>{form.service}</label>
-          <select id="contact-service" name="service" value={values.service} onChange={(event) => update("service", event.target.value)} aria-invalid={Boolean(errors.service)} aria-describedby={errors.service ? "contact-service-error" : undefined} className={selectClass}>
-            <option value="">{form.servicePlaceholder}</option>
-            {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-            <option value="other">{form.serviceOther}</option>
-          </select>
-          {errors.service && <p id="contact-service-error" role="alert" className="mt-2 text-[14.5px] font-medium text-[#9b1c1c]">{errors.service}</p>}
-        </div>
-        <div>
-          <label htmlFor="contact-budget" className={labelClass}>{form.budget}</label>
-          <select id="contact-budget" name="budget" value={values.budget} onChange={(event) => update("budget", event.target.value)} className={selectClass}>
-            <option value="">{form.budgetPlaceholder}</option>
-            {form.budgetRanges.map((label, index) => <option key={CONTACT_BUDGET_IDS[index]} value={CONTACT_BUDGET_IDS[index]}>{label}</option>)}
-          </select>
-        </div>
-      </div>
-      <div className="grid gap-8 sm:grid-cols-2">
-        <div>
-          <label htmlFor="contact-timing" className={labelClass}>{additions.timing}</label>
-          <select id="contact-timing" name="timing" value={values.timing} onChange={(event) => update("timing", event.target.value)} className={selectClass}>
-            <option value="">{additions.timingPlaceholder}</option>
-            {additions.timingOptions.map((label, index) => <option key={CONTACT_TIMING_IDS[index]} value={CONTACT_TIMING_IDS[index]}>{label}</option>)}
-          </select>
-        </div>
-        {field("location", additions.location, "text", additions.locationPlaceholder, CONTACT_LIMITS.location)}
+      <div>
+        <label htmlFor="contact-service" className={labelClass}>{form.service}</label>
+        <select id="contact-service" name="service" value={values.service} onChange={(event) => update("service", event.target.value)} aria-invalid={Boolean(errors.service)} aria-describedby={errors.service ? "contact-service-error" : undefined} className={selectClass}>
+          <option value="">{form.servicePlaceholder}</option>
+          {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          <option value="other">{form.serviceOther}</option>
+        </select>
+        {errors.service && <p id="contact-service-error" role="alert" className="mt-2 text-[14.5px] font-medium text-[#9b1c1c]">{errors.service}</p>}
       </div>
       <div>
         <label htmlFor="contact-message" className={labelClass}>{form.message}</label>
+        {values.service === "discovery" && <p id="contact-call-hint" className="mt-2 text-[15.5px] leading-snug text-night/85">{site.cta.callHint}</p>}
         <textarea id="contact-message" name="message" value={values.message} onChange={(event) => update("message", event.target.value)} placeholder={form.messagePlaceholder} maxLength={CONTACT_LIMITS.message} rows={5} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? "contact-message-error" : undefined} className={selectClass} />
         {errors.message && <p id="contact-message-error" role="alert" className="mt-2 text-[14.5px] font-medium text-[#9b1c1c]">{errors.message}</p>}
       </div>
+      <details open={moreOpen} onToggle={(event) => setMoreOpen(event.currentTarget.open)} className="border-y border-night/25">
+        <summary className="eyebrow flex min-h-12 cursor-pointer items-center text-night">{site.cta.moreDetails}</summary>
+        <div className="space-y-8 pb-8 pt-4">
+          <div className="grid gap-8 sm:grid-cols-2">
+            {field("businessName", form.businessName, "text", form.businessPlaceholder, CONTACT_LIMITS.businessName)}
+            {field("website", additions.website, "url", additions.websitePlaceholder, CONTACT_LIMITS.website)}
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div>
+              <label htmlFor="contact-budget" className={labelClass}>{form.budget}</label>
+              <select id="contact-budget" name="budget" value={values.budget} onChange={(event) => update("budget", event.target.value)} className={selectClass}>
+                <option value="">{form.budgetPlaceholder}</option>
+                {form.budgetRanges.map((label, index) => <option key={CONTACT_BUDGET_IDS[index]} value={CONTACT_BUDGET_IDS[index]}>{label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="contact-timing" className={labelClass}>{additions.timing}</label>
+              <select id="contact-timing" name="timing" value={values.timing} onChange={(event) => update("timing", event.target.value)} className={selectClass}>
+                <option value="">{additions.timingPlaceholder}</option>
+                {additions.timingOptions.map((label, index) => <option key={CONTACT_TIMING_IDS[index]} value={CONTACT_TIMING_IDS[index]}>{label}</option>)}
+              </select>
+            </div>
+          </div>
+          {field("location", additions.location, "text", additions.locationPlaceholder, CONTACT_LIMITS.location)}
+        </div>
+      </details>
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label htmlFor="contact-company">Company</label>
         <input id="contact-company" name="company" tabIndex={-1} autoComplete="off" value={values.company} onChange={(event) => update("company", event.target.value)} />

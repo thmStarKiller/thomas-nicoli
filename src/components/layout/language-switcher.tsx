@@ -42,7 +42,7 @@ export function LanguageSwitcher({
             aria-current={locale === current ? "true" : undefined}
             title={localeNames[locale]}
             className={cn(
-              "font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300",
+              "inline-flex min-h-11 min-w-9 items-center justify-center font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300",
               locale === current
                 ? tone === "dark"
                   ? "text-sand"

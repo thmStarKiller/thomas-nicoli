@@ -112,7 +112,7 @@ export function Ticker({ items }: { items: readonly string[] }) {
   return (
     <div aria-hidden className="relative select-none">
       <Band items={items} direction={1} className="bg-night text-sand" squareClassName="bg-spice-bright" alternateClassName="text-spice-bright" />
-      <Band items={reversed} direction={-1} className="bg-spice-bright text-night" squareClassName="bg-night" alternateClassName="text-sand" />
+      <Band items={reversed} direction={-1} className="bg-spice-bright text-night" squareClassName="bg-night" alternateClassName="not-italic" />
     </div>
   );
 }

@@ -65,7 +65,16 @@ export interface SiteCopy {
     clarity: string;
     index: string;
   };
-  cta: { contact: string; audit: string; question: string; reply: string };
+  cta: {
+    contact: string;
+    call: string;
+    callOption: string;
+    callHint: string;
+    moreDetails: string;
+    audit: string;
+    question: string;
+    reply: string;
+  };
   labels: {
     price: string;
     turnaround: string;

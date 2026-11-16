@@ -27,8 +27,8 @@ export async function generateMetadata({
   return pageMetadata({
     lang,
     path: `/work/${slug}`,
-    title: `${item.title} | ${item.label}`,
-    description: item.summary,
+    title: item.title,
+    description: `${item.summary} ${item.label}. ${item.status}.`.slice(0, 160),
   });
 }
 

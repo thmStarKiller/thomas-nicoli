@@ -493,6 +493,14 @@ body {
       transform 1.1s var(--ease-snap) var(--d, 0ms);
   }
 
+  /* slide only: for first-screen content that must be painted at once */
+  html.js [data-lift]:not([data-seen]) {
+    transform: translateY(36px);
+  }
+  html.js [data-lift] {
+    transition: transform 1.1s var(--ease-snap) var(--d, 0ms);
+  }
+
   /* headline words rising from behind a mask */
   .w {
     display: inline-block;
@@ -512,6 +520,7 @@ body {
   /* while the opening curtain is up, hold the hero back so it lands after it */
   html.intro-on [data-words] .w > span,
   html.intro-on [data-rise],
+  html.intro-on [data-lift],
   html.intro-on [data-wipe] > * {
     transition-delay: calc(var(--d, 0ms) + 1050ms);
   }

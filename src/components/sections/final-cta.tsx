@@ -24,7 +24,7 @@ export function FinalCta({ lang }: { lang: Locale }) {
             <p className="lead text-pretty text-sand/80">{c.text}</p>
             <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
               <CtaLink lang={lang} tone="spice" className="w-full sm:w-auto">
-                {site.cta.contact}
+                {site.cta.call}
               </CtaLink>
               <a
                 href={siteConfig.contact.socials.linkedin}

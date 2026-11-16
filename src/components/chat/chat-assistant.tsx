@@ -749,7 +749,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
         data-testid="site-chat-launcher"
         type="button"
         aria-expanded={open}
-        aria-label={open ? copy.closeLabel : copy.openLabel}
+        aria-label={open ? copy.closeLabel : `${copy.launcher}. ${copy.openLabel}`}
         onClick={() => setOpen((value) => !value)}
         className={`group relative h-14 items-stretch overflow-hidden border border-sand/25 bg-night text-sand ${open ? "hidden sm:flex" : "flex"}`}
       >

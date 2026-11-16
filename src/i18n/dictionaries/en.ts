@@ -3,9 +3,9 @@
 export const dictionary = {
   meta: {
     home: {
-      title: "Thomas Nicoli | AI consultant for businesses and professionals",
+      title: "AI consultant in Madrid for businesses | Thomas Nicoli",
       description:
-        "AI consultant in Madrid. I help businesses and professionals automate repetitive work one useful step at a time, with a fixed price agreed before work starts. English, Spanish and French.",
+        "AI consultant in Madrid. I help businesses and professionals automate repetitive work one step at a time, at a fixed price agreed before work starts.",
     },
     services: {
       title: "Services: AI audits, automation, assistants and training",
@@ -18,12 +18,12 @@ export const dictionary = {
         "The decisions, systems and lessons behind three clearly labelled concept studies and four self-initiated digital tools.",
     },
     about: {
-      title: "About | Thomas Nicoli",
+      title: "About",
       description:
         "E-commerce, CRM, web and automation consultant in Madrid, connecting business, creative teams and platforms from strategy through implementation.",
     },
     contact: {
-      title: "Contact | Start a project",
+      title: "Contact",
       description:
         "Tell me about your business and what you want to achieve. Replies within one working day, in English, Spanish or French.",
     },

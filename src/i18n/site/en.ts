@@ -12,6 +12,10 @@ export const site: SiteCopy = {
   },
   cta: {
     contact: "Get in touch",
+    call: "Book a call",
+    callOption: "An intro call",
+    callHint: "Give me two or three times that suit you, Madrid time. I will confirm one by email.",
+    moreDetails: "Add details (optional)",
     audit: "Request the audit",
     question: "Ask a question",
     reply: "I reply within one working day",
@@ -40,8 +44,8 @@ export const site: SiteCopy = {
       label: "AI consultant · Madrid",
       title: ["AI that ", "earns its place", " in your business."],
       text: "I help businesses and professionals put AI to work on the tasks that eat the week: enquiries, follow-ups and repetitive admin. Fixed prices, one useful step at a time, and you approve each one.",
-      primary: "Request the €490 audit",
-      secondary: "See what I do",
+      primary: "Book a call",
+      secondary: "Request the €490 audit",
       caption: "Thomas Nicoli, Madrid",
       note: "Two projects at a time, by choice",
     },
@@ -167,9 +171,9 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "AI for businesses: audit, automation and assistants at fixed prices",
+      title: "AI audit and automation for businesses",
       description:
-        "A €490 AI Opportunity Audit, then fixed-price sprints for lead response, admin automation, website assistants and reporting. Madrid and remote, in Spanish, English or French.",
+        "A €490 AI Opportunity Audit, then fixed-price sprints for lead response, admin automation, website assistants and reporting. Madrid and remote.",
     },
     hero: {
       eyebrow: "For businesses",
@@ -325,9 +329,9 @@ export const site: SiteCopy = {
 
   professionals: {
     meta: {
-      title: "AI for professionals and teams: practical workshops in Madrid and online",
+      title: "AI workshops for professionals and teams",
       description:
-        "Practical AI workshops for marketing, e-commerce and operations people, taught in Spanish, English or French. Also French e-commerce content and review of AI output for agencies.",
+        "Practical AI workshops for marketing, e-commerce and operations people, in Spanish, English or French. Also French e-commerce content for agencies.",
     },
     hero: {
       eyebrow: "For professionals and teams",
@@ -452,7 +456,7 @@ export const site: SiteCopy = {
     meta: {
       title: "Work: experience and builds",
       description:
-        "More than ten years of digital commerce, content and platform work, and the AI tools Thomas Nicoli has designed and built himself. No invented clients and no borrowed results.",
+        "More than ten years of digital commerce and content work, and the AI tools Thomas Nicoli built himself. No invented clients, no borrowed results.",
     },
     hero: {
       eyebrow: "Work",
