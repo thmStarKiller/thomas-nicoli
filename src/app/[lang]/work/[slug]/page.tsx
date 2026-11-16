@@ -24,12 +24,19 @@ export async function generateMetadata({
   if (!hasLocale(lang)) return {};
   const item = getSite(lang).work.cases.find((entry) => entry.slug === slug);
   if (!item) return {};
-  return pageMetadata({
-    lang,
-    path: `/work/${slug}`,
-    title: item.title,
-    description: `${item.summary} ${item.label}. ${item.status}.`.slice(0, 160),
-  });
+  // Name plus what it is, in the page's language. Set as an absolute title:
+  // with the site name appended it would run past 60 characters, and the bare
+  // name alone is identical in every language.
+  const title = `${item.title} | ${item.label}`;
+  return {
+    ...pageMetadata({
+      lang,
+      path: `/work/${slug}`,
+      title,
+      description: `${item.summary} ${item.label}. ${item.status}.`.slice(0, 160),
+    }),
+    title: { absolute: title },
+  };
 }
 
 export default async function CasePage({
