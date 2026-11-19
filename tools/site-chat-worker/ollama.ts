@@ -34,7 +34,7 @@ export async function runLocalChatModel(
           stream: false,
           format: CHAT_OUTPUT_JSON_SCHEMA,
           keep_alive: "10m",
-          options: { temperature: 0.45, num_ctx: 8_192, num_predict: 1_000 },
+          options: { temperature: 0.45, num_ctx: 12_288, num_predict: 1_000 },
           messages: modelInput.messages,
         }),
       });

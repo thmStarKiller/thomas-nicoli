@@ -1,4 +1,4 @@
-import { chatJobPayloadSchema, type ChatAiOutput, type ChatJobPayload } from "../../src/lib/chat/contracts";
+import { chatJobPayloadSchema, type ChatAiOutput, type ChatJobPayload, type ChatLocale } from "../../src/lib/chat/contracts";
 import {
   buildChatModelInput,
   buildChatToneInput,
@@ -60,26 +60,35 @@ function messageText(envelope: unknown): string {
   return stripReasoning(String(content ?? ""));
 }
 
+type VisitorSignals = { tone: ChatTone; language?: ChatLocale };
+const REPLY_LOCALES = new Set<string>(["es", "en", "fr"]);
+
 /**
- * A short first call that only decides whether the visitor is playing.
- * Anything unexpected counts as serious, so a failure can never make the
- * assistant joke at the wrong moment.
+ * A short first call that decides whether the visitor is playing and which
+ * language they write in. Anything unexpected counts as serious with no
+ * language, so a failure can never make the assistant joke at the wrong
+ * moment, and the reply then follows the general language rule.
  */
-export async function detectChatTone(payload: ChatJobPayload, call: Call, timeoutMs = 8_000): Promise<ChatTone> {
+export async function readVisitorSignals(payload: ChatJobPayload, call: Call, timeoutMs = 8_000): Promise<VisitorSignals> {
   try {
     const response = await post(call, {
       temperature: 0,
-      max_tokens: 20,
+      max_tokens: 30,
       messages: buildChatToneInput(payload).messages,
       response_format: { type: "json_schema", json_schema: { name: "chat_tone", strict: true, schema: CHAT_TONE_JSON_SCHEMA } },
       chat_template_kwargs: { enable_thinking: false },
     }, timeoutMs);
-    if (!response.ok) return "serious";
-    const parsed = JSON.parse(messageText(await response.json())) as { tone?: unknown };
-    return parsed.tone === "playful" ? "playful" : "serious";
+    if (!response.ok) return { tone: "serious" };
+    const parsed = JSON.parse(messageText(await response.json())) as { tone?: unknown; language?: unknown };
+    const language = typeof parsed.language === "string" && REPLY_LOCALES.has(parsed.language) ? parsed.language as ChatLocale : undefined;
+    return { tone: parsed.tone === "playful" ? "playful" : "serious", language };
   } catch {
-    return "serious";
+    return { tone: "serious" };
   }
+}
+
+export async function detectChatTone(payload: ChatJobPayload, call: Call, timeoutMs = 8_000): Promise<ChatTone> {
+  return (await readVisitorSignals(payload, call, timeoutMs)).tone;
 }
 
 export async function runHostedChatModel(
@@ -92,8 +101,9 @@ export async function runHostedChatModel(
   const apiKey = options.apiKey.trim();
   if (!apiKey) throw new HostedChatModelError("hosted_key_missing");
   const call: Call = { apiKey, model: resolveHostedChatModel(options.model), fetcher: options.fetcher ?? fetch };
-  const tone = options.tone ?? await detectChatTone(safePayload, call);
-  const modelInput = buildChatModelInput(safePayload, tone);
+  const signals: VisitorSignals = options.tone ? { tone: options.tone } : await readVisitorSignals(safePayload, call);
+  const tone = signals.tone;
+  const modelInput = buildChatModelInput(safePayload, tone, signals.language);
   const attempts = Math.max(1, Math.min(options.attempts ?? 2, 3));
   let diagnostic = "no_response";
   // Measured on 14 Nov 2026: the schema makes every reply parse, and answering

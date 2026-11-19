@@ -377,6 +377,27 @@ describe("site chat hosted Nemotron model", () => {
     expect(reply.messages[0].content).toContain("€490");
   });
 
+  it("answers in the language the visitor writes in, whatever the page language", async () => {
+    const database = new FakeD1();
+    const transport = hostedNetwork([{ content: JSON.stringify(aiPayload) }], { content: '{"tone":"serious","language":"fr"}' });
+    await openSession(database, transport.fetcher);
+    await handleChat(
+      { request: request("/api/chat", chatBody({ locale: "en", message: "Bonjour, je cherche de l'aide" })), env: hostedEnv(database) },
+      { now, fetcher: transport.fetcher },
+    );
+    const reply = JSON.parse(transport.calls.find((call) => call.url.endsWith("/v1/chat/completions"))!.body);
+    expect(reply.messages[0].content).toContain("Reply in French, the language the visitor is writing in.");
+
+    for (const language of ["de", "other", undefined]) {
+      const db = new FakeD1();
+      const net = hostedNetwork([{ content: JSON.stringify(aiPayload) }], { content: JSON.stringify({ tone: "serious", language }) });
+      await openSession(db, net.fetcher);
+      await handleChat({ request: request("/api/chat", chatBody()), env: hostedEnv(db) }, { now, fetcher: net.fetcher });
+      const body = JSON.parse(net.calls.find((call) => call.url.endsWith("/v1/chat/completions"))!.body);
+      expect(body.messages[0].content).toContain("Reply in the language of the visitor's latest message");
+    }
+  });
+
   it("stays in the sober voice when the tone check fails or answers nonsense", async () => {
     for (const tone of [{ status: 503 }, { content: "not json" }, { content: '{"tone":"chaotic"}' }]) {
       const database = new FakeD1();

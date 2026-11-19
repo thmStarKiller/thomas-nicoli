@@ -20,6 +20,7 @@ export function getContactOptions(lang: Locale): { value: string; label: string 
     ...site.business.build.offers.map((offer) => ({ value: offer.slug, label: offer.name })),
     { value: "monthly-support", label: site.business.support.title.replace(/\.$/, "") },
     { value: "ai-training", label: site.professionals.modules[0].title },
+    ...site.professionals.modules.flatMap((module) => (module.slug ? [{ value: module.slug, label: module.title }] : [])),
     { value: "agency-content", label: site.professionals.agencies.eyebrow },
   ];
 }

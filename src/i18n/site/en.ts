@@ -49,7 +49,7 @@ export const site: SiteCopy = {
       caption: "Thomas Nicoli, Madrid",
       note: "Two projects at a time, by choice",
     },
-    ticker: ["AI audits","Lead response","Admin automation","Website assistants","Reporting","Workshops","French content"],
+    ticker: ["AI audits","Lead response","Admin automation","Website assistants","Reporting","Review replies","Workshops","French content"],
     facts: [
       { value: "10+", label: "years in digital commerce and content" },
       { value: "3", label: "working languages: French, English and Spanish" },
@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "How much does it cost?",
           answer:
-            "The audit is €490, fixed. Builds are fixed-price too: most fall between €1,250 and €2,250 depending on the workflow, and you get the figure in writing before anything starts. Third-party costs, such as software subscriptions, are listed separately before you accept.",
+            "The audit is €490, fixed. Builds are fixed-price too, from €690 for review replies to €2,250 for a website assistant, and you get the figure in writing before anything starts. Third-party costs, such as software subscriptions, are listed separately before you accept.",
         },
         {
           question: "Will AI act without me?",
@@ -191,6 +191,7 @@ export const site: SiteCopy = {
         "A message that arrives after hours gets no acknowledgement until the next day.",
         "Customers write in several languages, and replies in the second one take longer.",
         "The same questions are answered again every week.",
+        "Google reviews wait days for a reply, and some are in languages nobody on the team writes.",
       ],
     },
     steps: [
@@ -229,6 +230,8 @@ export const site: SiteCopy = {
             "Approved answers to frequent questions, with human escalation",
             "Structured lead summaries, testing and handover notes",
           ],
+          examples:
+            "Enquiries by email, web form or WhatsApp Business, for real estate agencies, language schools, tour operators and small hotels. Meta's WhatsApp message fees are listed separately.",
         },
         {
           slug: "administrative-automation-sprint",
@@ -258,6 +261,7 @@ export const site: SiteCopy = {
             "Spanish and English, with French as an option",
             "FAQ answers, lead capture and handoff to booking or contact",
             "Escalation rules, testing and documentation",
+            "Says clearly that it is an AI, and hands over to a person on request",
           ],
         },
         {
@@ -273,6 +277,22 @@ export const site: SiteCopy = {
             "A quality-control and human approval step",
             "Scheduling specification, testing and documentation",
           ],
+        },
+        {
+          slug: "review-reply-assistant",
+          name: "Review Reply Assistant",
+          line: "Every Google review answered in the reviewer's language and in your voice, with you approving each reply.",
+          price: "€690",
+          priceNote: "typical fixed price",
+          turnaround: "5 to 7 business days",
+          deliverables: [
+            "A digest of new reviews, daily or weekly",
+            "Draft replies in the reviewer's language, in your tone of voice",
+            "You approve, edit and post each reply; nothing is published without you",
+            "A monthly summary of the praise and complaints that keep coming back",
+          ],
+          examples:
+            "Replies to Google reviews for hotels and short-stay rentals, restaurants, tour operators, language schools and shops with foreign customers.",
         },
       ],
     },
@@ -299,6 +319,11 @@ export const site: SiteCopy = {
       title: "Before you request the audit.",
       items: [
         {
+          question: "Is the first call free?",
+          answer:
+            "Yes. The intro call is free and takes 30 minutes by video, on a Monday to Wednesday evening. We look at whether something is worth automating, and you get a straight answer either way.",
+        },
+        {
           question: "What do you need from me for the audit?",
           answer:
             "A 30-minute kick-off call, on a weekday evening or at lunchtime, and honest answers about how the work runs today. I do not need access to your systems.",
@@ -311,12 +336,17 @@ export const site: SiteCopy = {
         {
           question: "How long does a build take?",
           answer:
-            "Between 7 and 20 business days depending on the sprint. The audit itself takes 3 to 5 business days after the kick-off.",
+            "Between 5 and 20 business days depending on the build. The audit itself takes 3 to 5 business days after the kick-off.",
         },
         {
           question: "Are there extra costs?",
           answer:
             "Third-party costs, such as software subscriptions or model usage, are listed separately before you accept. Prices exclude VAT.",
+        },
+        {
+          question: "What if the AI gets something wrong?",
+          answer:
+            "It answers only from content you approve, anything it is unsure about goes to a person, and you approve each step before it goes live. Every build is tested on real examples before handover, and assistants say clearly that they are an AI.",
         },
         {
           question: "Which businesses do you turn down?",
@@ -369,6 +399,21 @@ export const site: SiteCopy = {
         ],
         note: "Final case: launching a fictional brand in France and Spain.",
       },
+      {
+        numeral: "C",
+        slug: "ai-starter",
+        title: "AI starter for small teams",
+        duration: "One 2-hour session for up to 10 people · €450",
+        objective:
+          "Your team agrees which AI tools to use, with which data, and how to check what comes back, and you keep a written record of it.",
+        contents: [
+          "Which tasks in your business are worth handing to AI, and which are not",
+          "What never goes into a tool: client data, passwords, confidential documents",
+          "How to check an AI answer before it reaches a customer",
+          "A one-page AI use policy written for your team, and an attendance record",
+        ],
+        note: "Practical training and a usage policy, not legal advice. The EU AI Act asks companies that use AI to help their staff understand it; this is a simple, documented way to start.",
+      },
     ],
     practical: {
       eyebrow: "Practical details",
@@ -379,7 +424,7 @@ export const site: SiteCopy = {
         { label: "When", value: "Live from Monday to Wednesday evenings, or self-paced online" },
         { label: "Languages", value: "Spanish, English or French" },
         { label: "Cases", value: "All classroom cases use fictional companies. No employer or client information is used." },
-        { label: "Price", value: "Quoted per group. For schools, according to the centre's rate." },
+        { label: "Price", value: "3-hour workshop: €750 per group of up to 12. Module of 6 to 10 hours: from €1,800 per group. AI starter for small teams: €450. Schools: the centre's rate. Prices exclude VAT." },
       ],
     },
     agencies: {
@@ -441,7 +486,17 @@ export const site: SiteCopy = {
         {
           question: "How much does it cost?",
           answer:
-            "It depends on the format and the size of the group. Tell me who it is for and I will send a fixed quote.",
+            "A 3-hour workshop is €750 for a group of up to 12, and a module of 6 to 10 hours starts at €1,800 per group. The AI starter for small teams is €450. Prices exclude VAT, and you get a fixed quote before anything is booked.",
+        },
+        {
+          question: "Do we have to train our staff because of the EU AI Act?",
+          answer:
+            "The EU AI Act asks companies that use AI to take measures so their staff understand it well enough. It does not require a certificate or a set course. A short session with a written usage policy is a practical, documented first step. For a legal reading of your own case, ask a lawyer.",
+        },
+        {
+          question: "Can the training be funded through FUNDAE?",
+          answer:
+            "If your company manages its FUNDAE training credit, it can organise the course and hire me as the trainer. For very small companies the credit is limited, so check the amount with your gestoría first.",
         },
         {
           question: "Do you teach at schools?",

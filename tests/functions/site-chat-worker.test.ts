@@ -26,7 +26,7 @@ describe("local site-chat model", () => {
       const body = JSON.parse(String(init?.body));
       expect(body.model).toBe("gemma4-local");
       expect(body.format).toMatchObject({ type: "object", additionalProperties: false });
-      expect(body.messages[0].content).toContain("Reply in French");
+      expect(body.messages[0].content).toMatch(/reply in French/i);
       expect(body.messages[0].content).toContain("untrusted visitor content");
       expect(body.messages[1].content).toContain("brouillard premium");
       return Response.json({ message: { content: JSON.stringify(output) } });

@@ -49,7 +49,7 @@ export const site: SiteCopy = {
       caption: "Thomas Nicoli, Madrid",
       note: "Deux projets à la fois, par choix",
     },
-    ticker: ["Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Ateliers","Contenu en français"],
+    ticker: ["Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Réponses aux avis","Ateliers","Contenu en français"],
     facts: [
       { value: "10+", label: "ans dans le commerce digital et le contenu" },
       { value: "3", label: "langues de travail : français, anglais et espagnol" },
@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "Combien ça coûte ?",
           answer:
-            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi : la plupart se situent entre 1 250 € et 2 250 € selon le flux, et vous recevez le montant par écrit avant le début du travail. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
+            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi, de 6905€ pour les réponses aux avis à 252505€ pour un assistant de site, et vous recevez le montant par écrit avant le début du travail. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
         },
         {
           question: "L’IA agira-t-elle sans moi ?",
@@ -191,6 +191,7 @@ export const site: SiteCopy = {
         "Un message arrivé hors horaires ne reçoit aucun accusé de réception avant le lendemain.",
         "Les clients écrivent dans plusieurs langues, et les réponses dans la seconde prennent plus de temps.",
         "Les mêmes questions reçoivent les mêmes réponses chaque semaine.",
+        "Les avis Google attendent des jours une réponse, et certains sont dans des langues que personne dans l’équipe n’écrit.",
       ],
     },
     steps: [
@@ -229,6 +230,8 @@ export const site: SiteCopy = {
             "Réponses validées aux questions fréquentes, avec passage de relais à une personne",
             "Résumés structurés des contacts, tests et notes de passation",
           ],
+          examples:
+            "Demandes par email, formulaire web ou WhatsApp Business, pour les agences immobilières, les écoles de langues, les organisateurs de visites et les petits hôtels. Les frais de messages WhatsApp facturés par Meta sont indiqués à part.",
         },
         {
           slug: "administrative-automation-sprint",
@@ -258,6 +261,7 @@ export const site: SiteCopy = {
             "Espagnol et anglais, avec le français en option",
             "Réponses aux questions fréquentes, collecte de contacts et renvoi vers la réservation ou le contact",
             "Règles d’escalade, tests et documentation",
+            "Indique clairement qu’il s’agit d’une IA et passe la main à une personne sur demande",
           ],
         },
         {
@@ -273,6 +277,22 @@ export const site: SiteCopy = {
             "Une étape de contrôle qualité et de validation humaine",
             "Spécification de la planification, tests et documentation",
           ],
+        },
+        {
+          slug: "review-reply-assistant",
+          name: "Assistant de réponse aux avis",
+          line: "Chaque avis Google reçoit une réponse dans la langue de son auteur et avec votre ton, et vous validez chaque réponse.",
+          price: "690 €",
+          priceNote: "prix fixe habituel",
+          turnaround: "5 à 7 jours ouvrés",
+          deliverables: [
+            "Un récapitulatif des nouveaux avis, chaque jour ou chaque semaine",
+            "Des brouillons de réponse dans la langue de chaque client, avec le ton de votre entreprise",
+            "Vous validez, modifiez et publiez chaque réponse : rien n’est publié sans vous",
+            "Une synthèse mensuelle des compliments et des reproches qui reviennent",
+          ],
+          examples:
+            "Réponses aux avis Google pour les hôtels et locations de courte durée, les restaurants, les organisateurs de visites, les écoles de langues et les boutiques avec une clientèle étrangère.",
         },
       ],
     },
@@ -299,6 +319,11 @@ export const site: SiteCopy = {
       title: "Avant de demander l’audit.",
       items: [
         {
+          question: "Le premier appel est-il gratuit ?",
+          answer:
+            "Oui. L’appel de présentation est gratuit et dure 30 minutes en visio, du lundi au mercredi en soirée. On regarde s’il y a quelque chose qui vaut la peine d’être automatisé, et vous repartez avec une réponse claire, quelle qu’elle soit.",
+        },
+        {
           question: "De quoi avez-vous besoin pour l’audit ?",
           answer:
             "D’un appel de lancement de 30 minutes, un soir de semaine ou à l’heure du déjeuner, et de réponses franches sur la façon dont le travail se fait aujourd’hui. Je n’ai pas besoin d’accéder à vos systèmes.",
@@ -311,12 +336,17 @@ export const site: SiteCopy = {
         {
           question: "Combien de temps prend une réalisation ?",
           answer:
-            "Entre 7 et 20 jours ouvrés selon le sprint. L’audit lui-même prend 3 à 5 jours ouvrés après l’appel de lancement.",
+            "Entre 5 et 20 jours ouvrés selon la réalisation. L’audit lui-même prend 3 à 5 jours ouvrés après l’appel de lancement.",
         },
         {
           question: "Y a-t-il des coûts supplémentaires ?",
           answer:
             "Les coûts tiers, comme les abonnements logiciels ou l’usage des modèles, sont indiqués à part avant votre accord. Les prix s’entendent hors TVA.",
+        },
+        {
+          question: "Et si l’IA se trompe ?",
+          answer:
+            "Elle ne répond qu’à partir des contenus que vous validez, ce dont elle n’est pas sûre part vers une personne, et vous validez chaque étape avant la mise en service. Chaque réalisation est testée sur des exemples réels avant la livraison, et les assistants indiquent clairement qu’ils sont une IA.",
         },
         {
           question: "Quelles entreprises refusez-vous ?",
@@ -369,6 +399,21 @@ export const site: SiteCopy = {
         ],
         note: "Cas final : le lancement d’une marque fictive en France et en Espagne.",
       },
+      {
+        numeral: "C",
+        slug: "ai-starter",
+        title: "Démarrage IA pour petites équipes",
+        duration: "Une séance de 2 heures jusqu’à 10 personnes · 450 €",
+        objective:
+          "Votre équipe convient des outils d’IA à utiliser, avec quelles données et comment vérifier ce qu’ils renvoient, et vous en gardez une trace écrite.",
+        contents: [
+          "Quelles tâches de votre entreprise valent la peine d’être confiées à l’IA, et lesquelles non",
+          "Ce qui n’entre jamais dans un outil : données clients, mots de passe, documents confidentiels",
+          "Comment vérifier une réponse d’IA avant qu’elle n’arrive à un client",
+          "Une charte d’utilisation de l’IA d’une page, écrite pour votre équipe, et une feuille de présence",
+        ],
+        note: "Une formation pratique et une charte d’utilisation, pas un conseil juridique. Le règlement européen sur l’IA demande aux entreprises qui utilisent l’IA d’aider leur personnel à la comprendre ; c’est une manière simple et documentée de commencer.",
+      },
     ],
     practical: {
       eyebrow: "En pratique",
@@ -379,7 +424,7 @@ export const site: SiteCopy = {
         { label: "Quand", value: "En direct du lundi au mercredi soir, ou en ligne à votre rythme" },
         { label: "Langues", value: "Français, anglais ou espagnol" },
         { label: "Cas", value: "Tous les cas étudiés portent sur des entreprises fictives. Aucune information d’un employeur ou d’un client n’est utilisée." },
-        { label: "Prix", value: "Devis par groupe. Pour les écoles, selon le tarif de l’établissement." },
+        { label: "Prix", value: "Atelier de 3 heures : 750 € par groupe jusqu’à 12 personnes. Module de 6 à 10 heures : à partir de 1 800 € par groupe. Démarrage IA pour petites équipes : 450 €. Écoles : selon le tarif de l’établissement. Prix hors TVA." },
       ],
     },
     agencies: {
@@ -441,7 +486,17 @@ export const site: SiteCopy = {
         {
           question: "Combien ça coûte ?",
           answer:
-            "Cela dépend du format et de la taille du groupe. Dites-moi à qui cela s’adresse et je vous enverrai un devis fixe.",
+            "Un atelier de 3 heures coûte 750 € pour un groupe jusqu’à 12 personnes, et un module de 6 à 10 heures à partir de 1 800 € par groupe. Le démarrage IA pour petites équipes coûte 450 €. Prix hors TVA, avec un devis fixe avant toute réservation.",
+        },
+        {
+          question: "Doit-on former le personnel à cause du règlement européen sur l’IA ?",
+          answer:
+            "Le règlement européen sur l’IA demande aux entreprises qui utilisent l’IA de prendre des mesures pour que leur personnel la comprenne suffisamment. Il n’impose ni certificat ni format de cours. Une séance courte avec une charte d’utilisation écrite est un premier pas pratique et documenté. Pour une lecture juridique de votre cas, consultez un avocat.",
+        },
+        {
+          question: "La formation peut-elle être financée par la FUNDAE (Espagne) ?",
+          answer:
+            "Si votre entreprise gère son crédit de formation FUNDAE, elle peut organiser le cours et m’engager comme formateur. Pour les très petites entreprises, le crédit est limité : vérifiez d’abord le montant avec votre gestoría.",
         },
         {
           question: "Intervenez-vous dans les écoles ?",

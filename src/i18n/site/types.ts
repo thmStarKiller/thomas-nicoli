@@ -136,6 +136,8 @@ export interface SiteCopy {
     hero: { eyebrow: string; title: Accent; intro: string };
     modules: readonly {
       numeral: string;
+      /** Set when the module can be chosen on its own in the enquiry form. */
+      slug?: string;
       title: string;
       duration: string;
       objective: string;
