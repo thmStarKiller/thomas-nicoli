@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "How much does it cost?",
           answer:
-            "The audit is €490, fixed. Builds are fixed-price too, from €690 for review replies to €2,250 for a website assistant, and websites start at €790. You get the figure in writing before anything starts. Third-party costs, such as software subscriptions, are listed separately before you accept.",
+            "The audit is €490, fixed. Builds are fixed-price too, from €690 for review replies to €2,250 for a website assistant, and websites start at €590. You get the figure in writing before anything starts. If the budget is tight, a one-to-one session costs €90 and small fixed jobs start at €390. Third-party costs, such as software subscriptions, are listed separately before you accept.",
         },
         {
           question: "Will AI act without me?",
@@ -173,7 +173,7 @@ export const site: SiteCopy = {
     meta: {
       title: "AI, automation and websites for businesses",
       description:
-        "A €490 AI audit, fixed-price automation sprints, and websites and small online shops from €790. In Spanish, English and French. Madrid and remote.",
+        "A €490 AI audit, fixed-price automation sprints, and websites and small online shops from €590. In Spanish, English and French. Madrid and remote.",
     },
     hero: {
       eyebrow: "For businesses",
@@ -307,7 +307,7 @@ export const site: SiteCopy = {
           slug: "landing-page",
           name: "Landing page",
           line: "One page for a service, a launch or a campaign, written to turn visits into enquiries.",
-          price: "€790",
+          price: "€590",
           priceNote: "typical fixed price",
           turnaround: "7 to 10 business days",
           deliverables: [
@@ -323,9 +323,9 @@ export const site: SiteCopy = {
           slug: "business-website",
           name: "Business website",
           line: "Up to six pages that explain what you sell and make it easy to get in touch, in Spanish and English, with French as an option.",
-          price: "€1,900",
+          price: "€1,490",
           priceNote: "typical fixed price",
-          turnaround: "15 to 25 business days",
+          turnaround: "10 to 20 business days",
           deliverables: [
             "Up to six pages: home, services, about, contact and two more",
             "Spanish and English, with French as an option, each page written for its language",
@@ -339,13 +339,13 @@ export const site: SiteCopy = {
           slug: "online-shop",
           name: "Small online shop",
           line: "A Shopify shop set up properly by someone who works on e-commerce platforms every day.",
-          price: "€2,600",
+          price: "€1,190",
           priceNote: "typical fixed price",
-          turnaround: "20 to 30 business days",
+          turnaround: "10 to 15 business days",
           deliverables: [
             "A Shopify theme set up and adapted to your brand",
-            "Up to 30 products loaded, with collections, payments and shipping for Spain",
-            "Product pages written to sell, in one or two languages",
+            "Up to 20 products loaded from your texts and photos, with collections, payments and shipping for Spain",
+            "Product pages laid out and checked in one language, a second on request",
             "Order emails checked, analytics, and a handover session",
           ],
           examples:
@@ -360,6 +360,44 @@ export const site: SiteCopy = {
       price: "€290",
       priceNote: "a month",
       custom: "Something else in mind? Custom projects run from €650 to €3,500, always with a written scope.",
+    },
+    small: {
+      eyebrow: "Smaller budget",
+      title: "Cheaper ways to start.",
+      intro:
+        "Not ready for a full build? These are small and fixed, and each one can grow into a sprint or a website later.",
+      items: [
+        {
+          slug: "ai-session",
+          name: "One-to-one AI session",
+          price: "€90",
+          priceNote: "60 minutes, online",
+          text: "Bring a question, a tool or a task. We set it up together on your screen, and you leave with written notes.",
+        },
+        {
+          slug: "quick-win",
+          name: "Quick win",
+          price: "€390",
+          priceNote: "3 to 5 business days",
+          text: "One small automation or fix, scoped in writing: an automatic reply, a form that fills a spreadsheet, a weekly digest of reviews or emails.",
+        },
+        {
+          slug: "website-refresh",
+          name: "Website refresh",
+          price: "€390",
+          priceNote: "3 to 5 business days",
+          text: "Your current site, cleaned up: texts, speed, search basics and a contact form that really reaches you.",
+        },
+        {
+          slug: "light-support",
+          name: "Light support",
+          price: "€95",
+          priceNote: "a month",
+          text: "One hour a month for small changes and checks on something I built for you.",
+        },
+      ],
+      hourly:
+        "Anything else that is small and within my skills is billed at €90 an hour, with a written estimate before I start. Prices exclude VAT.",
     },
     limits: {
       eyebrow: "Limits",
@@ -554,6 +592,11 @@ export const site: SiteCopy = {
           question: "Can the training be funded through FUNDAE?",
           answer:
             "If your company manages its FUNDAE training credit, it can organise the course and hire me as the trainer. For very small companies the credit is limited, so check the amount with your gestoría first.",
+        },
+        {
+          question: "Do you do one-to-one sessions?",
+          answer:
+            "Yes. A one-to-one AI session costs €90 for 60 minutes online: bring a question, a tool or a task, and you leave with written notes.",
         },
         {
           question: "Do you teach at schools?",

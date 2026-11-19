@@ -14,6 +14,7 @@ import { absoluteUrl } from "./seo";
 const text = (accent: Accent | string) => (typeof accent === "string" ? accent : accent.join("")).trim();
 const sentence = (value: string) => value.replace(/\s+/g, " ").trim();
 const noStop = (value: string) => sentence(value).replace(/[.:]$/, "");
+const clause = (value: string) => sentence(value).replace(/[.:;]$/, "");
 const withStop = (value: string) => (/[.!?]$/.test(sentence(value)) ? sentence(value) : `${sentence(value)}.`);
 const SOCIAL_NAMES: Record<string, string> = { linkedin: "LinkedIn", github: "GitHub", malt: "Malt", instagram: "Instagram" };
 
@@ -59,6 +60,10 @@ export function buildLlmsText(): string {
   for (const offer of site.business.websites.offers) {
     out.push(`- [${offer.name}](${business}#${offer.slug}):${price(offer.price, offer.priceNote)} Turnaround: ${offer.turnaround}. ${sentence(offer.line)}`);
   }
+  const small = site.business.small;
+  out.push("", `## ${clause(small.title)}`, "", sentence(small.intro), "");
+  for (const item of small.items) out.push(`- [${item.name}](${business}#${item.slug}):${features.showPrices ? ` ${item.price}, ${item.priceNote}.` : ""} ${sentence(item.text)}`);
+  out.push("", sentence(small.hourly));
   out.push("", "## Ongoing support", "");
   const support = site.business.support;
   out.push(`- ${noStop(support.title)}:${price(support.price, support.priceNote)} ${sentence(support.text)}`);

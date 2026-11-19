@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "¿Cuánto cuesta?",
           answer:
-            "La auditoría cuesta 490 €, precio cerrado. Los desarrollos también tienen precio cerrado, desde 690 € para las respuestas a reseñas hasta 2.250 € para un asistente web, y las webs empiezan en 790 €. Recibes la cifra por escrito antes de empezar. Los costes de terceros, como suscripciones de software, se indican aparte antes de que aceptes.",
+            "La auditoría cuesta 490 €, precio cerrado. Los desarrollos también tienen precio cerrado, desde 690 € para las respuestas a reseñas hasta 2.250 € para un asistente web, y las webs empiezan en 590 €. Recibes la cifra por escrito antes de empezar. Si el presupuesto es ajustado, una sesión individual cuesta 90 € y los trabajos pequeños a precio cerrado empiezan en 390 €. Los costes de terceros, como suscripciones de software, se indican aparte antes de que aceptes.",
         },
         {
           question: "¿La IA actuará sin mí?",
@@ -307,7 +307,7 @@ export const site: SiteCopy = {
           slug: "landing-page",
           name: "Landing page",
           line: "Una página para un servicio, un lanzamiento o una campaña, escrita para convertir visitas en contactos.",
-          price: "790 €",
+          price: "590 €",
           priceNote: "precio cerrado habitual",
           turnaround: "7 a 10 días laborables",
           deliverables: [
@@ -323,9 +323,9 @@ export const site: SiteCopy = {
           slug: "business-website",
           name: "Web para empresa",
           line: "Hasta seis páginas que explican lo que vendes y facilitan el contacto, en español e inglés, con francés como opción.",
-          price: "1.900 €",
+          price: "1.490 €",
           priceNote: "precio cerrado habitual",
-          turnaround: "15 a 25 días laborables",
+          turnaround: "10 a 20 días laborables",
           deliverables: [
             "Hasta seis páginas: inicio, servicios, sobre ti, contacto y dos más",
             "Español e inglés, con francés como opción, cada página escrita para su idioma",
@@ -339,13 +339,13 @@ export const site: SiteCopy = {
           slug: "online-shop",
           name: "Pequeña tienda online",
           line: "Una tienda Shopify bien montada por alguien que trabaja cada día en plataformas de e-commerce.",
-          price: "2.600 €",
+          price: "1.190 €",
           priceNote: "precio cerrado habitual",
-          turnaround: "20 a 30 días laborables",
+          turnaround: "10 a 15 días laborables",
           deliverables: [
             "Tema de Shopify configurado y adaptado a tu marca",
-            "Hasta 30 productos cargados, con colecciones, pagos y envíos para España",
-            "Fichas de producto escritas para vender, en uno o dos idiomas",
+            "Hasta 20 productos cargados a partir de tus textos y fotos, con colecciones, pagos y envíos para España",
+            "Fichas de producto maquetadas y revisadas en un idioma, un segundo idioma bajo petición",
             "Emails de pedido revisados, analítica y una sesión de entrega",
           ],
           examples:
@@ -360,6 +360,44 @@ export const site: SiteCopy = {
       price: "290 €",
       priceNote: "al mes",
       custom: "¿Tienes otra cosa en mente? Los proyectos a medida van de 650 € a 3.500 €, siempre con un alcance por escrito.",
+    },
+    small: {
+      eyebrow: "Presupuesto ajustado",
+      title: "Formas más económicas de empezar.",
+      intro:
+        "¿Todavía no es momento de un desarrollo completo? Estas opciones son pequeñas y a precio cerrado, y cada una puede convertirse más adelante en un sprint o en una web.",
+      items: [
+        {
+          slug: "ai-session",
+          name: "Sesión individual de IA",
+          price: "90 €",
+          priceNote: "60 minutos, online",
+          text: "Trae una pregunta, una herramienta o una tarea. La configuramos juntos en tu pantalla y te llevas notas por escrito.",
+        },
+        {
+          slug: "quick-win",
+          name: "Mejora rápida",
+          price: "390 €",
+          priceNote: "3 a 5 días laborables",
+          text: "Una automatización o un arreglo pequeño, definido por escrito: una respuesta automática, un formulario que rellena una hoja de cálculo, un resumen semanal de reseñas o emails.",
+        },
+        {
+          slug: "website-refresh",
+          name: "Puesta al día de tu web",
+          price: "390 €",
+          priceNote: "3 a 5 días laborables",
+          text: "Tu web actual, revisada: textos, velocidad, lo básico para buscadores y un formulario de contacto que de verdad te llega.",
+        },
+        {
+          slug: "light-support",
+          name: "Soporte ligero",
+          price: "95 €",
+          priceNote: "al mes",
+          text: "Una hora al mes para pequeños cambios y revisiones de algo que te haya desarrollado.",
+        },
+      ],
+      hourly:
+        "Cualquier otro trabajo pequeño que esté dentro de lo que sé hacer se factura a 90 € la hora, con un presupuesto por escrito antes de empezar. Precios sin IVA.",
     },
     limits: {
       eyebrow: "Límites",
@@ -554,6 +592,11 @@ export const site: SiteCopy = {
           question: "¿Se puede bonificar con FUNDAE?",
           answer:
             "Si tu empresa gestiona su crédito de formación de FUNDAE, puede organizar el curso y contratarme como formador. En empresas muy pequeñas el crédito es limitado, así que consulta antes el importe con tu gestoría.",
+        },
+        {
+          question: "¿Haces sesiones individuales?",
+          answer:
+            "Sí. Una sesión individual de IA cuesta 90 € por 60 minutos online: traes una pregunta, una herramienta o una tarea, y te llevas notas por escrito.",
         },
         {
           question: "¿Das clase en escuelas?",

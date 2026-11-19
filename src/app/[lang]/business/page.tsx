@@ -170,6 +170,39 @@ export default async function BusinessPage({
         </div>
       </section>
 
+      {/* Smaller budgets */}
+      <section id="small" className="scroll-mt-20 bg-sand py-20 sm:py-28">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-6 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <p className="eyebrow text-spice">{b.small.eyebrow}</p>
+            </Rise>
+            <Rise delay={100} className="lg:col-span-9">
+              <h2 className="text-balance font-display text-[clamp(2rem,3.6vw,3.4rem)] leading-[1.04]">{b.small.title}</h2>
+              <p className="lead mt-6 max-w-[38rem] text-pretty text-night/85">{b.small.intro}</p>
+            </Rise>
+          </div>
+          <ul className="mt-12 grid gap-x-10 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4">
+            {b.small.items.map((item) => (
+              <li key={item.slug} id={item.slug} className="flex scroll-mt-24 flex-col border-t border-night/20 py-7">
+                <h3 className="text-balance font-display text-[1.65rem] leading-[1.1]">{item.name}</h3>
+                {showPrices && (
+                  <p className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="font-display text-[2.4rem] leading-none">{item.price}</span>
+                    <span className="eyebrow text-night-mute">{item.priceNote}</span>
+                  </p>
+                )}
+                <p className="mt-4 flex-1 text-[16px] leading-relaxed text-night/85">{item.text}</p>
+                <CtaLink lang={lang} tone="night" size="sm" service={item.slug} className="mt-6 w-full sm:w-auto sm:self-start">
+                  {site.cta.question}
+                </CtaLink>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 max-w-[44rem] border-t border-night/20 pt-6 text-[15.5px] leading-relaxed text-night-mute">{b.small.hourly}</p>
+        </div>
+      </section>
+
       {/* Limits */}
       <section className="bg-night py-24 text-sand sm:py-32">
         <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">

@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "Combien ça coûte ?",
           answer:
-            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi, de 690 € pour les réponses aux avis à 2 250 € pour un assistant de site, et les sites démarrent à 790 €. Vous recevez le montant par écrit avant le début du travail. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
+            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi, de 690 € pour les réponses aux avis à 2 250 € pour un assistant de site, et les sites démarrent à 590 €. Vous recevez le montant par écrit avant le début du travail. Si le budget est serré, une séance individuelle coûte 90 € et les petits travaux à prix fixe commencent à 390 €. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
         },
         {
           question: "L’IA agira-t-elle sans moi ?",
@@ -307,7 +307,7 @@ export const site: SiteCopy = {
           slug: "landing-page",
           name: "Landing page",
           line: "Une page pour un service, un lancement ou une campagne, écrite pour transformer les visites en demandes.",
-          price: "790 €",
+          price: "590 €",
           priceNote: "prix fixe habituel",
           turnaround: "7 à 10 jours ouvrés",
           deliverables: [
@@ -323,9 +323,9 @@ export const site: SiteCopy = {
           slug: "business-website",
           name: "Site d’entreprise",
           line: "Jusqu’à six pages qui expliquent ce que vous vendez et facilitent le contact, en espagnol et en anglais, avec le français en option.",
-          price: "1 900 €",
+          price: "1 490 €",
           priceNote: "prix fixe habituel",
-          turnaround: "15 à 25 jours ouvrés",
+          turnaround: "10 à 20 jours ouvrés",
           deliverables: [
             "Jusqu’à six pages : accueil, services, à propos, contact et deux autres",
             "Espagnol et anglais, avec le français en option, chaque page écrite pour sa langue",
@@ -339,13 +339,13 @@ export const site: SiteCopy = {
           slug: "online-shop",
           name: "Petite boutique en ligne",
           line: "Une boutique Shopify bien montée, par quelqu’un qui travaille chaque jour sur des plateformes e-commerce.",
-          price: "2 600 €",
+          price: "1 190 €",
           priceNote: "prix fixe habituel",
-          turnaround: "20 à 30 jours ouvrés",
+          turnaround: "10 à 15 jours ouvrés",
           deliverables: [
             "Un thème Shopify configuré et adapté à votre marque",
-            "Jusqu’à 30 produits chargés, avec collections, paiements et livraison pour l’Espagne",
-            "Des fiches produits écrites pour vendre, en une ou deux langues",
+            "Jusqu’à 20 produits chargés à partir de vos textes et photos, avec collections, paiements et livraison pour l’Espagne",
+            "Des fiches produits mises en page et vérifiées dans une langue, une deuxième sur demande",
             "E-mails de commande vérifiés, mesure d’audience et une séance de passation",
           ],
           examples:
@@ -360,6 +360,44 @@ export const site: SiteCopy = {
       price: "290 €",
       priceNote: "par mois",
       custom: "Autre chose en tête ? Les projets sur mesure vont de 650 € à 3 500 €, toujours avec un périmètre écrit.",
+    },
+    small: {
+      eyebrow: "Petit budget",
+      title: "Des façons moins chères de commencer.",
+      intro:
+        "Pas encore prêt pour une réalisation complète ? Ces options sont petites et à prix fixe, et chacune peut devenir plus tard un sprint ou un site.",
+      items: [
+        {
+          slug: "ai-session",
+          name: "Séance individuelle IA",
+          price: "90 €",
+          priceNote: "60 minutes, en ligne",
+          text: "Venez avec une question, un outil ou une tâche. On le met en place ensemble sur votre écran, et vous repartez avec des notes écrites.",
+        },
+        {
+          slug: "quick-win",
+          name: "Gain rapide",
+          price: "390 €",
+          priceNote: "3 à 5 jours ouvrés",
+          text: "Une petite automatisation ou correction, cadrée par écrit : une réponse automatique, un formulaire qui remplit un tableur, un récapitulatif hebdomadaire des avis ou des e-mails.",
+        },
+        {
+          slug: "website-refresh",
+          name: "Remise à niveau du site",
+          price: "390 €",
+          priceNote: "3 à 5 jours ouvrés",
+          text: "Votre site actuel, remis en ordre : textes, vitesse, bases du référencement et un formulaire de contact qui vous parvient vraiment.",
+        },
+        {
+          slug: "light-support",
+          name: "Accompagnement léger",
+          price: "95 €",
+          priceNote: "par mois",
+          text: "Une heure par mois pour de petites modifications et vérifications sur ce que j’ai réalisé pour vous.",
+        },
+      ],
+      hourly:
+        "Tout autre petit travail qui entre dans mes compétences est facturé 90 € de l’heure, avec une estimation écrite avant de commencer. Prix hors TVA.",
     },
     limits: {
       eyebrow: "Limites",
@@ -554,6 +592,11 @@ export const site: SiteCopy = {
           question: "La formation peut-elle être financée par la FUNDAE (Espagne) ?",
           answer:
             "Si votre entreprise gère son crédit de formation FUNDAE, elle peut organiser le cours et m’engager comme formateur. Pour les très petites entreprises, le crédit est limité : vérifiez d’abord le montant avec votre gestoría.",
+        },
+        {
+          question: "Faites-vous des séances individuelles ?",
+          answer:
+            "Oui. Une séance individuelle IA coûte 90 € pour 60 minutes en ligne : vous venez avec une question, un outil ou une tâche, et vous repartez avec des notes écrites.",
         },
         {
           question: "Intervenez-vous dans les écoles ?",

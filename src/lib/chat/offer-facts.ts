@@ -1,6 +1,15 @@
 import { siteConfig } from "../../content/site-config";
 import { localePath, type Locale } from "../../i18n/config";
 import { getSite, type Accent, type Faq } from "../../i18n/site";
+import { dictionary as enDictionary } from "../../i18n/dictionaries/en";
+import { dictionary as esDictionary } from "../../i18n/dictionaries/es";
+import { dictionary as frDictionary } from "../../i18n/dictionaries/fr";
+
+const SKILLS: Record<Locale, readonly string[]> = {
+  en: enDictionary.about.capabilities,
+  es: esDictionary.about.capabilities,
+  fr: frDictionary.about.capabilities,
+};
 
 /**
  * The facts the site assistant may state, built from the same copy the pages
@@ -53,7 +62,14 @@ export function buildOfferFacts(lang: Locale): string {
   const support = site.business.support;
   out.push(`- Step III, ${clause(support.title)}: ${support.price} ${support.priceNote}. ${flat(support.text)}`);
   out.push(`- ${flat(support.custom)}`);
+  const small = site.business.small;
+  out.push(`- ${clause(small.title)} ${flat(small.intro)}`);
+  for (const item of small.items) {
+    out.push(`  - ${item.name}: ${item.price} (${item.priceNote}). ${flat(item.text)}`);
+  }
+  out.push(`- ${flat(small.hourly)}`);
   out.push(`- Not taken on: ${site.business.limits.items.map(clause).join("; ")}.`);
+  out.push(`- Published areas of skill (anything inside these can be quoted as a custom or hourly job): ${SKILLS[lang].map(clause).join("; ")}; plus everything in the offers above.`);
 
   const pro = site.professionals;
   out.push("", `PROFESSIONALS, TEAMS AND SCHOOLS (page ${page("/professionals")})`);
@@ -77,7 +93,7 @@ export function buildOfferFacts(lang: Locale): string {
   out.push(
     "",
     "CONTACT AND NEXT STEPS",
-    `- Book a 30-minute intro call (Google Meet, Monday to Wednesday evenings, Madrid time): ${contact.calendarUrl}`,
+    "- Free 30-minute intro call by video, Monday to Wednesday evenings, Madrid time. The chat panel shows a button to book it, and every page has Book a call buttons. Never write the booking link in a reply.",
     `- Enquiry form: ${page("/contact")}. ${flat(site.cta.reply)}.`,
     `- Email: ${contact.email}`,
     `- Not sure what to ask for: Project Clarity, six questions to describe the project (${page("/project-clarity")}).`,

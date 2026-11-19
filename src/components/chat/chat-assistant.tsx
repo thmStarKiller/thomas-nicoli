@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUp, ArrowUpRight, Check, MailCheck, RotateCcw, X } from "lucide-react";
+import { ArrowUp, ArrowUpRight, CalendarDays, Check, MailCheck, RotateCcw, X } from "lucide-react";
 import type { Locale } from "@/i18n/config";
+import { siteConfig } from "@/content/site-config";
 import { getChatCopy } from "@/i18n/chat";
 import { CHAT_LIMITS } from "@/lib/chat/contracts";
 import { TurnstileWidget } from "@/components/forms/turnstile-widget";
@@ -648,7 +649,7 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                         />
                         <span className="tabular-nums">{pad(index + 1)}</span>
                       </p>
-                      <div className={fromUser ? "mt-2 whitespace-pre-line bg-spice px-4 py-3 text-[0.9375rem] leading-relaxed text-sand" : "mt-2 whitespace-pre-line text-[0.9375rem] leading-relaxed text-sand/90"}>
+                      <div className={fromUser ? "mt-2 whitespace-pre-line bg-spice px-4 py-3 text-[0.9375rem] leading-relaxed text-sand [overflow-wrap:anywhere]" : "mt-2 whitespace-pre-line text-[0.9375rem] leading-relaxed text-sand/90 [overflow-wrap:anywhere]"}>
                         {fromUser
                           ? message.content
                           : <RevealText text={message.content} animate={Boolean(message.fresh) && !reduced} onDone={() => settleMessage(message.id)} />}
@@ -685,8 +686,23 @@ export function ChatAssistant({ lang, enabled }: { lang: Locale; enabled: boolea
                 </div>
               ) : (
                 <>
-                  {suggestions.length > 0 && (
+                  {(suggestions.length > 0 || siteConfig.contact.calendarUrl) && (
                     <ul className="chat-chips -mx-4 mb-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:block sm:border-t sm:border-sand/15 sm:px-0">
+                      {siteConfig.contact.calendarUrl && (
+                        <li className="shrink-0 sm:shrink">
+                          <a
+                            href={siteConfig.contact.calendarUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-testid="site-chat-book-call"
+                            className="chat-chip flex items-center gap-2 whitespace-nowrap bg-spice px-3 py-2.5 text-[0.8125rem] font-medium leading-snug text-sand sm:mt-2 sm:w-full sm:gap-3 sm:whitespace-normal sm:px-3"
+                          >
+                            <CalendarDays className="size-3.5 shrink-0" />
+                            <span className="min-w-0 flex-1">{copy.bookCall}</span>
+                            <ArrowUpRight className="size-3.5 shrink-0" />
+                          </a>
+                        </li>
+                      )}
                       {suggestions.map((suggestion, index) => (
                         <motion.li
                           key={suggestion}
