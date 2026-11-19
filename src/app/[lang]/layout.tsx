@@ -95,6 +95,7 @@ export default async function LocaleLayout({
   const structuredData = buildStructuredData(lang, dict.meta.home.description, {
     jobTitle: dict.about.role,
     serviceArea: dict.common.serviceArea,
+    knowsAbout: dict.about.capabilities,
   });
 
   return (

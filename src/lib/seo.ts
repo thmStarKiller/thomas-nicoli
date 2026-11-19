@@ -20,16 +20,29 @@ export function pageMetadata({
   path,
   title,
   description,
+  noindex = false,
 }: {
   lang: Locale;
   path: string;
   title: string;
   description: string;
+  /** For pages that only make sense inside a flow, such as form steps. */
+  noindex?: boolean;
 }): Metadata {
   const canonical = absoluteUrl(localePath(lang, path));
+  // A page that sets its own openGraph replaces the layout's share image,
+  // so every page names the image for its language explicitly.
+  const image = {
+    url: absoluteUrl(`/${lang}/opengraph-image`),
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: siteConfig.identity.ownerName,
+  };
   return {
     title,
     description,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical,
       languages: languagesFor(path),
@@ -41,11 +54,13 @@ export function pageMetadata({
       siteName: siteConfig.identity.studioName,
       locale: lang === "fr" ? "fr_FR" : lang === "en" ? "en_GB" : "es_ES",
       type: "website",
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [image.url],
     },
   };
 }

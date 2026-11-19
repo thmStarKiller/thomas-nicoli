@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const locale: Locale = hasLocale(lang) ? lang : "es";
   if (!CLARITY_ROUTE_IDS.includes(route as ClarityRouteId)) return {};
   const copy = getProjectClarityCopy(locale).clarity;
-  return pageMetadata({ lang: locale, path: `/project-clarity/${route}`, title: copy.eyebrow, description: copy.intro });
+  return pageMetadata({ lang: locale, path: `/project-clarity/${route}`, title: copy.title.replace(/\.$/, ""), description: copy.intro, noindex: true });
 }
 
 export default async function Page({ params }: { params: Promise<{ lang: string; route: string }> }) {

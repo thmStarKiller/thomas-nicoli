@@ -9,10 +9,17 @@ import { absoluteUrl } from "./seo";
 export function buildStructuredData(
   lang: Locale,
   description: string,
-  labels: { jobTitle: string; serviceArea: string },
+  labels: { jobTitle: string; serviceArea: string; knowsAbout?: readonly string[] },
 ) {
   const { identity, contact } = siteConfig;
   const url = absoluteUrl(localePath(lang, "/"));
+  const contactPoint = {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    email: contact.email,
+    url: absoluteUrl(localePath(lang, "/contact")),
+    availableLanguage: ["es", "en", "fr"],
+  };
 
   const sameAs = [
     contact.socials.linkedin,
@@ -29,6 +36,9 @@ export function buildStructuredData(
         name: identity.studioName,
         description,
         url,
+        email: contact.email,
+        image: absoluteUrl(`/${lang}/opengraph-image`),
+        contactPoint,
         founder: { "@id": `${absoluteUrl("/")}#person` },
         areaServed: { "@type": "Place", name: labels.serviceArea },
         address: {
@@ -44,6 +54,8 @@ export function buildStructuredData(
         name: identity.ownerName,
         jobTitle: labels.jobTitle,
         url,
+        email: contact.email,
+        ...(labels.knowsAbout?.length ? { knowsAbout: [...labels.knowsAbout] } : {}),
         image: absoluteUrl(siteConfig.media.profileImage),
         worksFor: { "@id": `${absoluteUrl("/")}#studio` },
         address: {
@@ -59,6 +71,7 @@ export function buildStructuredData(
         "@id": `${absoluteUrl("/")}#website`,
         url: absoluteUrl("/"),
         name: identity.studioName,
+        description,
         inLanguage: ["es", "en", "fr"],
         publisher: { "@id": `${absoluteUrl("/")}#person` },
       },

@@ -18,12 +18,12 @@ export const dictionary = {
         "The decisions, systems and lessons behind three clearly labelled concept studies and four self-initiated digital tools.",
     },
     about: {
-      title: "About",
+      title: "About: AI and digital commerce consultant",
       description:
         "E-commerce, CRM, web and automation consultant in Madrid, connecting business, creative teams and platforms from strategy through implementation.",
     },
     contact: {
-      title: "Contact",
+      title: "Contact an AI consultant in Madrid",
       description:
         "Tell me about your business and what you want to achieve. Replies within one working day, in English, Spanish or French.",
     },
@@ -33,7 +33,7 @@ export const dictionary = {
     },
     legal: {
       title: "Legal notice",
-      description: "Legal notice and terms of use for this website.",
+      description: "Who owns this website and the terms for using it, as required by Spanish law 34/2002 on information society services (LSSI-CE).",
     },
   },
 

@@ -18,12 +18,12 @@ export const dictionary = {
         "Les décisions, les systèmes et les enseignements derrière trois études de concept clairement identifiées et quatre outils personnels.",
     },
     about: {
-      title: "À propos",
+      title: "À propos : consultant IA et commerce digital",
       description:
         "Consultant e-commerce, CRM, web et automatisation à Madrid, je relie métier, création et plateformes, de la stratégie jusqu'à la mise en œuvre.",
     },
     contact: {
-      title: "Contact",
+      title: "Contacter un consultant IA à Madrid",
       description:
         "Parlez-moi de votre activité et de ce que vous voulez accomplir. Réponse sous un jour ouvré, en français, anglais ou espagnol.",
     },
@@ -33,7 +33,7 @@ export const dictionary = {
     },
     legal: {
       title: "Mentions légales",
-      description: "Mentions légales et conditions d'utilisation de ce site.",
+      description: "Qui édite ce site et les conditions pour l'utiliser, conformément à la loi espagnole 34/2002 sur les services de la société de l'information (LSSI-CE).",
     },
   },
 

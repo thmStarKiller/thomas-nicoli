@@ -18,12 +18,12 @@ export const dictionary = {
         "Decisiones, sistemas y aprendizajes detrás de tres estudios conceptuales y cuatro herramientas propias, con cada proyecto claramente identificado.",
     },
     about: {
-      title: "Sobre mí",
+      title: "Sobre mí: consultor de IA y comercio digital",
       description:
         "Consultor de e-commerce, CRM, web y automatización en Madrid. Conecto negocio, equipos creativos y plataformas para llevar la estrategia hasta la implementación.",
     },
     contact: {
-      title: "Contacto",
+      title: "Contactar con un consultor de IA en Madrid",
       description:
         "Cuéntame qué hace tu negocio y qué quieres conseguir. Respondo en un día laborable, en español, inglés o francés.",
     },
@@ -33,7 +33,7 @@ export const dictionary = {
     },
     legal: {
       title: "Aviso legal",
-      description: "Aviso legal y condiciones de uso de este sitio web.",
+      description: "Quién es el titular de esta web y las condiciones para usarla, según la Ley 34/2002 de servicios de la sociedad de la información (LSSI-CE).",
     },
   },
 
