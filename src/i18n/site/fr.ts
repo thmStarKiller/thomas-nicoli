@@ -408,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "Quelles entreprises refusez-vous ?",
           answer:
-            "Tout projet qui exige des données médicales, financières ou juridiques, ainsi que les jeux d’argent. Les entreprises pour adultes (18+) qui exercent légalement sont les bienvenues, tant que le travail ne touche pas à des données sensibles de clients. J’évite aussi les comptes beauté et cosmétique, pour prévenir tout conflit d’intérêts.",
+            "Tout projet qui exige des données médicales, financières ou juridiques. Les entreprises pour adultes (18+) qui exercent légalement et les opérateurs de jeux d’argent agréés sont les bienvenus, tant que le travail ne touche pas à des données sensibles de clients. J’évite aussi les comptes beauté et cosmétique, pour prévenir tout conflit d’intérêts.",
         },
       ],
     },

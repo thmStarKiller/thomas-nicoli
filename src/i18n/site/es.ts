@@ -408,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "¿Qué empresas rechazas?",
           answer:
-            "Cualquier proyecto que requiera datos médicos, financieros o legales, y el juego. Los negocios para adultos (+18) que operan legalmente son bienvenidos, siempre que el trabajo no implique datos sensibles de clientes. También evito cuentas de belleza y cosmética, para prevenir cualquier conflicto de intereses.",
+            "Cualquier proyecto que requiera datos médicos, financieros o legales. Los negocios para adultos (+18) que operan legalmente y los operadores de juego con licencia son bienvenidos, siempre que el trabajo no implique datos sensibles de clientes. También evito cuentas de belleza y cosmética, para prevenir cualquier conflicto de intereses.",
         },
       ],
     },

@@ -408,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "Which businesses do you turn down?",
           answer:
-            "Anything that needs medical, financial or legal data, and gambling. Legal adult (18+) businesses are welcome, as long as the work does not involve sensitive customer data. I also avoid beauty and cosmetics accounts, to prevent any conflict of interest.",
+            "Anything that needs medical, financial or legal data. Legal adult (18+) businesses and licensed gambling operators are welcome, as long as the work does not involve sensitive customer data. I also avoid beauty and cosmetics accounts, to prevent any conflict of interest.",
         },
       ],
     },
