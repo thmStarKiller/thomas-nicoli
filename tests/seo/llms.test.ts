@@ -11,7 +11,7 @@ describe("llms.txt", () => {
     expect(body.startsWith("# Thomas Nicoli Consulting\n\n> ")).toBe(true);
     const site = getSite("en");
     expect(body).toContain(site.home.audit.price);
-    for (const offer of site.business.build.offers) {
+    for (const offer of [...site.business.build.offers, ...site.business.websites.offers]) {
       expect(body).toContain(offer.name);
       expect(body).toContain(offer.price);
     }

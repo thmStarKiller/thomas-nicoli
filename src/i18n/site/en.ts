@@ -49,7 +49,7 @@ export const site: SiteCopy = {
       caption: "Thomas Nicoli, Madrid",
       note: "Two projects at a time, by choice",
     },
-    ticker: ["AI audits","Lead response","Admin automation","Website assistants","Reporting","Review replies","Workshops","French content"],
+    ticker: ["AI audits","Lead response","Admin automation","Website assistants","Reporting","Review replies","Websites","Workshops","French content"],
     facts: [
       { value: "10+", label: "years in digital commerce and content" },
       { value: "3", label: "working languages: French, English and Spanish" },
@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "How much does it cost?",
           answer:
-            "The audit is €490, fixed. Builds are fixed-price too, from €690 for review replies to €2,250 for a website assistant, and you get the figure in writing before anything starts. Third-party costs, such as software subscriptions, are listed separately before you accept.",
+            "The audit is €490, fixed. Builds are fixed-price too, from €690 for review replies to €2,250 for a website assistant, and websites start at €790. You get the figure in writing before anything starts. Third-party costs, such as software subscriptions, are listed separately before you accept.",
         },
         {
           question: "Will AI act without me?",
@@ -171,9 +171,9 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "AI audit and automation for businesses",
+      title: "AI, automation and websites for businesses",
       description:
-        "A €490 AI Opportunity Audit, then fixed-price sprints for lead response, admin automation, website assistants and reporting. Madrid and remote.",
+        "A €490 AI audit, fixed-price automation sprints, and websites and small online shops from €790. In Spanish, English and French. Madrid and remote.",
     },
     hero: {
       eyebrow: "For businesses",
@@ -296,6 +296,63 @@ export const site: SiteCopy = {
         },
       ],
     },
+    websites: {
+      eyebrow: "Websites",
+      title: ["Websites that ", "work in three languages", " and get found."],
+      intro:
+        "Fixed-price websites and small online shops, built with AI-assisted development and checked page by page. Each one is fast on phones, ready for search engines and AI assistants, and handed over with a guide. You own the domain, the code and the content; hosting and platform fees are paid by you directly and listed before you accept.",
+      examplesLabel: "Good for",
+      offers: [
+        {
+          slug: "landing-page",
+          name: "Landing page",
+          line: "One page for a service, a launch or a campaign, written to turn visits into enquiries.",
+          price: "€790",
+          priceNote: "typical fixed price",
+          turnaround: "7 to 10 business days",
+          deliverables: [
+            "One page, written and designed around a single action",
+            "A contact or booking form, with enquiries sent to your inbox",
+            "Fast on phones, with titles, descriptions and share images set",
+            "Hosting set up on your own account, and a handover guide",
+          ],
+          examples:
+            "A new service, an event, a product launch, an advertising campaign.",
+        },
+        {
+          slug: "business-website",
+          name: "Business website",
+          line: "Up to six pages that explain what you sell and make it easy to get in touch, in Spanish and English, with French as an option.",
+          price: "€1,900",
+          priceNote: "typical fixed price",
+          turnaround: "15 to 25 business days",
+          deliverables: [
+            "Up to six pages: home, services, about, contact and two more",
+            "Spanish and English, with French as an option, each page written for its language",
+            "Search basics: page titles, descriptions, sitemap, Google Search Console and structured data",
+            "A contact form, analytics and a guide for editing the content",
+          ],
+          examples:
+            "Restaurants, language schools, real estate agencies, tour operators, independent professionals.",
+        },
+        {
+          slug: "online-shop",
+          name: "Small online shop",
+          line: "A Shopify shop set up properly by someone who works on e-commerce platforms every day.",
+          price: "€2,600",
+          priceNote: "typical fixed price",
+          turnaround: "20 to 30 business days",
+          deliverables: [
+            "A Shopify theme set up and adapted to your brand",
+            "Up to 30 products loaded, with collections, payments and shipping for Spain",
+            "Product pages written to sell, in one or two languages",
+            "Order emails checked, analytics, and a handover session",
+          ],
+          examples:
+            "Small D2C brands, makers, food and wine producers, shops selling to foreign customers. Shopify's monthly fee and apps are paid by you directly.",
+        },
+      ],
+    },
     support: {
       eyebrow: "Step III",
       title: "Monthly support and optimisation.",
@@ -351,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "Which businesses do you turn down?",
           answer:
-            "Anything that needs medical, financial or legal data, plus gambling and adult businesses. I also avoid beauty and cosmetics accounts, to prevent any conflict of interest.",
+            "Anything that needs medical, financial or legal data, and gambling. Legal adult (18+) businesses are welcome, as long as the work does not involve sensitive customer data. I also avoid beauty and cosmetics accounts, to prevent any conflict of interest.",
         },
       ],
     },

@@ -49,7 +49,7 @@ export const site: SiteCopy = {
       caption: "Thomas Nicoli, Madrid",
       note: "Deux projets à la fois, par choix",
     },
-    ticker: ["Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Réponses aux avis","Ateliers","Contenu en français"],
+    ticker: ["Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Réponses aux avis","Sites web","Ateliers","Contenu en français"],
     facts: [
       { value: "10+", label: "ans dans le commerce digital et le contenu" },
       { value: "3", label: "langues de travail : français, anglais et espagnol" },
@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "Combien ça coûte ?",
           answer:
-            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi, de 6905€ pour les réponses aux avis à 252505€ pour un assistant de site, et vous recevez le montant par écrit avant le début du travail. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
+            "L’audit coûte 490 €, prix fixe. Les réalisations sont à prix fixe elles aussi, de 690 € pour les réponses aux avis à 2 250 € pour un assistant de site, et les sites démarrent à 790 €. Vous recevez le montant par écrit avant le début du travail. Les coûts tiers, comme les abonnements logiciels, sont indiqués à part avant votre accord.",
         },
         {
           question: "L’IA agira-t-elle sans moi ?",
@@ -171,7 +171,7 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "IA en entreprise : audit et automatisation",
+      title: "IA, automatisation et sites pour entreprises",
       description:
         "Un audit d’opportunités IA à 490 €, puis des sprints à prix fixe : réponse aux demandes, tâches administratives, assistants de site, rapports.",
     },
@@ -296,6 +296,63 @@ export const site: SiteCopy = {
         },
       ],
     },
+    websites: {
+      eyebrow: "Sites web",
+      title: ["Des sites qui ", "parlent trois langues", " et qu’on trouve."],
+      intro:
+        "Des sites et de petites boutiques en ligne à prix fixe, développés avec l’aide de l’IA et vérifiés page par page. Chacun est rapide sur mobile, prêt pour les moteurs de recherche et les assistants IA, et livré avec un guide. Le domaine, le code et les contenus vous appartiennent ; l’hébergement et les abonnements de plateforme sont payés directement par vous et indiqués avant votre accord.",
+      examplesLabel: "Pour qui",
+      offers: [
+        {
+          slug: "landing-page",
+          name: "Landing page",
+          line: "Une page pour un service, un lancement ou une campagne, écrite pour transformer les visites en demandes.",
+          price: "790 €",
+          priceNote: "prix fixe habituel",
+          turnaround: "7 à 10 jours ouvrés",
+          deliverables: [
+            "Une page, écrite et conçue autour d’une seule action",
+            "Un formulaire de contact ou de réservation, avec les demandes envoyées dans votre boîte mail",
+            "Rapide sur mobile, avec titres, descriptions et images de partage réglés",
+            "L’hébergement configuré sur votre propre compte, et un guide de passation",
+          ],
+          examples:
+            "Un nouveau service, un événement, un lancement de produit, une campagne publicitaire.",
+        },
+        {
+          slug: "business-website",
+          name: "Site d’entreprise",
+          line: "Jusqu’à six pages qui expliquent ce que vous vendez et facilitent le contact, en espagnol et en anglais, avec le français en option.",
+          price: "1 900 €",
+          priceNote: "prix fixe habituel",
+          turnaround: "15 à 25 jours ouvrés",
+          deliverables: [
+            "Jusqu’à six pages : accueil, services, à propos, contact et deux autres",
+            "Espagnol et anglais, avec le français en option, chaque page écrite pour sa langue",
+            "Les bases du référencement : titres, descriptions, sitemap, Google Search Console et données structurées",
+            "Un formulaire de contact, la mesure d’audience et un guide pour modifier les contenus",
+          ],
+          examples:
+            "Restaurants, écoles de langues, agences immobilières, organisateurs de visites, indépendants.",
+        },
+        {
+          slug: "online-shop",
+          name: "Petite boutique en ligne",
+          line: "Une boutique Shopify bien montée, par quelqu’un qui travaille chaque jour sur des plateformes e-commerce.",
+          price: "2 600 €",
+          priceNote: "prix fixe habituel",
+          turnaround: "20 à 30 jours ouvrés",
+          deliverables: [
+            "Un thème Shopify configuré et adapté à votre marque",
+            "Jusqu’à 30 produits chargés, avec collections, paiements et livraison pour l’Espagne",
+            "Des fiches produits écrites pour vendre, en une ou deux langues",
+            "E-mails de commande vérifiés, mesure d’audience et une séance de passation",
+          ],
+          examples:
+            "Petites marques D2C, artisans, producteurs alimentaires et viticoles, boutiques qui vendent à une clientèle étrangère. L’abonnement Shopify et ses applications sont payés directement par vous.",
+        },
+      ],
+    },
     support: {
       eyebrow: "Étape III",
       title: "Accompagnement mensuel et optimisation.",
@@ -351,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "Quelles entreprises refusez-vous ?",
           answer:
-            "Tout projet qui exige des données médicales, financières ou juridiques, ainsi que les jeux d’argent et les activités pour adultes. J’évite aussi les comptes beauté et cosmétique, pour prévenir tout conflit d’intérêts.",
+            "Tout projet qui exige des données médicales, financières ou juridiques, ainsi que les jeux d’argent. Les entreprises pour adultes (18+) qui exercent légalement sont les bienvenues, tant que le travail ne touche pas à des données sensibles de clients. J’évite aussi les comptes beauté et cosmétique, pour prévenir tout conflit d’intérêts.",
         },
       ],
     },

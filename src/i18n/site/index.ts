@@ -18,6 +18,7 @@ export function getContactOptions(lang: Locale): { value: string; label: string 
     { value: "discovery", label: site.cta.callOption },
     { value: "ai-opportunity-audit", label: site.home.audit.title.join("").replace(/\.$/, "") },
     ...site.business.build.offers.map((offer) => ({ value: offer.slug, label: offer.name })),
+    ...site.business.websites.offers.map((offer) => ({ value: offer.slug, label: offer.name })),
     { value: "monthly-support", label: site.business.support.title.replace(/\.$/, "") },
     { value: "ai-training", label: site.professionals.modules[0].title },
     ...site.professionals.modules.flatMap((module) => (module.slug ? [{ value: module.slug, label: module.title }] : [])),

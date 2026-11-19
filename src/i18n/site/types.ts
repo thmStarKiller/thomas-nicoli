@@ -127,6 +127,7 @@ export interface SiteCopy {
     signals: { eyebrow: string; title: string; items: readonly string[] };
     steps: readonly { numeral: string; name: string; text: string }[];
     build: { eyebrow: string; title: Accent; intro: string; offers: readonly Offer[] };
+    websites: { eyebrow: string; title: Accent; intro: string; examplesLabel: string; offers: readonly Offer[] };
     support: { eyebrow: string; title: string; text: string; price: string; priceNote: string; custom: string };
     limits: { eyebrow: string; title: string; items: readonly string[] };
     faq: { eyebrow: string; title: string; items: readonly Faq[] };

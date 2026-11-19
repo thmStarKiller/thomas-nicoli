@@ -55,6 +55,11 @@ export function buildLlmsText(): string {
     const timing = offer.turnaround ? ` Turnaround: ${offer.turnaround}.` : "";
     out.push(`- [${offer.name}](${business}#${offer.slug}):${price(offer.price, offer.priceNote)}${timing} ${sentence(offer.line)}`);
   }
+  out.push("", "## Websites and online shops", "", sentence(site.business.websites.intro), "");
+  for (const offer of site.business.websites.offers) {
+    out.push(`- [${offer.name}](${business}#${offer.slug}):${price(offer.price, offer.priceNote)} Turnaround: ${offer.turnaround}. ${sentence(offer.line)}`);
+  }
+  out.push("", "## Ongoing support", "");
   const support = site.business.support;
   out.push(`- ${noStop(support.title)}:${price(support.price, support.priceNote)} ${sentence(support.text)}`);
   out.push(`- ${sentence(support.custom)}`, "");

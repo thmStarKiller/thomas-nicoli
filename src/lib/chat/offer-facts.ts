@@ -43,6 +43,13 @@ export function buildOfferFacts(lang: Locale): string {
       `  - ${offer.name}: ${offer.price} (${offer.priceNote}), ${offer.turnaround}. ${flat(offer.line)} Includes: ${offer.deliverables.map(clause).join("; ")}.${examples}`,
     );
   }
+  const websites = site.business.websites;
+  out.push(`- Websites and online shops (page ${page("/business")}#websites). ${flat(websites.intro)}`);
+  for (const offer of websites.offers) {
+    out.push(
+      `  - ${offer.name}: ${offer.price} (${offer.priceNote}), ${offer.turnaround}. ${flat(offer.line)} Includes: ${offer.deliverables.map(clause).join("; ")}. ${websites.examplesLabel}: ${clause(offer.examples ?? "")}.`,
+    );
+  }
   const support = site.business.support;
   out.push(`- Step III, ${clause(support.title)}: ${support.price} ${support.priceNote}. ${flat(support.text)}`);
   out.push(`- ${flat(support.custom)}`);

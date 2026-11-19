@@ -49,7 +49,7 @@ export const site: SiteCopy = {
       caption: "Thomas Nicoli, Madrid",
       note: "Dos proyectos a la vez, por decisión propia",
     },
-    ticker: ["Auditorías de IA","Respuesta a contactos","Automatización administrativa","Asistentes web","Informes","Respuestas a reseñas","Talleres","Contenido en francés"],
+    ticker: ["Auditorías de IA","Respuesta a contactos","Automatización administrativa","Asistentes web","Informes","Respuestas a reseñas","Webs","Talleres","Contenido en francés"],
     facts: [
       { value: "+10", label: "años en comercio digital y contenido" },
       { value: "3", label: "idiomas de trabajo: francés, inglés y español" },
@@ -127,7 +127,7 @@ export const site: SiteCopy = {
         {
           question: "¿Cuánto cuesta?",
           answer:
-            "La auditoría cuesta 490 €, precio cerrado. Los desarrollos también tienen precio cerrado, desde 690 € para las respuestas a reseñas hasta 2.250 € para un asistente web, y recibes la cifra por escrito antes de empezar. Los costes de terceros, como suscripciones de software, se indican aparte antes de que aceptes.",
+            "La auditoría cuesta 490 €, precio cerrado. Los desarrollos también tienen precio cerrado, desde 690 € para las respuestas a reseñas hasta 2.250 € para un asistente web, y las webs empiezan en 790 €. Recibes la cifra por escrito antes de empezar. Los costes de terceros, como suscripciones de software, se indican aparte antes de que aceptes.",
         },
         {
           question: "¿La IA actuará sin mí?",
@@ -171,7 +171,7 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "IA para empresas: auditoría y automatización",
+      title: "IA, automatización y webs para empresas",
       description:
         "Auditoría de oportunidades de IA por 490 € y sprints a precio cerrado para contactos, tareas administrativas, asistentes web e informes. Madrid y remoto.",
     },
@@ -296,6 +296,63 @@ export const site: SiteCopy = {
         },
       ],
     },
+    websites: {
+      eyebrow: "Webs",
+      title: ["Webs que ", "funcionan en tres idiomas", " y se encuentran."],
+      intro:
+        "Webs y pequeñas tiendas online a precio cerrado, desarrolladas con ayuda de IA y revisadas página a página. Cada una es rápida en el móvil, está preparada para buscadores y asistentes de IA, y se entrega con una guía. El dominio, el código y el contenido son tuyos; el alojamiento y las cuotas de plataforma los pagas tú directamente y se detallan antes de que aceptes.",
+      examplesLabel: "Pensado para",
+      offers: [
+        {
+          slug: "landing-page",
+          name: "Landing page",
+          line: "Una página para un servicio, un lanzamiento o una campaña, escrita para convertir visitas en contactos.",
+          price: "790 €",
+          priceNote: "precio cerrado habitual",
+          turnaround: "7 a 10 días laborables",
+          deliverables: [
+            "Una página, escrita y diseñada en torno a una sola acción",
+            "Formulario de contacto o de reserva, con las consultas en tu bandeja de entrada",
+            "Rápida en el móvil, con títulos, descripciones e imágenes para compartir",
+            "Alojamiento configurado en tu propia cuenta y una guía de entrega",
+          ],
+          examples:
+            "Un servicio nuevo, un evento, el lanzamiento de un producto, una campaña de anuncios.",
+        },
+        {
+          slug: "business-website",
+          name: "Web para empresa",
+          line: "Hasta seis páginas que explican lo que vendes y facilitan el contacto, en español e inglés, con francés como opción.",
+          price: "1.900 €",
+          priceNote: "precio cerrado habitual",
+          turnaround: "15 a 25 días laborables",
+          deliverables: [
+            "Hasta seis páginas: inicio, servicios, sobre ti, contacto y dos más",
+            "Español e inglés, con francés como opción, cada página escrita para su idioma",
+            "Lo básico para buscadores: títulos, descripciones, sitemap, Google Search Console y datos estructurados",
+            "Formulario de contacto, analítica y una guía para editar los contenidos",
+          ],
+          examples:
+            "Restaurantes, academias de idiomas, inmobiliarias, empresas de tours, profesionales independientes.",
+        },
+        {
+          slug: "online-shop",
+          name: "Pequeña tienda online",
+          line: "Una tienda Shopify bien montada por alguien que trabaja cada día en plataformas de e-commerce.",
+          price: "2.600 €",
+          priceNote: "precio cerrado habitual",
+          turnaround: "20 a 30 días laborables",
+          deliverables: [
+            "Tema de Shopify configurado y adaptado a tu marca",
+            "Hasta 30 productos cargados, con colecciones, pagos y envíos para España",
+            "Fichas de producto escritas para vender, en uno o dos idiomas",
+            "Emails de pedido revisados, analítica y una sesión de entrega",
+          ],
+          examples:
+            "Pequeñas marcas D2C, artesanos, productores de alimentación y vino, tiendas que venden a clientes extranjeros. La cuota mensual de Shopify y sus apps las pagas tú directamente.",
+        },
+      ],
+    },
     support: {
       eyebrow: "Paso III",
       title: "Soporte mensual y optimización.",
@@ -351,7 +408,7 @@ export const site: SiteCopy = {
         {
           question: "¿Qué empresas rechazas?",
           answer:
-            "Cualquier proyecto que requiera datos médicos, financieros o legales, además de juego y negocios para adultos. También evito cuentas de belleza y cosmética, para prevenir cualquier conflicto de intereses.",
+            "Cualquier proyecto que requiera datos médicos, financieros o legales, y el juego. Los negocios para adultos (+18) que operan legalmente son bienvenidos, siempre que el trabajo no implique datos sensibles de clientes. También evito cuentas de belleza y cosmética, para prevenir cualquier conflicto de intereses.",
         },
       ],
     },
