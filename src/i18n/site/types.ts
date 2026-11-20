@@ -124,6 +124,22 @@ export interface SiteCopy {
   business: {
     meta: { title: string; description: string };
     hero: { eyebrow: string; title: Accent; intro: string };
+    assistants: {
+      eyebrow: string;
+      tagline: string;
+      title: Accent;
+      paragraphs: readonly string[];
+      howTitle: string;
+      how: readonly { name: string; text: string }[];
+      problemsTitle: string;
+      problems: readonly string[];
+      benefitsTitle: string;
+      benefits: readonly string[];
+      compare: string;
+      price: string;
+      cta: string;
+      ctaButton: string;
+    };
     signals: { eyebrow: string; title: string; items: readonly string[] };
     steps: readonly { numeral: string; name: string; text: string }[];
     build: { eyebrow: string; title: Accent; intro: string; offers: readonly Offer[] };

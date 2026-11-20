@@ -43,13 +43,13 @@ export const site: SiteCopy = {
     hero: {
       label: "Consultor de IA · Madrid",
       title: ["IA que ", "se gana su sitio", " en tu negocio."],
-      text: "Ayudo a empresas y profesionales a poner la IA a trabajar en las tareas que se comen la semana: consultas, seguimientos y gestión repetitiva. Precios cerrados, un paso útil cada vez, y tú apruebas cada uno.",
+      text: "Configuro asistentes de IA que se encargan del trabajo repetitivo de ordenador de tu negocio, dentro del software que ya usas siempre que sea posible. Precios cerrados, un paso útil cada vez, y tú apruebas cada uno.",
       primary: "Reservar una llamada",
       secondary: "Solicitar la auditoría de 490 €",
       caption: "Thomas Nicoli, Madrid",
       note: "Dos proyectos a la vez, por decisión propia",
     },
-    ticker: ["Auditorías de IA","Respuesta a contactos","Automatización administrativa","Asistentes web","Informes","Respuestas a reseñas","Webs","Talleres","Contenido en francés"],
+    ticker: ["Asistentes de oficina con IA","Auditorías de IA","Respuesta a contactos","Automatización administrativa","Asistentes web","Informes","Respuestas a reseñas","Webs","Talleres","Contenido en francés"],
     facts: [
       { value: "+10", label: "años en comercio digital y contenido" },
       { value: "3", label: "idiomas de trabajo: francés, inglés y español" },
@@ -63,8 +63,8 @@ export const site: SiteCopy = {
         {
           numeral: "I",
           title: "Para empresas",
-          text: "Encontrar el trabajo repetitivo, automatizar una parte y mantener el control.",
-          meta: "Auditoría por 490 €, desarrollos desde 1.250 €",
+          text: "Asistentes de oficina con IA que se encargan del trabajo repetitivo, tarea a tarea, y tú mantienes el control.",
+          meta: "Auditoría a 490 €, tareas pequeñas desde 390 €",
           href: "/business",
         },
         {
@@ -171,15 +171,62 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "IA, automatización y webs para empresas",
+      title: "Asistentes con IA, automatización y webs",
       description:
-        "Auditoría de oportunidades de IA por 490 € y sprints a precio cerrado para contactos, tareas administrativas, asistentes web e informes. Madrid y remoto.",
+        "Asistentes de IA que se encargan del trabajo repetitivo en las herramientas que ya usas. Auditoría de 490 €, precios cerrados y webs desde 590 €. Madrid y remoto.",
     },
     hero: {
       eyebrow: "Para empresas",
       title: ["Menos trabajo repetitivo, ", "un paso a precio cerrado", " cada vez."],
       intro:
         "Para pequeñas y medianas empresas de Madrid y alrededores, y equipos en remoto en otros lugares. Empezamos con una auditoría breve, construimos una cosa que ahorre tiempo y solo entonces decidimos si seguir.",
+    },
+    assistants: {
+      eyebrow: "Asistentes de oficina con IA",
+      tagline: "El trabajo repetitivo, resuelto.",
+      title: ["Menos copiar, pegar y perseguir. ", "Más tiempo", " para lo que importa."],
+      paragraphs: [
+        "Todos los negocios tienen tareas que se comen horas cada semana: volver a escribir datos de los emails en una hoja de cálculo, actualizar el mismo cliente en dos o tres sitios, enviar las mismas respuestas, rehacer los mismos documentos.",
+        "Los asistentes de oficina con IA le quitan ese trabajo a tu equipo. Miro cómo funciona hoy tu negocio, elijo las tareas en las que un asistente ahorrará tiempo de verdad y lo configuro alrededor de tus herramientas y de tu forma de trabajar. No tienes que cambiar de software ni aprender nada técnico.",
+        "Cada asistente sigue reglas que tú apruebas. Se encarga de los casos rutinarios y pasa lo que se sale de lo normal a una persona, así que siempre sabes qué ha hecho y tú mantienes el control.",
+        "Empezamos con poco: una tarea, configurada y probada en pocas semanas, a un precio cerrado acordado antes de empezar. Si demuestra su valor, pasamos a la siguiente.",
+      ],
+      howTitle: "Cómo funciona",
+      how: [
+        { name: "Una llamada gratuita", text: "30 minutos. Me cuentas qué tareas os quitan más tiempo." },
+        { name: "Una mirada de cerca", text: "Veo cómo se hace hoy el trabajo, elijo las tareas en las que un asistente ahorrará tiempo de verdad y te digo cuáles es mejor dejar como están." },
+        { name: "La puesta en marcha", text: "Configuro el asistente con tus herramientas y tus reglas, lo probamos juntos con casos reales y enseño a tu equipo a usarlo." },
+        { name: "Empieza a trabajar", text: "Revisas los resultados, y lo ajustamos o pasamos a la siguiente tarea." },
+      ],
+      problemsTitle: "Lo que puede quitarte de encima",
+      problems: [
+        "Datos copiados a mano de emails o formularios web a hojas de cálculo u otros programas",
+        "La misma información actualizada en varios sitios",
+        "Consultas que esperan horas una primera respuesta",
+        "Emails rutinarios, confirmaciones y recordatorios escritos uno a uno",
+        "Pedidos, reservas o citas que se vuelven a teclear en otro sistema",
+        "Presupuestos, documentos e informes semanales rehechos desde cero",
+        "Archivos y adjuntos guardados, renombrados y ordenados a mano",
+        "Información repartida entre herramientas, sin que nadie tenga la visión completa",
+        "Personas que saltan de pantalla en pantalla todo el día para terminar una tarea sencilla",
+        "Pequeños errores por volver a escribir los mismos datos",
+      ],
+      benefitsTitle: "Lo que ganas",
+      benefits: [
+        "Horas libres cada semana para clientes, ventas y decisiones",
+        "Menos errores al teclear y menos seguimientos olvidados",
+        "Respuestas más rápidas a tus clientes",
+        "Ningún programa nuevo que aprender ni un gran proyecto informático",
+        "Reglas que tú apruebas, con una persona al mando de lo importante",
+        "Un primer paso pequeño y a precio cerrado, con poco riesgo",
+        "Configurado para tu negocio, con alguien que lo ajusta cuando tu negocio cambia",
+      ],
+      compare:
+        "Un chatbot responde preguntas. Un proyecto clásico de automatización suele implicar software nuevo, meses de trabajo y un presupuesto grande. Un asistente de oficina con IA hace el trabajo rutinario él mismo, dentro de las herramientas que ya usas, y está listo en semanas a precio cerrado, con una persona revisando lo que importa.",
+      price: "Un asistente para una tarea: 1.650 €, precio cerrado habitual, en 7 a 14 días laborables. Tareas más pequeñas desde 390 €.",
+      cta:
+        "Cuéntame qué tarea le gustaría dejar de hacer a tu equipo. En una llamada gratuita de 30 minutos vemos si un asistente puede encargarse de ella y cuánto costaría.",
+      ctaButton: "Reservar una llamada gratuita",
     },
     signals: {
       eyebrow: "Señales de que merece la pena mirarlo",
@@ -235,8 +282,8 @@ export const site: SiteCopy = {
         },
         {
           slug: "administrative-automation-sprint",
-          name: "Sprint de automatización administrativa",
-          line: "Un flujo interno automatizado, probado y entregado.",
+          name: "Asistente de oficina con IA",
+          line: "Una tarea repetitiva que deja de hacerse a mano, probada y entregada, dentro de las herramientas que ya usas.",
           price: "1.650 €",
           priceNote: "precio cerrado habitual",
           turnaround: "7 a 14 días laborables",

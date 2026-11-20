@@ -43,13 +43,13 @@ export const site: SiteCopy = {
     hero: {
       label: "AI consultant · Madrid",
       title: ["AI that ", "earns its place", " in your business."],
-      text: "I help businesses and professionals put AI to work on the tasks that eat the week: enquiries, follow-ups and repetitive admin. Fixed prices, one useful step at a time, and you approve each one.",
+      text: "I set up AI assistants that take over the repetitive computer work in your business, inside the software you already use wherever possible. Fixed prices, one useful step at a time, and you approve each one.",
       primary: "Book a call",
       secondary: "Request the €490 audit",
       caption: "Thomas Nicoli, Madrid",
       note: "Two projects at a time, by choice",
     },
-    ticker: ["AI audits","Lead response","Admin automation","Website assistants","Reporting","Review replies","Websites","Workshops","French content"],
+    ticker: ["AI office assistants","AI audits","Lead response","Admin automation","Website assistants","Reporting","Review replies","Websites","Workshops","French content"],
     facts: [
       { value: "10+", label: "years in digital commerce and content" },
       { value: "3", label: "working languages: French, English and Spanish" },
@@ -63,8 +63,8 @@ export const site: SiteCopy = {
         {
           numeral: "I",
           title: "For businesses",
-          text: "Find the repetitive work, automate one piece of it, and stay in control.",
-          meta: "Audit at €490, builds from €1,250",
+          text: "AI office assistants that take over repetitive computer work, one task at a time, with you in control.",
+          meta: "Audit at €490, small tasks from €390",
           href: "/business",
         },
         {
@@ -171,15 +171,62 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "AI, automation and websites for businesses",
+      title: "AI office assistants, automation and websites",
       description:
-        "A €490 AI audit, fixed-price automation sprints, and websites and small online shops from €590. In Spanish, English and French. Madrid and remote.",
+        "AI assistants that take over repetitive computer work in the tools you already use. A €490 audit, fixed prices, and websites from €590. Madrid and remote.",
     },
     hero: {
       eyebrow: "For businesses",
       title: ["Less repetitive work, ", "one fixed-price step", " at a time."],
       intro:
         "For small and mid-sized businesses in and around Madrid, and remote teams elsewhere. We start with a short audit, build one thing that saves time, and only then decide whether to go further.",
+    },
+    assistants: {
+      eyebrow: "AI Office Assistants",
+      tagline: "The repetitive work, taken care of.",
+      title: ["Less copying, pasting and chasing. ", "More time", " for the work that matters."],
+      paragraphs: [
+        "Every business has tasks that eat hours each week: retyping details from emails into a spreadsheet, updating the same customer in two or three places, sending the same replies, rebuilding the same documents.",
+        "AI Office Assistants take that work off your team. I look at how your business runs today, choose the tasks where an assistant will save real time, and set it up around your existing tools and your way of working. You do not need to change your software or learn anything technical.",
+        "Each assistant follows rules you approve. It handles the routine cases and passes anything unusual to a person, so you always know what it did and you stay in control.",
+        "We start small: one task, set up and tested in a few weeks, at a fixed price agreed before any work begins. If it earns its place, we look at the next one.",
+      ],
+      howTitle: "How it works",
+      how: [
+        { name: "A free call", text: "30 minutes. You tell me which tasks take the most time." },
+        { name: "A close look", text: "I see how the work is done today, pick the tasks where an assistant will save real time, and tell you which ones are better left alone." },
+        { name: "Set-up", text: "I build the assistant around your tools and your rules, we test it together on real examples, and I show your team how to use it." },
+        { name: "It starts working", text: "You check the results, and we adjust it or move on to the next task." },
+      ],
+      problemsTitle: "What it can take over",
+      problems: [
+        "Details copied by hand from emails or web forms into spreadsheets or other software",
+        "The same information updated in several places",
+        "Enquiries that wait hours for a first reply",
+        "Routine emails, confirmations and reminders written one by one",
+        "Orders, bookings or appointments typed again into another system",
+        "Quotes, documents and weekly reports rebuilt from scratch",
+        "Files and attachments saved, renamed and sorted by hand",
+        "Information spread across tools, so nobody has the full picture",
+        "Staff switching between screens all day to finish one simple task",
+        "Small mistakes caused by retyping the same data",
+      ],
+      benefitsTitle: "What you get",
+      benefits: [
+        "Hours back every week for customers, sales and decisions",
+        "Fewer typing mistakes and forgotten follow-ups",
+        "Faster replies to customers",
+        "No new software to learn and no large IT project",
+        "Rules you approve, with a person in charge of anything important",
+        "A small first step at a fixed price, so the risk stays low",
+        "Set up for your business, with someone to adjust it as the business changes",
+      ],
+      compare:
+        "A chatbot answers questions. A traditional automation project usually means new software, months of work and a large budget. An AI Office Assistant does the routine work itself, inside the tools you already use, and is ready in weeks at a fixed price, with a person checking anything that matters.",
+      price: "One assistant for one task: €1,650, typical fixed price, in 7 to 14 business days. Smaller tasks from €390.",
+      cta:
+        "Tell me which task your team would most like to stop doing. In a free 30-minute call we will look at whether an assistant can take it over, and what it would cost.",
+      ctaButton: "Book a free call",
     },
     signals: {
       eyebrow: "Signs it is worth a look",
@@ -235,8 +282,8 @@ export const site: SiteCopy = {
         },
         {
           slug: "administrative-automation-sprint",
-          name: "Administrative Automation Sprint",
-          line: "One back-office workflow automated, tested and handed over.",
+          name: "AI Office Assistant",
+          line: "One repetitive task taken over, tested and handed over, inside the tools you already use.",
           price: "€1,650",
           priceNote: "typical fixed price",
           turnaround: "7 to 14 business days",

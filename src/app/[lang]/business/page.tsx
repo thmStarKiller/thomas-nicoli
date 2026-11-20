@@ -33,6 +33,7 @@ export default async function BusinessPage({
   if (!hasLocale(lang)) notFound();
   const site = getSite(lang);
   const b = site.business;
+  const a = b.assistants;
   const showPrices = siteConfig.features.showPrices;
 
   const audit = site.home.audit;
@@ -69,6 +70,86 @@ export default async function BusinessPage({
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* Lead service: AI Office Assistants */}
+      <section id="assistants" className="scroll-mt-20 bg-sand py-24 sm:py-36">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-6 lg:grid-cols-12">
+            <Rise className="lg:col-span-3">
+              <p className="eyebrow text-spice">{a.eyebrow}</p>
+              <p className="mt-4 max-w-[16rem] font-display text-[1.3rem] italic leading-snug text-night/80">{a.tagline}</p>
+            </Rise>
+            <div className="lg:col-span-9">
+              <Headline parts={a.title} className="text-balance text-[length:var(--text-h2)] leading-[1.02]" />
+              <Rise delay={150}>
+                <div className="mt-8 max-w-[40rem] space-y-5">
+                  {a.paragraphs.map((paragraph, i) => (
+                    <p key={i} className={i === 0 ? "lead text-pretty text-night/90" : "text-pretty text-[18px] leading-relaxed text-night/85"}>
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </Rise>
+            </div>
+          </div>
+
+          <div className="mt-20 sm:mt-28">
+            <Rise>
+              <p className="eyebrow text-spice">{a.howTitle}</p>
+            </Rise>
+            <ol className="mt-6 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
+              {a.how.map((step, i) => (
+                <li key={step.name} className="border-t border-night/20 py-6">
+                  <p className="font-display text-[1.05rem] italic text-spice">0{i + 1}</p>
+                  <h3 className="mt-2 font-display text-[1.6rem] leading-tight">{step.name}</h3>
+                  <p className="mt-3 text-[16.5px] leading-relaxed text-night/85">{step.text}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <Rise>
+              <p className="eyebrow text-spice">{a.problemsTitle}</p>
+              <ul className="mt-4">
+                {a.problems.map((item) => (
+                  <li key={item} className="border-b border-night/15 py-3 text-[17px] leading-snug last:border-b-0">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Rise>
+            <Rise delay={120}>
+              <p className="eyebrow text-spice">{a.benefitsTitle}</p>
+              <ul className="mt-4">
+                {a.benefits.map((item) => (
+                  <li key={item} className="border-b border-night/15 py-3 text-[17px] leading-snug last:border-b-0">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Rise>
+          </div>
+
+          <div className="mt-16 grid gap-10 border-t border-night/20 pt-10 lg:grid-cols-12">
+            <Rise className="lg:col-span-7">
+              <p className="text-pretty font-display text-[clamp(1.5rem,2.4vw,2.1rem)] leading-snug">{a.compare}</p>
+            </Rise>
+            <Rise delay={120} className="lg:col-span-4 lg:col-start-9">
+              {showPrices && <p className="text-[17px] font-medium leading-relaxed text-night">{a.price}</p>}
+              <p className="mt-4 text-[16px] leading-relaxed text-night/80">{a.cta}</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <CtaLink lang={lang} tone="spice" className="w-full sm:w-auto">
+                  {a.ctaButton}
+                </CtaLink>
+                <CtaLink lang={lang} tone="night" size="sm" service="administrative-automation-sprint" className="w-full sm:w-auto">
+                  {site.cta.question}
+                </CtaLink>
+              </div>
+            </Rise>
+          </div>
+        </div>
       </section>
 
       {/* Signals */}

@@ -49,6 +49,11 @@ export function buildLlmsText(): string {
     "",
   );
 
+  const lead = site.business.assistants;
+  out.push(`## ${lead.eyebrow} (lead service)`, "", `${sentence(lead.tagline)} ${lead.paragraphs.map(sentence).join(" ")}`, "");
+  out.push(`How it works: ${lead.how.map((step) => `${step.name}: ${noStop(step.text)}`).join("; ")}.`, "");
+  if (features.showPrices) out.push(sentence(lead.price), "");
+  out.push(`More: ${business}#assistants`, "");
   out.push("## Services for businesses", "");
   const audit = site.home.audit;
   out.push(`- [${noStop(text(audit.title))}](${business}#audit):${price(audit.price, audit.priceNote)} ${sentence(audit.text)} ${withStop(audit.timing)}`);

@@ -43,6 +43,7 @@ export function buildOfferFacts(lang: Locale): string {
   out.push(
     "",
     `BUSINESSES (page ${page("/business")})`,
+    `- LEAD SERVICE, ${site.business.assistants.eyebrow} (page ${page("/business")}#assistants): ${flat(site.business.assistants.tagline)} ${site.business.assistants.paragraphs.slice(1).map(flat).join(" ")} How it works: ${site.business.assistants.how.map((step) => `${step.name}: ${clause(step.text)}`).join("; ")}. ${flat(site.business.assistants.price)} It can take over, for example: ${site.business.assistants.problems.map(clause).join("; ")}.`,
     `- Step I, ${clause(flat(audit.title))}: ${audit.price}, ${audit.priceNote}. ${audit.timing}. ${flat(audit.text)} Includes: ${audit.items.map(clause).join("; ")}. ${flat(audit.excluded)}`,
   );
   out.push(`- Step II, fixed-price builds. ${flat(site.business.build.intro)}`);

@@ -43,13 +43,13 @@ export const site: SiteCopy = {
     hero: {
       label: "Consultant IA · Madrid",
       title: ["Une IA qui ", "mérite sa place", " dans votre activité."],
-      text: "J’aide les entreprises et les professionnels à mettre l’IA au travail sur les tâches qui dévorent la semaine : demandes, relances et gestion répétitive. Des prix fixes, une étape utile à la fois, et vous validez chacune.",
+      text: "Je mets en place des assistants IA qui prennent en charge le travail répétitif sur ordinateur de votre entreprise, dans les logiciels que vous utilisez déjà, quand c’est possible. Des prix fixes, une étape utile à la fois, et vous validez chacune.",
       primary: "Réserver un appel",
       secondary: "Demander l’audit à 490 €",
       caption: "Thomas Nicoli, Madrid",
       note: "Deux projets à la fois, par choix",
     },
-    ticker: ["Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Réponses aux avis","Sites web","Ateliers","Contenu en français"],
+    ticker: ["Assistants de bureau IA","Audits IA","Réponse aux demandes","Automatisation administrative","Assistants de site","Rapports","Réponses aux avis","Sites web","Ateliers","Contenu en français"],
     facts: [
       { value: "10+", label: "ans dans le commerce digital et le contenu" },
       { value: "3", label: "langues de travail : français, anglais et espagnol" },
@@ -63,8 +63,8 @@ export const site: SiteCopy = {
         {
           numeral: "I",
           title: "Pour les entreprises",
-          text: "Repérer le travail répétitif, en automatiser une partie et garder la main.",
-          meta: "Audit à 490 €, réalisations dès 1 250 €",
+          text: "Des assistants de bureau IA qui prennent en charge le travail répétitif, une tâche à la fois, et vous gardez la main.",
+          meta: "Audit à 490 €, petites tâches dès 390 €",
           href: "/business",
         },
         {
@@ -171,15 +171,62 @@ export const site: SiteCopy = {
 
   business: {
     meta: {
-      title: "IA, automatisation et sites pour entreprises",
+      title: "Assistants IA, automatisation et sites web",
       description:
-        "Un audit d’opportunités IA à 490 €, puis des sprints à prix fixe : réponse aux demandes, tâches administratives, assistants de site, rapports.",
+        "Des assistants IA qui prennent en charge le travail répétitif dans les outils que vous utilisez déjà. Audit à 490 €, prix fixes, sites dès 590 €. Madrid et à distance.",
     },
     hero: {
       eyebrow: "Pour les entreprises",
       title: ["Moins de travail répétitif, ", "une étape à prix fixe", " à la fois."],
       intro:
         "Pour les petites et moyennes entreprises de Madrid et de ses environs, et les équipes à distance ailleurs. Nous commençons par un audit court, nous construisons une chose qui fait gagner du temps, et alors seulement nous décidons d’aller plus loin.",
+    },
+    assistants: {
+      eyebrow: "Assistants de bureau IA",
+      tagline: "Le travail répétitif, pris en charge.",
+      title: ["Moins de copier-coller et de relances. ", "Plus de temps", " pour ce qui compte."],
+      paragraphs: [
+        "Chaque entreprise a des tâches qui mangent des heures chaque semaine : ressaisir des informations d’e-mails dans un tableur, mettre à jour le même client à deux ou trois endroits, envoyer les mêmes réponses, refaire les mêmes documents.",
+        "Les assistants de bureau IA retirent ce travail à votre équipe. J’observe comment fonctionne votre entreprise aujourd’hui, je choisis les tâches où un assistant fera vraiment gagner du temps, et je le configure autour de vos outils et de votre façon de travailler. Vous n’avez ni à changer de logiciel ni à apprendre quoi que ce soit de technique.",
+        "Chaque assistant suit des règles que vous validez. Il traite les cas courants et transmet tout ce qui sort de l’ordinaire à une personne : vous savez toujours ce qu’il a fait, et vous gardez la main.",
+        "On commence petit : une tâche, mise en place et testée en quelques semaines, à un prix fixe convenu avant le début du travail. Si elle fait ses preuves, on passe à la suivante.",
+      ],
+      howTitle: "Comment ça marche",
+      how: [
+        { name: "Un appel gratuit", text: "30 minutes. Vous me dites quelles tâches prennent le plus de temps." },
+        { name: "Un examen de près", text: "Je regarde comment le travail se fait aujourd’hui, je choisis les tâches où un assistant fera vraiment gagner du temps, et je vous dis lesquelles il vaut mieux laisser telles quelles." },
+        { name: "La mise en place", text: "Je configure l’assistant avec vos outils et vos règles, nous le testons ensemble sur des cas réels, et je montre à votre équipe comment l’utiliser." },
+        { name: "Il se met au travail", text: "Vous vérifiez les résultats, puis on l’ajuste ou on passe à la tâche suivante." },
+      ],
+      problemsTitle: "Ce qu’il peut prendre en charge",
+      problems: [
+        "Des informations recopiées à la main depuis des e-mails ou des formulaires web vers des tableurs ou d’autres logiciels",
+        "La même information mise à jour à plusieurs endroits",
+        "Des demandes qui attendent des heures une première réponse",
+        "Des e-mails de routine, confirmations et rappels écrits un par un",
+        "Des commandes, réservations ou rendez-vous ressaisis dans un autre système",
+        "Des devis, documents et rapports hebdomadaires refaits de zéro",
+        "Des fichiers et pièces jointes enregistrés, renommés et classés à la main",
+        "Des informations éparpillées entre plusieurs outils, sans vue d’ensemble",
+        "Des personnes qui passent d’un écran à l’autre toute la journée pour finir une tâche simple",
+        "De petites erreurs dues à la ressaisie des mêmes données",
+      ],
+      benefitsTitle: "Ce que vous y gagnez",
+      benefits: [
+        "Des heures récupérées chaque semaine pour les clients, les ventes et les décisions",
+        "Moins d’erreurs de saisie et de relances oubliées",
+        "Des réponses plus rapides à vos clients",
+        "Aucun nouveau logiciel à apprendre, ni de grand projet informatique",
+        "Des règles que vous validez, avec une personne aux commandes pour tout ce qui compte",
+        "Un premier pas modeste, à prix fixe, pour limiter le risque",
+        "Configuré pour votre entreprise, avec quelqu’un pour l’ajuster quand elle évolue",
+      ],
+      compare:
+        "Un chatbot répond à des questions. Un projet d’automatisation classique implique souvent un nouveau logiciel, des mois de travail et un gros budget. Un assistant de bureau IA fait lui-même le travail de routine, dans les outils que vous utilisez déjà, et il est prêt en quelques semaines à prix fixe, avec une personne qui vérifie ce qui compte.",
+      price: "Un assistant pour une tâche : 1 650 €, prix fixe habituel, en 7 à 14 jours ouvrés. Tâches plus petites dès 390 €.",
+      cta:
+        "Dites-moi quelle tâche votre équipe aimerait le plus ne plus faire. Lors d’un appel gratuit de 30 minutes, nous verrons si un assistant peut s’en charger, et ce que cela coûterait.",
+      ctaButton: "Réserver un appel gratuit",
     },
     signals: {
       eyebrow: "Les signes qui méritent un regard",
@@ -235,8 +282,8 @@ export const site: SiteCopy = {
         },
         {
           slug: "administrative-automation-sprint",
-          name: "Sprint d’automatisation administrative",
-          line: "Un flux de back-office automatisé, testé et transmis.",
+          name: "Assistant de bureau IA",
+          line: "Une tâche répétitive prise en charge, testée et livrée, dans les outils que vous utilisez déjà.",
           price: "1 650 €",
           priceNote: "prix fixe habituel",
           turnaround: "7 à 14 jours ouvrés",
